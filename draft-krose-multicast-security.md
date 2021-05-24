@@ -81,14 +81,9 @@ document are to be interpreted as described in BCP 14 {{RFC2119}} {{!RFC8174}}
 when, and only when, they appear in all capitals, as shown here.
 
 
-# Web Transport Threat Model
-
-TODO: Expand a bit on the properties expected of Web Transport protocols.
-
-
 # Multicast Transport Properties
 
-By contrast with bidirectional unicast transports, multicast transports are necessarily unicast, connectionless, unreliable, and not congestion-controlled.
+By contrast with bidirectional unicast transports, multicast transports are necessarily unidirectional, connectionless, unreliable, and not congestion-controlled.
 
 
 # Threat Model
