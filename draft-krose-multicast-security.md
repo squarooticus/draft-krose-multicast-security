@@ -109,23 +109,34 @@ By contrast with bidirectional unicast transports, multicast transports are nece
 At its most general, the goal of authentication is to ensure that data being processed is genuine, while the goal of integrity protection is to ensure that the data is unmodified and complete and (where appropriate) to expose any exceptions to applications for further handling.
 In practice, the mechanisms for these two functions overlap to a high degree, so we address them together.
 
+### Authentication Tagging
+
 In the context of unicast transport security, authentication means that content is known to have originated from the trusted peer, something that is typically enforced via a cryptographic authentication tag:
 
-* With a symmetric message authentication code (MAC), this assumes only the two parties to the communication have access to the keying material.
-* With an asymmetric signature (that may be repeated to multiple clients by the same origin, and potentially even relayed through otherwise untrusted parties), this assumes that only the sender has access to the signing key.
+* Symmetric tags, such as symmetric message authentication codes (MACs) and authentication tags produced by authenticated encryption algorithms.
+Because anyone in possession of the keying material may produce valid symmetric authentication tags, such keying material is typically known to at most two parties:
+one sender and one receiver.
+Some algorithms (such as TESLA, discussed below) relieve this constraint by imposing some different constraint on verification of tagged content.
+* Asymmetric tags, typically public key cryptosystem signatures.
+These assume that only the sender has access to the signing key, but impose no constraints on dissemination of the signature verification key.
 
 In both cases:
 
 * The receiving party must have a means for establishing trust in the keying material used to verify the authentication tag.
-* The authentication tag serves to provide integrity protection over the unit of content to which the tag applies, with additional mechanisms required to provide protection against duplication (replay), deletion, and reordering.
+* Instead of directly authenticating the protected content, the tag may protect a root of trust that itself cryptographically prevents modification or forgery of further content.
+Examples include:
+    * The TLS 1.3 handshake employing an authentication tag to reject MitM attacks against ECDH key agreement.
+    * An authentication tag of a Merkle tree root protecting the content represented by the entire tree.
+* The authentication tag serves to provide integrity protection over the unit of content to which the tag applies, with additional mechanisms required to detect and/or manage duplication/replay, deletion/loss, and reordering.
 
-Asymmetric signing of content delivered through multicast is identical to the unicast case, owing to the asymmetry of access to the signing key; but the symmetric MAC case does not directly apply given that multiple receivers need access to the same key used for both signing and verification, which opens up the possibility of forgery by a receiver on-path or with the ability to spoof the source.
+Asymmetric verification of content delivered through multicast is identical to the unicast case, owing to the asymmetry of access to the signing key;
+but the symmetric MAC case does not directly apply given that multiple receivers need access to the same key used for both signing and verification, which opens up the possibility of forgery by a receiver on-path or with the ability to spoof the source.
 
 Multiple mechanisms providing for reliable asymmetric authentication of data delivered by multicast have been proposed over the years.
 
-* TESLA {{RFC4082}} employs computationally-inexpensive symmetric authentication via time-released keys at the costs of requiring loose time synchronization between clients and servers and of imposing latency above one-way path delay prior to release of authenticated data to applications.
-Effectively, TESLA achieves asymmetry between the sender and multiple receivers through timed release of keying material rather than through the computational difficulty of deriving a signing key from a verification key.
-TODO: Insert something about the downsides of TESLA here.
+* TESLA {{RFC4082}} achieves asymmetry between the sender and multiple receivers through timed release of symmetric keying material rather than through the computational difficulty of deriving a signing key from a verification key in public key cryptosystems like RSA and ECDSA.
+It employs computationally-inexpensive symmetric authentication tagging with release of the keying material to receivers only after they are assumed to have received the protected data, with any data received subsequent to key release to be discarded.
+This requires some degree of time synchronization between clients and servers and imposes latency above one-way path delay prior to release of authenticated data to applications.
 
 * Simple per-packet asymmetric signature of packet contents based on out-of-band communication of the signature's public key and algorithm, for example as described in Section 3 of {{RFC6584}}.
 
@@ -137,8 +148,16 @@ Regardless of mechanism, however, the primary goal of authentication in the mult
 that the content delivered to the application originated from the trusted source.
 Semantic equivalence to (D)TLS in this respect is therefore straightforwardly achieved by any number of potential mechanisms.
 
-Integrity is similarly partially provided by the authentication mechanism.
-As multicast is not connection-oriented at the transport layer (e.g., multicast protocols typically employ UDP), applications using multicast must already mitigate or tolerate duplication/replay, loss/deletion, and reordering, irrespective of authenticity.
+### Beyond Authentication Tagging
+
+Integrity is partially provided by the authentication mechanism.
+As multicast is not connection-oriented at the transport layer (e.g., multicast protocols typically employ UDP), applications relying on multicast must otherwise provide for detection and/or management of packet duplication/replay, loss/deletion, and reordering.
+
+Some of these functions may also be provided by the authentication mechanism. For instance:
+
+* TESLA prevents replay and reveals reordering, but only across time intervals. An application requiring finer-grained countermeasures against duplication/replay or reordering, or indeed any countermeasure to deletion/loss, would need to provide that via custom support (e.g., through the introduction of packet sequence numbers) or via an intermediate-layer protocol providing those functions.
+
+* AMBI by design provides strong protection against duplication/replay and reveals reordering and deletion/loss of content packets through a strict in-order manifest of packet digests.
 
 
 ## Confidentiality
