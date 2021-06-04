@@ -32,61 +32,77 @@ author:
 
 normative:
     RFC2119:
+    RFC3552:
+    RFC4607:
+    RFC8085:
+    RFC8174:
+    RFC8815:
 
 informative:
 
     RFC4082:
-
-    RFC4607:
-
+    RFC6584:
+    RFC8446:
     RFC8826:
-
     AMBI:
-        title: "Asymmetric Manifest-based Integrity"
-        date: "30 October 2020"
-        seriesinfo:
-            Internet-Draft: draft-ietf-mboned-ambi-01
-        author:
-            -
-                ins: J. Holland
-                name: Jake Holland
-                org: Akamai Technologies, Inc.
-            -
-                ins: K. Rose
-                name: Kyle Rose
-                org: Akamai Technologies, Inc.
-
+        I-D.draft-ietf-mboned-ambi
     webtrans:
-        title: "The WebTransport Protocol Framework"
-        date: "18 October 2020"
-        seriesinfo:
-            Internet-Draft: draft-ietf-webtrans-overview-01
-        author:
-            ins: V. Vasiliev
-            name: Victor Vasiliev
-            org: Google, Inc.
+        I-D.draft-ietf-webtrans-overview
 
+    huang-w2sp:
+        title: "Talking to Yourself for Fun and Profit"
+        date: "May 2011"
+        seriesinfo:
+            Web 2.0 Security and Privacy (W2SP 2011)
+        author:
+            -
+                ins: L-S. Huang
+            -
+                ins: E.Y. Chen
+            -
+                ins: A. Barth
+            -
+                ins: E. Rescorla
+            -
+                ins: C. Jackson
+        target: https://ptolemy.berkeley.edu/projects/truststc/pubs/840/websocket.pdf
 
 --- abstract
 
-Interdomain multicast has unique potential to solve delivery scalability for popular content, but it carries a set of security and privacy issues that do not affect unicast delivery.
-These merit a full analysis of the risks and mitigations before a determination can be made about whether interdomain multicast can reasonably fit within the Web security model.
-
+Interdomain multicast has unique potential to solve delivery scalability for popular content, but it carries a set of security and privacy issues that differ from those in unicast delivery.
+This document analyzes the security threats unique to multicast-based delivery for Internet and Web traffic under the Internet and Web threat models.
 
 --- middle
 
 # Introduction
 
-The Web security model, while not yet documented authoritatively in a single reference, has generally been interpreted to require certain properties of underlying transports, such as:
+This document examines the security considerations relevant to the use of multicast for scalable one-to-many delivery of application traffic over the Internet, along with special considerations for multicast delivery to clients constrained by the Web security model.
 
-* Confidentiality: A passive observer must not be able to identify or access content through simple observation of the bits being delivered, up to the limits of metadata privacy (such as traffic analysis, peer identity, application/transport/security-layer protocol design constraints, etc.).
-* Authenticity: A receiver must be able to cryptographically verify that the delivered content originated from the desired source.
-* Integrity: A receiver must be able to distinguish between original content as sent from the desired source and content modified in some way (including through deletion) by an attacker.
-* Non-linkability: A passive observer must not be able to link a single user across multiple devices or a single client roaming across multiple networks.
+## Background
 
-Web Transport {{webtrans}}, for instance, proposes to interpret these requirements in part to mean that any qualifying transport protocol "MUST use TLS or a semantically equivalent security protocol".
+This document assumes readers have a basic undrestanding of some background topics, specifically:
+
+ * The Internet threat model as defined in Section 3 of {{RFC3552}}.
+
+ * The Security Considerations for UDP Usage Guidelines as described in Section 6 of {{RFC8085}}, since application layer multicast traffic is generally carried over UDP.
+
+ * Source-specific multicast, as described in {{RFC4607}}.  This document focuses on interdomain multicast, therefore any-source multicast is out of scope in accordance with the deprecation of interdomain any-source multicast in {{RFC8815}}.
+
+## Web Security Model
+
+The Web security model, while not yet documented authoritatively in a single reference, nevertheless strongly influences Web client implementations, and has generally been interpreted to require certain properties of underlying transports such as:
+
+ * Confidentiality: A passive observer must not be able to identify or access content through simple observation of the bits being delivered, up to the limits of metadata privacy (such as traffic analysis, peer identity, application/transport/security-layer protocol design constraints, etc.).
+ * Authenticity: A receiver must be able to cryptographically verify that the delivered content originated from the desired source.
+ * Integrity: A receiver must be able to distinguish between original content as sent from the desired source and content modified in some way (including through deletion) by an attacker.
+ * Non-linkability: A passive observer must not be able to link a single user across multiple devices or a single client roaming across multiple networks.
+
+For unicast transport, TLS {{RFC8446}} satisfies these requirements, therefore Web Transport {{webtrans}} proposes to require qualifying transport protocols to use "TLS or a semantically equivalent security protocol".
+
 For unicast communication this is sensible and meaningful (if imprecise) for an engineer with a grounding in security, but it is unclear how or whether 'semantic equivalence to TLS' can be directly interpreted in any meaningful way for multicast transport protocols.
-This document instead explicitly describes a security and privacy threat model for multicast transports as a proposal to extend the Web security model to accommodate multicast delivery in a way that fits within the spirit of how that model is generally interpreted for unicast.
+This document instead explicitly describes a security and privacy threat model for multicast transports in order to extend the Web security model to accommodate multicast delivery in a way that fits within the spirit of how that model is generally interpreted for unicast.
+
+Although defining the security protections necessary to make multicast traffic suitable for Web Transport is a key goal for this document, many of the security considerations described here would be equally necessary to consider if a higher level multicast transport protocol were used for a more specific use case, for delivery to clients constrained by the Web security model.
 
 
 # Conventions and Definitions
@@ -99,7 +115,11 @@ when, and only when, they appear in all capitals, as shown here.
 
 # Multicast Transport Properties
 
-By contrast with bidirectional unicast transports, multicast transports are necessarily unidirectional, connectionless, unreliable, and not congestion-controlled.
+By contrast with bidirectional unicast transports, multicast transport at the IP or UDP layer is necessarily unidirectional, connectionless, and unreliable.
+
+Although applications compliant with Section 4.1 of {{RFC8085}} will implement congestion control, in the context of a threat model it's important to note that malicious clients might attempt to use non-compliant subscriptions to multicast traffic as part of a DoS attack where possible, and that some applications might not be compliant with the recommendations for congestion control implementations.
+
+TODO: maybe some mention that higher-level protocols can provide reliability (e.g. 5740 (norm)/5775 (alc) and/or flute(6726)/fcast(6968) that use alc, plus draft-pardue-quic-http-mcast), but this may introduce different risks from spoofing if per-packet authenticity is not provided.  For example, in an application with unicast recovery for a reliable object that's constructed out of 1k packets, injecting a single spoofed packet amplifies by 1k * number of receivers, if they all recover the whole reliable object.  Also: determine whether this mention belongs in this section--maybe better as a ref to a different section here?
 
 
 # Threat Model
@@ -142,7 +162,7 @@ This requires some degree of time synchronization between clients and servers an
 
 * Asymmetric Manifest-based Integrity (AMBI) {{AMBI}}, in contrast with TESLA, assumes the existence of an out-of-band, authenticated channel for distribution of manifests containing cryptographic digests of those packets.
 Authentication of this channel may, for instance, be provided by TLS if manifests are distributed using HTTPS from an origin known to the client to be closely affiliated with the multicast stream, such as would be the case if the manifest URL is delivered by the origin of the parent page hosting the media object.
-Authenticity in this case is a prerequisite of the out-of-band channel that the AMBI protocol relies on, rath
+Authenticity in this case is a prerequisite of the out-of-band channel that AMBI builds upon to provide authenticity for the multicast data channel.
 
 Regardless of mechanism, however, the primary goal of authentication in the multicast context is identical to that for unicast:
 that the content delivered to the application originated from the trusted source.
@@ -213,14 +233,9 @@ TODO: Re: passively linking a user across user agents or roaming devices.
 
 ## Browser-Specific Threats
 
-Shamelessly paraphrasing {{RFC8826}}, the security requirements for multicast transports to a browser follow directly from the requirement that the browser's job is to protect the user.
+The security requirements for multicast transport to a browser follow directly from the requirement that the browser's job is to protect the user.  Huang et al. [huang-w2sp] summarize the core browser security guarantee as follows:
 
-> Huang et
-> al. [huang-w2sp] summarize the core browser security guarantee as
-> follows:
->
->> Users can safely visit arbitrary web sites and execute scripts
->> provided by those sites.
+  Users can safely visit arbitrary web sites and execute scripts provided by those sites.
 
 The reader will find the full discussion of the browser threat model in section 3 of {{RFC8826}} helpful in understanding what follows.
 
