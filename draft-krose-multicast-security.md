@@ -127,9 +127,11 @@ Multiple mechanisms providing for reliable asymmetric authentication of data del
 Effectively, TESLA achieves asymmetry between the sender and multiple receivers through timed release of keying material rather than through the computational difficulty of deriving a signing key from a verification key.
 TODO: Insert something about the downsides of TESLA here.
 
+* Simple per-packet asymmetric signature of packet contents based on out-of-band communication of the signature's public key and algorithm, for example as described in Section 3 of {{RFC6584}}.
+
 * Asymmetric Manifest-based Integrity (AMBI) {{AMBI}}, in contrast with TESLA, assumes the existence of an out-of-band, authenticated channel for distribution of manifests containing cryptographic digests of those packets.
 Authentication of this channel may, for instance, be provided by TLS if manifests are distributed using HTTPS from an origin known to the client to be closely affiliated with the multicast stream, such as would be the case if the manifest URL is delivered by the origin of the parent page hosting the media object.
-Asymmetry in this case is a prerequisite of the out-of-band channel rather than a property provided by the AMBI protocol itself.
+Authenticity in this case is a prerequisite of the out-of-band channel that the AMBI protocol relies on, rath
 
 Regardless of mechanism, however, the primary goal of authentication in the multicast context is identical to that for unicast:
 that the content delivered to the application originated from the trusted source.
