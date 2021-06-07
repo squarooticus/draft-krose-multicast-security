@@ -80,7 +80,7 @@ This document examines the security considerations relevant to the use of multic
 
 ## Background
 
-This document assumes readers have a basic undrestanding of some background topics, specifically:
+This document assumes readers have a basic understanding of some background topics, specifically:
 
  * The Internet threat model as defined in Section 3 of {{RFC3552}}.
 
@@ -131,31 +131,37 @@ In practice, the mechanisms for these two functions overlap to a high degree, so
 
 ### Authentication Tagging
 
+The Web security model requires that content be authenticated cryptographically.
 In the context of unicast transport security, authentication means that content is known to have originated from the trusted peer, something that is typically enforced via a cryptographic authentication tag:
 
 * Symmetric tags, such as symmetric message authentication codes (MACs) and authentication tags produced by authenticated encryption algorithms.
 Because anyone in possession of the keying material may produce valid symmetric authentication tags, such keying material is typically known to at most two parties:
 one sender and one receiver.
 Some algorithms (such as TESLA, discussed below) relieve this constraint by imposing some different constraint on verification of tagged content.
-* Asymmetric tags, typically public key cryptosystem signatures.
+
+* Asymmetric tags, typically signatures produced by public key cryptosystems.
 These assume that only the sender has access to the signing key, but impose no constraints on dissemination of the signature verification key.
 
 In both cases:
 
 * The receiving party must have a means for establishing trust in the keying material used to verify the authentication tag.
-* Instead of directly authenticating the protected content, the tag may protect a root of trust that itself cryptographically prevents modification or forgery of further content.
-Examples include:
-    * The TLS 1.3 handshake employing an authentication tag to reject MitM attacks against ECDH key agreement.
-    * An authentication tag of a Merkle tree root protecting the content represented by the entire tree.
-* The authentication tag serves to provide integrity protection over the unit of content to which the tag applies, with additional mechanisms required to detect and/or manage duplication/replay, deletion/loss, and reordering.
 
-Asymmetric verification of content delivered through multicast is identical to the unicast case, owing to the asymmetry of access to the signing key;
-but the symmetric MAC case does not directly apply given that multiple receivers need access to the same key used for both signing and verification, which opens up the possibility of forgery by a receiver on-path or with the ability to spoof the source.
+* Instead of directly authenticating the protected content, the tag may protect a root of trust that itself protects cryptographically-linked content.
+Examples include:
+
+    * The TLS 1.3 handshake employing an authentication tag to reject MitM attacks against ECDH key agreement.
+
+    * An authentication tag of a Merkle tree root protecting the content represented by the entire tree.
+
+* The authentication tag serves to provide integrity protection over the unit of content to which the tag applies, with additional mechanisms required to detect and/or manage duplication/replay, deletion/loss, and reordering within a sequence of such authenticated content units.
+
+Asymmetric verification of content delivered through multicast is conceptually identical to the unicast case, owing to the asymmetry of access to the signing key;
+but the symmetric case does not directly apply given that multiple receivers need access to the same key used for both signing and verification, which in a naïve implementation opens up the possibility of forgery by a receiver on-path or with the ability to spoof the source.
 
 Multiple mechanisms providing for reliable asymmetric authentication of data delivered by multicast have been proposed over the years.
 
-* TESLA {{RFC4082}} achieves asymmetry between the sender and multiple receivers through timed release of symmetric keying material rather than through the computational difficulty of deriving a signing key from a verification key in public key cryptosystems like RSA and ECDSA.
-It employs computationally-inexpensive symmetric authentication tagging with release of the keying material to receivers only after they are assumed to have received the protected data, with any data received subsequent to key release to be discarded.
+* TESLA {{RFC4082}} achieves asymmetry between the sender and multiple receivers through timed release of symmetric keying material rather than through the assumed computational difficulty of deriving a signing key from a verification key in public key cryptosystems like RSA and ECDSA.
+It employs computationally-inexpensive symmetric authentication tagging with release of the keying material to receivers only after they are assumed to have received the protected data, with any data received subsequent to scheduled key release to be discarded by the receiver.
 This requires some degree of time synchronization between clients and servers and imposes latency above one-way path delay prior to release of authenticated data to applications.
 
 * Simple per-packet asymmetric signature of packet contents based on out-of-band communication of the signature's public key and algorithm, for example as described in Section 3 of {{RFC6584}}.
@@ -170,8 +176,27 @@ Semantic equivalence to (D)TLS in this respect is therefore straightforwardly ac
 
 ### Beyond Authentication Tagging
 
-Integrity is partially provided by the authentication mechanism.
-As multicast is not connection-oriented at the transport layer (e.g., multicast protocols typically employ UDP), applications relying on multicast must otherwise provide for detection and/or management of packet duplication/replay, loss/deletion, and reordering.
+Integrity in the Web security model for unicast is closely tied to the features provided by transports that enabled the Web from its earliest days.
+TCP, the transport substrate for the original HTTP, provides in-order delivery, reliability via retransmission, packet de-duplication, and modest protection against replay and forgery by certain classes of adversaries.
+SSL and TLS later greatly strengthened those protections.
+Web applications universally rely on these integrity assumptions for even the most basic operations.
+It is no surprise, then, that when QUIC was subsequently designed with HTTP as the model application, initial requirements included the integrity guarantees provided by TCP at the granularity of an individual stream.
+
+Multicast applications by contrast have different integrity assumptions owing to the multicast transport legacy.
+UDP, the transport protocol atop which multicast applications are typically built, provides no native reliability, in-order delivery, de-duplication, or protection against replay or forgery.
+Additionally, UDP by itself provides no protection against off-path spoofing or injection.
+Multicast has therefore traditionally been used for applications that can deal with a modest loss of integrity through application-layer mitigations such as:
+
+* Packet indexes to reveal duplication/replay and reordering, and to complicate off-path spoofing and injection
+* Deletion coding to allow recovery from loss/deletion
+* Graceful degradation in response to loss/deletion, exemplified by video codecs designed to tolerate loss
+
+A baseline for multicast transport integrity that makes sense within the Web security model requires that we first define the minimally acceptable integrity requirements for data that may be presented to a user.
+
+TODO: Dangers of manipulation without violating authentication and how to manage this.
+
+Integrity in multicast, as in the unicast case, is partially provided by the authentication mechanism.
+As multicast is not connection-oriented at the transport layer, applications relying on multicast must otherwise provide for detection and/or management of packet duplication/replay, loss/deletion, and reordering.
 
 Some of these functions may also be provided by the authentication mechanism. For instance:
 
