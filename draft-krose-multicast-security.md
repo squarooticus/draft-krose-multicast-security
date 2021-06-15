@@ -33,10 +33,13 @@ author:
 normative:
     RFC2119:
     RFC3552:
+    RFC4949:
     RFC4607:
+    RFC7258:
     RFC8085:
     RFC8174:
     RFC8815:
+    RFC9000:
 
 informative:
 
@@ -124,12 +127,11 @@ TODO: maybe some mention that higher-level protocols can provide reliability (e.
 
 # Threat Model
 
-## Authenticity and Integrity
-
 At its most general, the goal of authentication is to ensure that data being processed is genuine, while the goal of integrity protection is to ensure that the data is unmodified and complete and (where appropriate) to expose any exceptions to applications for further handling.
-In practice, the mechanisms for these two functions overlap to a high degree, so we address them together.
+In practice, the mechanisms for these two functions overlap to a high degree, so we address them jointly.
 
-### Authentication Tagging
+
+## Authentication
 
 The Web security model requires that content be authenticated cryptographically.
 In the context of unicast transport security, authentication means that content is known to have originated from the trusted peer, something that is typically enforced via a cryptographic authentication tag:
@@ -174,7 +176,8 @@ Regardless of mechanism, the primary goal of authentication in the multicast con
 that the content delivered to the application originated from the trusted source.
 Semantic equivalence to (D)TLS in this respect is therefore straightforwardly achieved by any number of potential mechanisms.
 
-### Beyond Authentication Tagging
+
+## Integrity
 
 Integrity in the Web security model for unicast is closely tied to the features provided by transports that enabled the Web from its earliest days.
 TCP, the transport substrate for the original HTTP, provides in-order delivery, reliability via retransmission, packet de-duplication, and modest protection against replay and forgery by certain classes of adversaries.
@@ -248,19 +251,26 @@ the availability of multicast transports does not further complicate this respon
 
 ### Forward Secrecy
 
-TODO: Confidentiality of past payloads, e.g. via key rotation.
+Forward secrecy (also called "perfect forward secrecy" or "PFS" and defined in {{RFC4949}}) is a countermeasure against attackers that record encrypted traffic with the intent of later decrypting it should the communicating parties' long-term keys be compromised.
+Forward secrecy for protocols leveraging time-limited keys to protect a communication session ("session keys") requires that such session keys be unrecoverable by an attacker that later compromises the long-term keys used to negotiate or deliver those session keys.
+
+As noted earlier, confidential content delivered via multicast will necessarily imply delivery of the same keying material to multiple receivers, rather than negotiation of a unique key as is typical in the unicast case.
+Presumably, such receivers will need to be individually authenticated and authorized by the content provider prior to delivery of decryption keys.
+If this authorization and key delivery channel is a forward secret unicast transport such as TLS 1.3, then so long as these encryption keys are rotated and new keys distributed to clients periodically via this channel, the multicast payloads will also effectively be forward secret beyond the time interval of rotation, which we can consider to be the session duration.
 
 
 ## Non-linkability
 
-TODO: Re: passively linking a user across user agents or roaming devices.
+Concern about pervasive monitoring of users culminated in the publication of {{RFC7258}}, which states that "the IETF will work to mitigate the technical aspects of [pervasive monitoring]."
+One area of particular concern is the ability for pervasive monitoring to track individual clients across changes in network connectivity, such as being able to tell when a device or connection migrates from a wired home network to a cell network.
+This has motivated mitigations in subsequent protocol designs, such as those discussed in section 9.5 of {{RFC9000}}.
 
 
 ## Browser-Specific Threats
 
 The security requirements for multicast transport to a browser follow directly from the requirement that the browser's job is to protect the user.  Huang et al. [huang-w2sp] summarize the core browser security guarantee as follows:
 
-  Users can safely visit arbitrary web sites and execute scripts provided by those sites.
+> Users can safely visit arbitrary web sites and execute scripts provided by those sites.
 
 The reader will find the full discussion of the browser threat model in section 3 of {{RFC8826}} helpful in understanding what follows.
 
@@ -272,6 +282,11 @@ This document covers only unidirectional multicast from a server to (potentially
 
 ### Hostile Origin
 
+A hostile origin could serve a Web application that attempts to join many multicast groups, overwhelming the provider's network with undesired traffic.
+
+### Private Browsing Modes
+
+Browsers that offer a private browsing mode, designed both to bypass access to client-side persistent state and to prevent broad classes of data leakage that can be leveraged by passive and active attackers alike, should require explicit user approval for joining a multicast group given the metadata exposure to network elements of IGMP and MLD messages.
 
 
 # Security Considerations
