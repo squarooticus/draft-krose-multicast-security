@@ -160,11 +160,11 @@ This requires some degree of time synchronization between clients and servers an
 
 * Simple per-packet asymmetric signature of packet contents based on out-of-band communication of the signature's public key and algorithm, for example as described in Section 3 of {{RFC6584}}.
 
-* Asymmetric Manifest-based Integrity (AMBI) {{AMBI}}, in contrast with TESLA, assumes the existence of an out-of-band, authenticated channel for distribution of manifests containing cryptographic digests of those packets.
+* Asymmetric Manifest-based Integrity (AMBI) {{AMBI}} relies on an out-of-band authenticated channel for distribution of manifests containing cryptographic digests of the packets in the multicast stream.
 Authentication of this channel may, for instance, be provided by TLS if manifests are distributed using HTTPS from an origin known to the client to be closely affiliated with the multicast stream, such as would be the case if the manifest URL is delivered by the origin of the parent page hosting the media object.
 Authenticity in this case is a prerequisite of the out-of-band channel that AMBI builds upon to provide authenticity for the multicast data channel.
 
-Regardless of mechanism, however, the primary goal of authentication in the multicast context is identical to that for unicast:
+Regardless of mechanism, the primary goal of authentication in the multicast context is identical to that for unicast:
 that the content delivered to the application originated from the trusted source.
 Semantic equivalence to (D)TLS in this respect is therefore straightforwardly achieved by any number of potential mechanisms.
 
@@ -196,7 +196,7 @@ Furthermore, since those receivers all require the same keying material to decry
 That having been said, however, there are factors and practices that help mitigate these additional risks:
 
 * Multicast delivery is unidirectional from content provider to consumer and has no end-to-end unicast control channel association at the transport-layer, though such associations are possible and even likely at the application layer.
-Assuming application-layer unicast control plane traffic is properly-secured, identifiable plaintext control messages are limited to IGMP messages intercepted by (and not retransmitted verbatim by) a user's upstream router.
+Assuming application-layer unicast control plane traffic is properly-secured, identifiable plaintext control messages are limited to IGMP or MLD messages intercepted by (and not retransmitted verbatim by) a user's upstream router.
 Notwithstanding linkability via data or metadata from application-layer control flows, a passive observer with monitoring capability at a particular path element can thus only directly determine that some entity served by that path element has joined a particular multicast channel (in SSM {{RFC4607}}, identified by the (source, group) pair of IP addresses).
 Increasing the specificity of user identification would require a monitoring point closer to the user or some way to manipulate a user into revealing metadata out-of-band that the observer can tie to the user via traffic analysis or other means.
 
