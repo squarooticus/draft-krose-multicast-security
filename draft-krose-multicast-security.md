@@ -230,7 +230,7 @@ Increasing the specificity of user identification would require a monitoring poi
 
 * There is in general no way to link a multicast channel to other related content:
 in particular, if a multicast stream is encrypted using a key delivered out-of-band, there is no standard mechanism in the multicast protocol ecosystem for identifying the location of the keying material.
-Thus, for a passive observer to know what content is actually being consumed, beyond simply identifying the multicast channel or metadata such as the cohort of possible group members revealed by tracking channel membership at the observer's set of network tap points, they would need to already know what content is available via that channel, either via traffic analysis such as in the case of passive observation of unicast TLS, or via access to the related content that references the channel. TODO: This explanation needs to be made comprehensible.
+Thus, for a passive observer to know what content is actually being consumed, beyond simply identifying the multicast channel or metadata such as the cohort of possible receivers revealed by tracking channel membership at the observer's set of network tap points, they would need to already know what content is available via that channel, either via traffic analysis such as in the case of passive observation of unicast TLS, or via access to the related content that references the channel. TODO: This explanation needs to be made comprehensible.
 A dragnet cataloging all content available through a particular origin would defeat this, but could be further mitigated via controlled access to index information, or via periodic changes in multicast source, group, or keying material or some combination of the three.
 
 * As covered in {{personaldata}}, multicast is not generally suitable for transport of personal data: consequently, while the attack surface of a pool of receivers increases with the number of receivers, the corresponding impact of a compromise goes down as more broadly-distributed content is less likely to contain revelatory information. TODO: This doesn't account for the dissidents-watching-a-prohibited-stream scenario.
@@ -280,9 +280,20 @@ This document covers only unidirectional multicast from a server to (potentially
 
 ### Injection
 
+In the absence of any specific mitigations, network attackers have the ability to inject or modify packets in a multicast stream.
+On-path injection and modification are trivial, but even off-path injection is feasible for many networks, such as those that implement no protections against source address spoofing.
+Consequently, it is critical that a browser prevent any such injected or modified traffic from reaching large attack surfaces in the browser, such as the rendering code.
+
 ### Hostile Origin
 
-A hostile origin could serve a Web application that attempts to join many multicast groups, overwhelming the provider's network with undesired traffic.
+A hostile origin could serve a Web application that attempts to join many multicast channels, overwhelming the provider's network with undesired traffic.
+
+The first line of defense is the browser itself:
+the browser should at a minimum prevent joining of channels not associated with the hosting site.
+In the general case, this implies the need for a CORS-like mechanism for cross-origin authorization of multicast channel sharing.
+
+The second line of defense is the network.
+The user's upstream router can and should monitor the user's multicast behavior, implementing circuit breakers that will target unpopular content when overloaded or when an abusive subscription pattern is detected.
 
 ### Private Browsing Modes
 
