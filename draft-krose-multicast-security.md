@@ -2,6 +2,7 @@
 docname: draft-krose-multicast-security-latest
 title: Security and Privacy Considerations for Multicast Transports
 abbrev: Multicast Transport Security
+date:
 category: std
 
 ipr: trust200902
