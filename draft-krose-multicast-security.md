@@ -111,7 +111,7 @@ For unicast transport, TLS {{RFC8446}} satisfies these requirements, therefore W
 For unicast communication this is sensible and meaningful (if imprecise) for an engineer with a grounding in security, but it is unclear how or whether 'semantic equivalence to TLS' can be directly interpreted in any meaningful way for multicast transport protocols.
 This document instead explicitly describes a security and privacy threat model for multicast transports in order to extend the Web security model to accommodate multicast delivery in a way that fits within the spirit of how that model is generally interpreted for unicast.
 
-Although defining the security protections necessary to make multicast traffic suitable for Web Transport is a key goal for this document, many of the security considerations described here would be equally necessary to consider if a higher level multicast transport protocol were used for a more specific use case, for delivery to clients constrained by the Web security model.
+Although defining the security protections necessary to make multicast traffic suitable for Web Transport is a key goal for this document, many of the security considerations described here would be equally necessary to consider if a higher level multicast transport protocol were to be made available via a different interface within clients constrained by the Web security model.
 
 
 # Conventions and Definitions
@@ -208,7 +208,7 @@ Multicast has therefore traditionally been used for applications that can deal w
 * Deletion coding to allow for passive recovery from loss/deletion
 * Graceful degradation in response to loss/deletion, exemplified by video codecs designed to tolerate loss
 
-A baseline for multicast transport integrity that makes sense within the Web security model requires that we first define the minimally acceptable integrity requirements for data that may be presented to a user or otherwise input to the browser trusted computing base.
+A baseline for multicast transport integrity that makes sense within the Web security model requires that we first define the minimally acceptable integrity requirements for data that may be presented to a user or otherwise input to the browser's trusted computing base.
 We propose that the proper minimal standard given the variety of potential use cases, including many that have no need for reliable or in-order delivery, is to require protection against replay, injection, and modification and the ability to detect deletion, loss, or reordering.
 This standard will necessarily constrain conformant application-layer protocol design, just as the Web security model adds constraints to vanilla TCP.
 
