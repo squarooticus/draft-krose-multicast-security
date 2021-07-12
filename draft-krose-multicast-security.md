@@ -208,14 +208,14 @@ Multicast has therefore traditionally been used for applications that can deal w
 * Deletion coding to allow for passive recovery from loss/deletion
 * Graceful degradation in response to loss/deletion, exemplified by video codecs designed to tolerate loss
 
-A baseline for multicast transport integrity that makes sense within the Web security model requires that we first define the minimally acceptable integrity requirements for data that may be presented to a user.
+A baseline for multicast transport integrity that makes sense within the Web security model requires that we first define the minimally acceptable integrity requirements for data that may be presented to a user or otherwise input to the browser trusted computing base.
+We propose that the proper minimal standard given the variety of potential use cases, including many that have no need for reliable or in-order delivery, is to require protection against replay, injection, and modification and the ability to detect deletion, loss, or reordering.
+This standard will necessarily constrain conformant application-layer protocol design, just as the Web security model adds constraints to vanilla TCP.
 
-TODO: Dangers of manipulation without violating authentication and how to manage this.
-
-Integrity in multicast, as in the unicast case, is partially provided by the authentication mechanism.
-As multicast is not connection-oriented at the transport layer, applications relying on multicast must otherwise provide for detection and/or management of packet duplication/replay, loss/deletion, and reordering.
-
-Some of these functions may also be provided by the authentication mechanism. For instance:
+Integrity in multicast, as in the unicast case, is partially provided by the authentication mechanism:
+for example, if authentication is provided at packet granularity, modified or forged packets will fail to authenticate and will thus not be delivered to the application.
+Lacking a bidirectional relationship at the transport layer, however, applications relying on multicast must otherwise provide for detection of and/or recovery from packet duplication/replay, loss/deletion, and reordering.
+Some of these functions, too, may be provided by the authentication layer. For instance:
 
 * TESLA prevents replay and reveals reordering, but only across time intervals. An application requiring finer-grained countermeasures against duplication/replay or reordering, or indeed any countermeasure to deletion/loss, would need to provide that via custom support (e.g., through the introduction of packet sequence numbers) or via an intermediate-layer protocol providing those functions.
 
