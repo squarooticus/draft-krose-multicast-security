@@ -134,7 +134,7 @@ Given the virtually unbounded potential for attacks targeting data confidentiali
 ## Multicast Transport Properties
 
 Unlike typical unicast transport protocols, multicast transports are naturally unidirectional.
-A typical use case for multicast transport is for a small number of senders to transmit data to a large number of receivers.
+Use cases for multicast transports typically involve one or a small number of senders transmitting data to a large number of receivers.
 The sender may not know who the receivers are, or even how many of them there are, although a sender may require a pre-existing out-of-band relationship with receivers for the received data to be useful, such as via distribution of decryption keys only to authorized receivers.
 
 Applications built atop multicast IP or UDP must provide a mechanism for congestion control, just as those built atop unicast IP or UDP must.
