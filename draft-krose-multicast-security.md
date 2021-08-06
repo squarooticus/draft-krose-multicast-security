@@ -146,7 +146,7 @@ For example, in an application with unicast recovery for objects constructed out
 Care must be taken to avoid such amplification attack vectors.
 
 
-## Authentication
+## Authentication {#authentication}
 
 The Web security model requires that content be authenticated cryptographically.
 In the context of unicast transport security, authentication means that content is known to have originated from the trusted peer, something that is typically enforced via a cryptographic authentication tag:
@@ -275,6 +275,18 @@ Forward secrecy for protocols leveraging time-limited keys to protect a communic
 As noted earlier, confidential content delivered via multicast will necessarily imply delivery of the same keying material to multiple receivers, rather than negotiation of a unique key as is typical in the unicast case.
 Presumably, such receivers will need to be individually authenticated and authorized by the content provider prior to delivery of decryption keys.
 If this authorization and key delivery mechanism employs a forward secret unicast transport such as TLS 1.3, then so long as these encryption keys are ephemeral (that is, rotated periodically and discarded after rotation) the multicast payloads will also effectively be forward secret beyond the time interval of rotation, which we can consider to be the session duration.
+
+### Bypassing Authentication
+
+Protocols should be designed to discourage implementations from making use of unauthenticated data.
+The usual approach to enforcing this is to entangle decryption and authentication where possible, for example via use of primitives such as authenticated encryption (AE).
+While ultimately authentication checks are independent of decryption (at least in classical cryptography), use of such primitives to minimize the number of places in which an incomplete or lazy implementation can avoid such checks constitutes best practice.
+TLS 1.3, for instance, mandates authenticated encryption for all symmetric cryptographic operations:
+without writing one's own AE cipher implementation that purposely skips the authentication tag check, this leaves establishment of trust in the peer certificate as the only practical step an implementation can skip without impacting the ability to make use of the decrypted content.
+
+The situation is complicated by the need for more than two parties to have access to symmetric keys that would used to secure payloads via AE in the unicast case.
+As discussed in {{authentication}}, it is imperative for protocols to provide, and for receivers to leverage, some kind of asymmetry in authentication of each content unit prior to any use of said content to eliminate the ability for a rogue receiver to cause other receivers to deliver forged data to applications.
+This requirement to perform authentication checks separately from, and in addition to, decryption throughout the lifetime of a stream necessarily introduces greater risk from implementation incorrectness than what has been achieved by TLS 1.3 in the unicast case.
 
 
 ## Non-linkability
