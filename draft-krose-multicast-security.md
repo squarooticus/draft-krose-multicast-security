@@ -151,7 +151,7 @@ Care must be taken to avoid such amplification attack vectors.
 The Web security model requires that content be authenticated cryptographically.
 In the context of unicast transport security, authentication means that content is known to have originated from the trusted peer, something that is typically enforced via a cryptographic authentication tag:
 
-* Symmetric tags, such as symmetric message authentication codes (MACs) and authentication tags produced by authenticated encryption algorithms.
+* Symmetric tags, such as symmetric message authentication codes (MACs) and authentication tags produced by authenticated encryption (AE) algorithms.
 Because anyone in possession of the keying material may produce valid symmetric authentication tags, such keying material is typically known to at most two parties:
 one sender and one receiver.
 Some algorithms (such as TESLA, discussed below) relieve this constraint by imposing some different constraint on verification of tagged content.
@@ -279,14 +279,15 @@ If this authorization and key delivery mechanism employs a forward secret unicas
 ### Bypassing Authentication
 
 Protocols should be designed to discourage implementations from making use of unauthenticated data.
-The usual approach to enforcing this is to entangle decryption and authentication where possible, for example via use of primitives such as authenticated encryption (AE).
+The usual approach to enforcing this is to entangle decryption and authentication where possible, for example via use of primitives such as authenticated encryption.
 While ultimately authentication checks are independent of decryption (at least in classical cryptography), use of such primitives to minimize the number of places in which an incomplete or lazy implementation can avoid such checks constitutes best practice.
-TLS 1.3, for instance, mandates authenticated encryption for all symmetric cryptographic operations:
+TLS 1.3, for instance, mandates AE for all symmetric cryptographic operations:
 without writing one's own AE cipher implementation that purposely skips the authentication tag check, this leaves establishment of trust in the peer certificate as the only practical step an implementation can skip without impacting the ability to make use of the decrypted content.
 
-The situation is complicated by the need for more than two parties to have access to symmetric keys that would used to secure payloads via AE in the unicast case.
-As discussed in {{authentication}}, it is imperative for protocols to provide, and for receivers to leverage, some kind of asymmetry in authentication of each content unit prior to any use of said content to eliminate the ability for a rogue receiver to cause other receivers to deliver forged data to applications.
-This requirement to perform authentication checks separately from, and in addition to, decryption throughout the lifetime of a stream necessarily introduces greater risk from implementation incorrectness than what has been achieved by TLS 1.3 in the unicast case.
+The situation in multicast is complicated by the need for more than two parties to have access to symmetric keys that would used to secure payloads via AE in the unicast case.
+As discussed in {{authentication}}, it is imperative for protocols to provide, and for receivers to leverage, some kind of asymmetry in authentication of each content unit prior to any use of said content to eliminate the ability for an attacker in possession of a shared symmetric key (possibly including an authorized receiver) to inject forged data into a stream that other receivers would then validate and deliver to applications.
+This requirement to perform authentication checks throughout the lifetime of a stream that are separate from, and orthogonal to, content decryption adds an extra dimension of risk from implementation incorrectness, because such authentication becomes an on-going process rather than the result of a one-time certificate check at connection establishment.
+Protocol designers and implementors are thus strongly encouraged to simplify or even black box such on-going authentication to minimize the potential for implementors or users to skip such checks.
 
 
 ## Non-linkability
@@ -294,7 +295,7 @@ This requirement to perform authentication checks separately from, and in additi
 Concern about pervasive monitoring of users culminated in the publication of {{RFC7258}}, which states that "the IETF will work to mitigate the technical aspects of \[pervasive monitoring\]."
 One area of particular concern is the ability for pervasive monitoring to track individual clients across changes in network connectivity, such as being able to tell when a device or connection migrates from a wired home network to a cell network.
 This has motivated mitigations in subsequent protocol designs, such as those discussed in section 9.5 of {{RFC9000}}.
-Migration of multicast group subscriptions across network connections carries the potential for correlation of metadata between multicast group subscriptions and unicast control channels, even when control channels are encrypted, so care must be taken to design such protocols to avoid such correlations.
+Migration of multicast group subscriptions across network connections carries the potential for correlation of metadata between multicast group subscriptions and unicast control channels, even when control channels are encrypted, so care must be taken to design protocols to avoid such correlations.
 
 
 ## Browser-Specific Threats
