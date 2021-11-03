@@ -148,13 +148,24 @@ Care must be taken to avoid such amplification attack vectors.
 
 ## Authentication {#authentication}
 
-The Web security model requires that content be authenticated cryptographically.
-In the context of unicast transport security, authentication means that content is known to have originated from the trusted peer, something that is typically enforced via a cryptographic authentication tag:
+The Web security model requires that:
+
+* Requests and responses must be authenticated as having originated from the peer. (In the case of server-only authentication schemes, this means responses from the trusted server and requests from the client browser having established trust in the server.)
+
+* Each response must be bound to a specific request.
+
+In the unicast case:
+
+* Authentication of responses in HTTPS is provided by a trusted octet stream, cryptographically resistant to tampering, bootstrapped via certificate validation and trust chain verification (either server-only or mutual).
+
+* Binding of a response to a request in HTTPS is a direct consequence of the integrity guaranteed by this trusted stream to the image of the underlying HTTP protocol, which itself allows for no ambiguity in determining which request induced a particular response.
+
+Authentication of units of transport for trusted channels (think: individual packets or messages) is typically provided by a cryptographic authentication tag:
 
 * Symmetric tags, such as symmetric message authentication codes (MACs) and authentication tags produced by authenticated encryption (AE) algorithms.
 Because anyone in possession of the keying material may produce valid symmetric authentication tags, such keying material is typically known to at most two parties:
 one sender and one receiver.
-Some algorithms (such as TESLA, discussed below) relieve this constraint by imposing some different constraint on verification of tagged content.
+Some algorithms employing symmetric authentication (such as TESLA, discussed below) relieve this constraint by imposing some different constraint on verification of tagged content.
 
 * Asymmetric tags, typically signatures produced by public key cryptosystems.
 These assume that only the sender has access to the signing key, but impose no constraints on dissemination of the signature verification key.
