@@ -1,0 +1,554 @@
+
+
+
+
+TODO Working Group                                               K. Rose
+Internet-Draft                                                J. Holland
+Intended status: Standards Track               Akamai Technologies, Inc.
+Expires: 14 July 2022                                    10 January 2022
+
+
+      Security and Privacy Considerations for Multicast Transports
+                 draft-krose-multicast-security-latest
+
+Abstract
+
+   Interdomain multicast has unique potential to solve delivery
+   scalability for popular content, but it carries a set of security and
+   privacy issues that differ from those in unicast delivery.  This
+   document analyzes the security threats unique to multicast-based
+   delivery for Internet and Web traffic under the Internet and Web
+   threat models.
+
+Discussion Venues
+
+   This note is to be removed before publishing as an RFC.
+
+   Discussion of this document takes place on the mailing list (), which
+   is archived at .
+
+   Source for this draft and an issue tracker can be found at
+   https://github.com/squarooticus/draft-krose-multicast-security.
+
+Status of This Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at https://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on 14 July 2022.
+
+Copyright Notice
+
+   Copyright (c) 2022 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents (https://trustee.ietf.org/
+   license-info) in effect on the date of publication of this document.
+   Please review these documents carefully, as they describe your rights
+   and restrictions with respect to this document.  Code Components
+   extracted from this document must include Revised BSD License text as
+   described in Section 4.e of the Trust Legal Provisions and are
+   provided without warranty as described in the Revised BSD License.
+
+Table of Contents
+
+   1.  Introduction
+     1.1.  Background
+     1.2.  Web Security Model
+   2.  Conventions and Definitions
+   3.  Multicast Transport Properties
+   4.  Threat Model
+     4.1.  Authenticity and Integrity
+       4.1.1.  Authentication Tagging
+       4.1.2.  Beyond Authentication Tagging
+     4.2.  Confidentiality
+       4.2.1.  Privacy
+       4.2.2.  Personal Data
+       4.2.3.  Forward Secrecy
+     4.3.  Non-linkability
+     4.4.  Browser-Specific Threats
+       4.4.1.  Access to Local Resources
+       4.4.2.  Injection
+       4.4.3.  Hostile Origin
+   5.  Security Considerations
+   6.  IANA Considerations
+   7.  References
+     7.1.  Normative References
+     7.2.  Informative References
+   Acknowledgments
+   Authors' Addresses
+
+1.  Introduction
+
+   This document examines the security considerations relevant to the
+   use of multicast for scalable one-to-many delivery of application
+   traffic over the Internet, along with special considerations for
+   multicast delivery to clients constrained by the Web security model.
+
+1.1.  Background
+
+   This document assumes readers have a basic undrestanding of some
+   background topics, specifically:
+
+   *  The Internet threat model as defined in Section 3 of [RFC3552].
+
+   *  The Security Considerations for UDP Usage Guidelines as described
+      in Section 6 of [RFC8085], since application layer multicast
+      traffic is generally carried over UDP.
+
+   *  Source-specific multicast, as described in [RFC4607].  This
+      document focuses on interdomain multicast, therefore any-source
+      multicast is out of scope in accordance with the deprecation of
+      interdomain any-source multicast in [RFC8815].
+
+1.2.  Web Security Model
+
+   The Web security model, while not yet documented authoritatively in a
+   single reference, nevertheless strongly influences Web client
+   implementations, and has generally been interpreted to require
+   certain properties of underlying transports such as:
+
+   *  Confidentiality: A passive observer must not be able to identify
+      or access content through simple observation of the bits being
+      delivered, up to the limits of metadata privacy (such as traffic
+      analysis, peer identity, application/transport/security-layer
+      protocol design constraints, etc.).
+
+   *  Authenticity: A receiver must be able to cryptographically verify
+      that the delivered content originated from the desired source.
+
+   *  Integrity: A receiver must be able to distinguish between original
+      content as sent from the desired source and content modified in
+      some way (including through deletion) by an attacker.
+
+   *  Non-linkability: A passive observer must not be able to link a
+      single user across multiple devices or a single client roaming
+      across multiple networks.
+
+   For unicast transport, TLS [RFC8446] satisfies these requirements,
+   therefore Web Transport [webtrans] proposes to require qualifying
+   transport protocols to use "TLS or a semantically equivalent security
+   protocol".
+
+   For unicast communication this is sensible and meaningful (if
+   imprecise) for an engineer with a grounding in security, but it is
+   unclear how or whether 'semantic equivalence to TLS' can be directly
+   interpreted in any meaningful way for multicast transport protocols.
+   This document instead explicitly describes a security and privacy
+   threat model for multicast transports in order to extend the Web
+   security model to accommodate multicast delivery in a way that fits
+   within the spirit of how that model is generally interpreted for
+   unicast.
+
+   Although defining the security protections necessary to make
+   multicast traffic suitable for Web Transport is a key goal for this
+   document, many of the security considerations described here would be
+   equally necessary to consider if a higher level multicast transport
+   protocol were used for a more specific use case, for delivery to
+   clients constrained by the Web security model.
+
+2.  Conventions and Definitions
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+   "OPTIONAL" in this document are to be interpreted as described in BCP
+   14 [RFC2119] [RFC8174] when, and only when, they appear in all
+   capitals, as shown here.
+
+3.  Multicast Transport Properties
+
+   By contrast with bidirectional unicast transports, multicast
+   transport at the IP or UDP layer is necessarily unidirectional,
+   connectionless, and unreliable.
+
+   Although applications compliant with Section 4.1 of [RFC8085] will
+   implement congestion control, in the context of a threat model it's
+   important to note that malicious clients might attempt to use non-
+   compliant subscriptions to multicast traffic as part of a DoS attack
+   where possible, and that some applications might not be compliant
+   with the recommendations for congestion control implementations.
+
+   TODO: maybe some mention that higher-level protocols can provide
+   reliability (e.g. 5740 (norm)/5775 (alc) and/or
+   flute(6726)/fcast(6968) that use alc, plus draft-pardue-quic-http-
+   mcast), but this may introduce different risks from spoofing if per-
+   packet authenticity is not provided.  For example, in an application
+   with unicast recovery for a reliable object that's constructed out of
+   1k packets, injecting a single spoofed packet amplifies by 1k *
+   number of receivers, if they all recover the whole reliable object.
+   Also: determine whether this mention belongs in this section--maybe
+   better as a ref to a different section here?
+
+4.  Threat Model
+
+4.1.  Authenticity and Integrity
+
+   At its most general, the goal of authentication is to ensure that
+   data being processed is genuine, while the goal of integrity
+   protection is to ensure that the data is unmodified and complete and
+   (where appropriate) to expose any exceptions to applications for
+   further handling.  In practice, the mechanisms for these two
+   functions overlap to a high degree, so we address them together.
+
+4.1.1.  Authentication Tagging
+
+   In the context of unicast transport security, authentication means
+   that content is known to have originated from the trusted peer,
+   something that is typically enforced via a cryptographic
+   authentication tag:
+
+   *  Symmetric tags, such as symmetric message authentication codes
+      (MACs) and authentication tags produced by authenticated
+      encryption algorithms.  Because anyone in possession of the keying
+      material may produce valid symmetric authentication tags, such
+      keying material is typically known to at most two parties: one
+      sender and one receiver.  Some algorithms (such as TESLA,
+      discussed below) relieve this constraint by imposing some
+      different constraint on verification of tagged content.
+
+   *  Asymmetric tags, typically public key cryptosystem signatures.
+      These assume that only the sender has access to the signing key,
+      but impose no constraints on dissemination of the signature
+      verification key.
+
+   In both cases:
+
+   *  The receiving party must have a means for establishing trust in
+      the keying material used to verify the authentication tag.
+
+   *  Instead of directly authenticating the protected content, the tag
+      may protect a root of trust that itself cryptographically prevents
+      modification or forgery of further content.  Examples include:
+
+      -  The TLS 1.3 handshake employing an authentication tag to reject
+         MitM attacks against ECDH key agreement.
+
+      -  An authentication tag of a Merkle tree root protecting the
+         content represented by the entire tree.
+
+   *  The authentication tag serves to provide integrity protection over
+      the unit of content to which the tag applies, with additional
+      mechanisms required to detect and/or manage duplication/replay,
+      deletion/loss, and reordering.
+
+   Asymmetric verification of content delivered through multicast is
+   identical to the unicast case, owing to the asymmetry of access to
+   the signing key; but the symmetric MAC case does not directly apply
+   given that multiple receivers need access to the same key used for
+   both signing and verification, which opens up the possibility of
+   forgery by a receiver on-path or with the ability to spoof the
+   source.
+
+   Multiple mechanisms providing for reliable asymmetric authentication
+   of data delivered by multicast have been proposed over the years.
+
+   *  TESLA [RFC4082] achieves asymmetry between the sender and multiple
+      receivers through timed release of symmetric keying material
+      rather than through the computational difficulty of deriving a
+      signing key from a verification key in public key cryptosystems
+      like RSA and ECDSA.  It employs computationally-inexpensive
+      symmetric authentication tagging with release of the keying
+      material to receivers only after they are assumed to have received
+      the protected data, with any data received subsequent to key
+      release to be discarded.  This requires some degree of time
+      synchronization between clients and servers and imposes latency
+      above one-way path delay prior to release of authenticated data to
+      applications.
+
+   *  Simple per-packet asymmetric signature of packet contents based on
+      out-of-band communication of the signature's public key and
+      algorithm, for example as described in Section 3 of [RFC6584].
+
+   *  Asymmetric Manifest-based Integrity (AMBI) [AMBI] relies on an
+      out-of-band authenticated channel for distribution of manifests
+      containing cryptographic digests of the packets in the multicast
+      stream.  Authentication of this channel may, for instance, be
+      provided by TLS if manifests are distributed using HTTPS from an
+      origin known to the client to be closely affiliated with the
+      multicast stream, such as would be the case if the manifest URL is
+      delivered by the origin of the parent page hosting the media
+      object.  Authenticity in this case is a prerequisite of the out-
+      of-band channel that AMBI builds upon to provide authenticity for
+      the multicast data channel.
+
+   Regardless of mechanism, the primary goal of authentication in the
+   multicast context is identical to that for unicast: that the content
+   delivered to the application originated from the trusted source.
+   Semantic equivalence to (D)TLS in this respect is therefore
+   straightforwardly achieved by any number of potential mechanisms.
+
+4.1.2.  Beyond Authentication Tagging
+
+   Integrity is partially provided by the authentication mechanism.  As
+   multicast is not connection-oriented at the transport layer (e.g.,
+   multicast protocols typically employ UDP), applications relying on
+   multicast must otherwise provide for detection and/or management of
+   packet duplication/replay, loss/deletion, and reordering.
+
+   Some of these functions may also be provided by the authentication
+   mechanism.  For instance:
+
+   *  TESLA prevents replay and reveals reordering, but only across time
+      intervals.  An application requiring finer-grained countermeasures
+      against duplication/replay or reordering, or indeed any
+      countermeasure to deletion/loss, would need to provide that via
+      custom support (e.g., through the introduction of packet sequence
+      numbers) or via an intermediate-layer protocol providing those
+      functions.
+
+   *  AMBI by design provides strong protection against duplication/
+      replay and reveals reordering and deletion/loss of content packets
+      through a strict in-order manifest of packet digests.
+
+4.2.  Confidentiality
+
+   In the unicast transport security context, confidentiality implies
+   that an observer (passive or active) without pre-existing access to
+   keying material must not be able to decrypt the bytes on the wire or
+   identify the content being transferred, even if that adversary has
+   access to the decrypted content via other means.  In practice, the
+   former is trivially achieved through the use of authenticated key
+   exchange and modern symmetric ciphers, but the latter is an ideal
+   that is rarely possible owing to the substantial metadata in the
+   clear on the public Internet: traffic analysis can make use of packet
+   sizes and timing, endpoint identities, biases in application-layer
+   protocol designs, side channels, and other such metadata to reveal an
+   often surprising amount of information about the encrypted payload
+   without needing access to any keying material.
+
+   Multicast additionally introduces the complication that all receivers
+   of a stream, even if encrypted, receive the same payload (loss and
+   duplication notwithstanding).  This introduces novel privacy concerns
+   that do not apply to unicast transports.
+
+4.2.1.  Privacy
+
+   In contrast to (say) unicast TLS, on-path monitoring can trivially
+   prove that identical content was delivered to multiple receivers,
+   irrespective of payload encryption.  Furthermore, since those
+   receivers all require the same keying material to decrypt the
+   received payload, a compromise of any single receiver's device
+   exposes decryption keys, and therefore the plaintext content, to the
+   attacker.
+
+   That having been said, however, there are factors and practices that
+   help mitigate these additional risks:
+
+   *  Multicast delivery is unidirectional from content provider to
+      consumer and has no end-to-end unicast control channel association
+      at the transport-layer, though such associations are possible and
+      even likely at the application layer.  Assuming application-layer
+      unicast control plane traffic is properly-secured, identifiable
+      plaintext control messages are limited to IGMP or MLD messages
+      intercepted by (and not retransmitted verbatim by) a user's
+      upstream router.  Notwithstanding linkability via data or metadata
+      from application-layer control flows, a passive observer with
+      monitoring capability at a particular path element can thus only
+      directly determine that some entity served by that path element
+      has joined a particular multicast channel (in SSM [RFC4607],
+      identified by the (source, group) pair of IP addresses).
+      Increasing the specificity of user identification would require a
+      monitoring point closer to the user or some way to manipulate a
+      user into revealing metadata out-of-band that the observer can tie
+      to the user via traffic analysis or other means.
+
+   *  There is in general no way to link a multicast channel to other
+      related content: in particular, if a multicast stream is encrypted
+      using a key delivered out-of-band, there is no standard mechanism
+      in the multicast protocol ecosystem for identifying the location
+      of the keying material.  Thus, for a passive observer to know what
+      content is actually being consumed, beyond simply identifying the
+      multicast channel or metadata such as the cohort of possible group
+      members revealed by tracking channel membership at the observer's
+      set of network tap points, they would need to already know what
+      content is available via that channel, either via traffic analysis
+      such as in the case of passive observation of unicast TLS, or via
+      access to the related content that references the channel.  TODO:
+      This explanation needs to be made comprehensible.  A dragnet
+      cataloging all content available through a particular origin would
+      defeat this, but could be further mitigated via controlled access
+      to index information, or via periodic changes in multicast source,
+      group, or keying material or some combination of the three.
+
+   *  As covered in Section 4.2.2, multicast is not generally suitable
+      for transport of personal data: consequently, while the attack
+      surface of a pool of receivers increases with the number of
+      receivers, the corresponding impact of a compromise goes down as
+      more broadly-distributed content is less likely to contain
+      revelatory information.  TODO: This doesn't account for the
+      dissidents-watching-a-prohibited-stream scenario.
+
+4.2.2.  Personal Data
+
+   A sender has responsibility not to expose personal information
+   broadly.  This is not a consideration unique to multicast delivery:
+   an irresponsible service could publish a web page with Social
+   Security numbers or push its server TLS private key into the
+   certificate transparency log as easily as it could multicast personal
+   data to a large set of receivers.
+
+   The Web security model partially mitigates irresponsible senders by
+   mandating the use of secure transports: prohibiting the fetching of
+   mixed content on a single page prevents a server from sending private
+   data to a browser in the clear.  The main effect is to raise the bar
+   closer to requiring bad faith on the part of senders in revealing
+   personal information.
+
+   Multicast by its very nature is not generally suitable for transport
+   of personal data: since the main value of leveraging a multicast
+   transport is to deliver the same data to a large pool of receivers,
+   such content must not include confidential personal information.
+   Senders already have a responsibility to handle private information
+   in a way that respects the privacy of users: the availability of
+   multicast transports does not further complicate this responsibility.
+
+4.2.3.  Forward Secrecy
+
+   TODO: Confidentiality of past payloads, e.g. via key rotation.
+
+4.3.  Non-linkability
+
+   TODO: Re: passively linking a user across user agents or roaming
+   devices.
+
+4.4.  Browser-Specific Threats
+
+   The security requirements for multicast transport to a browser follow
+   directly from the requirement that the browser's job is to protect
+   the user.  Huang et al. [huang-w2sp] summarize the core browser
+   security guarantee as follows:
+
+   Users can safely visit arbitrary web sites and execute scripts
+   provided by those sites.
+
+   The reader will find the full discussion of the browser threat model
+   in section 3 of [RFC8826] helpful in understanding what follows.
+
+4.4.1.  Access to Local Resources
+
+   This document covers only unidirectional multicast from a server to
+   (potentially many) clients, as well as associated control channels
+   used to manage that communication and access to the content delivered
+   via multicast.  As a result, local resource access can be presumed to
+   be limited to that already available within web applications.  Note
+   that these resources may include information that can be used to
+   identify or track individuals, such as information about the user
+   agent, viewport size, display resolution, but TODO: reference some
+   other guidance on how this kind of PII is to be handled.
+
+4.4.2.  Injection
+
+4.4.3.  Hostile Origin
+
+5.  Security Considerations
+
+   This entire document is about security.
+
+6.  IANA Considerations
+
+   This document has no IANA actions.
+
+7.  References
+
+7.1.  Normative References
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119,
+              DOI 10.17487/RFC2119, March 1997,
+              <https://www.rfc-editor.org/rfc/rfc2119>.
+
+   [RFC3552]  Rescorla, E. and B. Korver, "Guidelines for Writing RFC
+              Text on Security Considerations", BCP 72, RFC 3552,
+              DOI 10.17487/RFC3552, July 2003,
+              <https://www.rfc-editor.org/rfc/rfc3552>.
+
+   [RFC4607]  Holbrook, H. and B. Cain, "Source-Specific Multicast for
+              IP", RFC 4607, DOI 10.17487/RFC4607, August 2006,
+              <https://www.rfc-editor.org/rfc/rfc4607>.
+
+   [RFC8085]  Eggert, L., Fairhurst, G., and G. Shepherd, "UDP Usage
+              Guidelines", BCP 145, RFC 8085, DOI 10.17487/RFC8085,
+              March 2017, <https://www.rfc-editor.org/rfc/rfc8085>.
+
+   [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
+              2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
+              May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
+
+   [RFC8815]  Abrahamsson, M., Chown, T., Giuliano, L., and T. Eckert,
+              "Deprecating Any-Source Multicast (ASM) for Interdomain
+              Multicast", BCP 229, RFC 8815, DOI 10.17487/RFC8815,
+              August 2020, <https://www.rfc-editor.org/rfc/rfc8815>.
+
+7.2.  Informative References
+
+   [AMBI]     Holland, J. and K. Rose, "Asymmetric Manifest Based
+              Integrity", Work in Progress, Internet-Draft, draft-ietf-
+              mboned-ambi-02, 11 July 2021,
+              <https://datatracker.ietf.org/doc/html/draft-ietf-mboned-
+              ambi-02>.
+
+   [huang-w2sp]
+              Huang, L-S., Chen, E.Y., Barth, A., Rescorla, E., and C.
+              Jackson, "Talking to Yourself for Fun and Profit", Web 2.0
+              Security and Privacy (W2SP 2011) , May 2011,
+              <https://ptolemy.berkeley.edu/projects/truststc/pubs/840/
+              websocket.pdf>.
+
+   [RFC4082]  Perrig, A., Song, D., Canetti, R., Tygar, J. D., and B.
+              Briscoe, "Timed Efficient Stream Loss-Tolerant
+              Authentication (TESLA): Multicast Source Authentication
+              Transform Introduction", RFC 4082, DOI 10.17487/RFC4082,
+              June 2005, <https://www.rfc-editor.org/rfc/rfc4082>.
+
+   [RFC6584]  Roca, V., "Simple Authentication Schemes for the
+              Asynchronous Layered Coding (ALC) and NACK-Oriented
+              Reliable Multicast (NORM) Protocols", RFC 6584,
+              DOI 10.17487/RFC6584, April 2012,
+              <https://www.rfc-editor.org/rfc/rfc6584>.
+
+   [RFC8446]  Rescorla, E., "The Transport Layer Security (TLS) Protocol
+              Version 1.3", RFC 8446, DOI 10.17487/RFC8446, August 2018,
+              <https://www.rfc-editor.org/rfc/rfc8446>.
+
+   [RFC8826]  Rescorla, E., "Security Considerations for WebRTC",
+              RFC 8826, DOI 10.17487/RFC8826, January 2021,
+              <https://www.rfc-editor.org/rfc/rfc8826>.
+
+   [webtrans] Vasiliev, V., "The WebTransport Protocol Framework", Work
+              in Progress, Internet-Draft, draft-ietf-webtrans-overview-
+              02, 28 July 2021, <https://datatracker.ietf.org/doc/html/
+              draft-ietf-webtrans-overview-02>.
+
+Acknowledgments
+
+   TODO acks
+
+Authors' Addresses
+
+   Kyle Rose
+   Akamai Technologies, Inc.
+   145 Broadway
+   Cambridge, MA 02144,
+   United States of America
+
+   Email: krose@krose.org
+
+
+   Jake Holland
+   Akamai Technologies, Inc.
+   145 Broadway
+   Cambridge, MA 02144,
+   United States of America
+
+   Email: jakeholland.net@gmail.com
