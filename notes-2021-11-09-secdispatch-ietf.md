@@ -297,7 +297,7 @@ many-to-many group conference, where it's important to know who's
 listening when you say something and there is some kind of trust between
 different group members?
 
-The intent of the confidentiality discussion was about 
+My understanding on the intent of the confidentiality discussion was about defense against traffic monitoring, or other threat models involved with leaking information about what people are consuming, if any can be identified.
 
 # Mic Topics
 
@@ -327,7 +327,7 @@ multicast traffic delivery on today's internet?
 is necessary before taking this further, but nothing else yet about the
 security requirements.)
 
-## Different problem then you think
+## Different problem than you think
 
  * [Video@1h54m08s](https://www.youtube.com/watch?v=vbbFgM761t4&t=1h54m08s)
  * Notes text:
