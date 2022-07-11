@@ -11,25 +11,26 @@
        Interdomain multicast has unique potential to solve delivery scalability for popular content, but it carries a set of security and privacy issues that differ from those in unicast delivery.
 This document analyzes the security threats unique to multicast-based delivery for Internet and Web traffic under the Internet and Web threat models. 
     " name="description">
-<meta content="xml2rfc 3.12.0" name="generator">
+<meta content="xml2rfc 3.13.0" name="generator">
 <meta content="Internet-Draft" name="keyword">
 <meta content="draft-krose-multicast-security-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.12.0
-    Python 3.9.7
+  xml2rfc 3.13.0
+    Python 3.10.4
     appdirs 1.4.4
-    ConfigArgParse 1.3
-    google-i18n-address 2.5.0
+    ConfigArgParse 1.5.3
+    google-i18n-address 2.5.2
     html5lib 1.1
     intervaltree 3.1.0
-    Jinja2 2.11.3
+    Jinja2 3.1.2
     kitchen 1.2.6
-    lxml 4.6.5
-    pycountry 20.7.3
-    pyflakes 2.3.1
-    PyYAML 5.4.1
-    requests 2.26.0
-    setuptools 52.0.0
+    lxml 4.9.1
+    MarkupSafe 2.1.1
+    pycountry 22.3.5
+    pyflakes 2.4.0
+    PyYAML 6.0
+    requests 2.27.1
+    setuptools 59.4.0
     six 1.16.0
 -->
 <link href="draft-krose-multicast-security.xml" rel="alternate" type="application/rfc+xml">
@@ -154,6 +155,14 @@ This document analyzes the security threats unique to multicast-based delivery f
   font-weight: 700;
   font-display: swap;
   src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Lora SemiBold'), local('Lora-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-semibold-latin.woff2') format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
@@ -337,7 +346,7 @@ ol, ul {
   padding: 0;
   margin: 0 0 0.5em 2em;
 }
-ol ol, ul ul, ol ul, ul ol {
+:is(ol, ul) :is(ol, ul) {
   margin-left: 1em;
 }
 li {
@@ -352,8 +361,7 @@ ul.empty, .ulEmpty {
 ul.empty li, .ulEmpty li {
   margin-top: 0.5em;
 }
-ul.compact, .ulCompact,
-ol.compact, .olCompact {
+:is(ul, ol).compact, .ulCompact, .olCompact {
   line-height: 100%;
   margin: 0 0 0 2em;
 }
@@ -369,7 +377,7 @@ dl > dd {
   margin-bottom: .8em;
   min-height: 1.3em;
 }
-dl.compact > dd, .dlCompact > dd {
+:is(dl.compact, .dlCompact) > dd {
   margin-bottom: 0em;
 }
 dl > dd > dl {
@@ -411,6 +419,9 @@ tt, code {
      remove leading to avoid altering the final height of lines */
   line-height: 0;
 }
+:is(h1, h2, h3, h4, h5, h6) :is(tt, code) {
+  font-size: 84%;
+}
 pre {
   border: 1px solid var(--line-color);
   font-size: 13.5px;
@@ -435,6 +446,19 @@ figcaption, caption {
   text-align: left;
 }
 @media screen {
+  /* Auto-collapse boilerplate. */
+  :is(#status-of-memo, #copyright) p {
+    margin: -2px 0;
+    max-height: 0;
+    transition: max-height 2s ease, margin 0.5s ease 0.5s;
+    overflow: hidden;
+  }
+  :is(#status-of-memo, #copyright):hover p,
+  :is(#status-of-memo, #copyright) h2:target ~ p {
+    margin: 0.5em 0;
+    max-height: 500px;
+    overflow: auto;
+  }
   pre, svg {
     display: inline-block;
     overflow-x: auto;
@@ -450,7 +474,7 @@ figcaption, caption {
     display: block;
     width: calc(100% - 25px);
   }
-  pre + .pilcrow, svg + .pilcrow {
+  :is(pre, svg) + .pilcrow {
     display: inline-block;
     vertical-align: text-bottom;
     padding-bottom: 8px;
@@ -499,17 +523,11 @@ th, td {
 th {
   background-color: var(--line-color);
 }
-tr:nth-child(2n) > td {
+:is(tr:nth-child(2n), thead+tbody > tr:nth-child(2n+1)) > td {
   background-color: var(--background-color);
 }
-tr:nth-child(2n+1) > td {
+:is(tr:nth-child(2n+1), thead+tbody > tr:nth-child(2n)) > td {
   background-color: var(--highlight-color);
-}
-thead+tbody > tr:nth-child(2n) > td {
-  background-color: var(--highlight-color);
-}
-thead+tbody > tr:nth-child(2n+1) > td {
-  background-color: var(--background-color);
 }
 table caption {
   margin: 0;
@@ -549,8 +567,9 @@ hr {
 }
 .bcp14 {
   font-variant: small-caps;
+  font-weight: 600;
+  font-size: 14.5px;
 }
-
 .role {
   font-variant: all-small-caps;
 }
@@ -789,7 +808,7 @@ hr.addr {
     margin: 0 0 0 4px;
     font-size: var(--small-font-size);
   }
-  #toc ul p, #toc ul li {
+  #toc ul :is(p, li) {
     margin: 2px 0;
     line-height: 22px;
   }
@@ -899,13 +918,13 @@ dl.dlNewline > dt {
 }
 
 /* Provide styling for table cell text alignment */
-table .text-left, table .text-left {
+table .text-left {
   text-align: left;
 }
-table .text-center, table .text-center {
+table .text-center {
   text-align: center;
 }
-table .text-right, table .text-right {
+table .text-right {
   text-align: right;
 }
 
@@ -972,12 +991,6 @@ address div.right {
   }
 
 }
-/* Tweak the bcp14 keyword presentation */
-.bcp14 {
-  font-variant: small-caps;
-  font-weight: bold;
-  font-size: 0.9em;
-}
 
 /* Dark mode. */
 @media (prefers-color-scheme: dark) {
@@ -992,19 +1005,20 @@ address div.right {
   --pilcrow-strong: #666;
   scrollbar-color: #777 #333;
 }
-/* Trick: a prefix match works because only black and white are allowed */
-svg [stroke="black"], svg [stroke^="#000"] {
+}
+
+/* SVG Trick: a prefix match works because only black and white are allowed */
+svg :is([stroke="black"], [stroke^="#000"]) {
   stroke: var(--text-color);
 }
-svg [stroke="white"], svg [stroke^="#fff"] {
+svg :is([stroke="white"], [stroke^="#fff"]) {
   stroke: var(--background-color);
 }
-svg [fill="black"], svg [fill^="#000"], svg :not([fill]) {
+svg :is([fill="black"], [fill^="#000"], :not([fill])) {
   fill: var(--text-color);
 }
-svg [stroke="fill"], svg [fill^="#fff"] {
+svg :is([stroke="fill"], [fill^="#fff"]) {
   fill: var(--background-color);
-}
 }
 </style>
 
@@ -1014,11 +1028,11 @@ svg [stroke="fill"], svg [fill^="#fff"] {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">Multicast Transport Security</td>
-<td class="right">January 2022</td>
+<td class="right">July 2022</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Rose &amp; Holland</td>
-<td class="center">Expires 14 July 2022</td>
+<td class="center">Expires 12 January 2023</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1031,12 +1045,12 @@ svg [stroke="fill"], svg [fill^="#fff"] {
 <dd class="internet-draft">draft-krose-multicast-security-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2022-01-10" class="published">10 January 2022</time>
+<time datetime="2022-07-11" class="published">11 July 2022</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2022-07-14">14 July 2022</time></dd>
+<dd class="expires"><time datetime="2023-01-12">12 January 2023</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1086,7 +1100,7 @@ This document analyzes the security threats unique to multicast-based delivery f
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 14 July 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 12 January 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1159,22 +1173,25 @@ This document analyzes the security threats unique to multicast-based delivery f
                 </ul>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.5">
-                <p id="section-toc.1-1.3.2.5.1"><a href="#section-3.5" class="xref">3.5</a>.  <a href="#name-non-linkability" class="xref">Non-linkability</a></p>
+                <p id="section-toc.1-1.3.2.5.1"><a href="#section-3.5" class="xref">3.5</a>.  <a href="#name-request-response-binding" class="xref">Request/Response Binding</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.6">
-                <p id="section-toc.1-1.3.2.6.1"><a href="#section-3.6" class="xref">3.6</a>.  <a href="#name-browser-specific-threats" class="xref">Browser-Specific Threats</a></p>
+                <p id="section-toc.1-1.3.2.6.1"><a href="#section-3.6" class="xref">3.6</a>.  <a href="#name-non-linkability" class="xref">Non-linkability</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.7">
+                <p id="section-toc.1-1.3.2.7.1"><a href="#section-3.7" class="xref">3.7</a>.  <a href="#name-browser-specific-threats" class="xref">Browser-Specific Threats</a></p>
 <ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.6.2.1">
-                    <p id="section-toc.1-1.3.2.6.2.1.1"><a href="#section-3.6.1" class="xref">3.6.1</a>.  <a href="#name-access-to-local-resources" class="xref">Access to Local Resources</a></p>
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.7.2.1">
+                    <p id="section-toc.1-1.3.2.7.2.1.1"><a href="#section-3.7.1" class="xref">3.7.1</a>.  <a href="#name-access-to-local-resources" class="xref">Access to Local Resources</a></p>
 </li>
-                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.6.2.2">
-                    <p id="section-toc.1-1.3.2.6.2.2.1"><a href="#section-3.6.2" class="xref">3.6.2</a>.  <a href="#name-injection" class="xref">Injection</a></p>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.7.2.2">
+                    <p id="section-toc.1-1.3.2.7.2.2.1"><a href="#section-3.7.2" class="xref">3.7.2</a>.  <a href="#name-injection" class="xref">Injection</a></p>
 </li>
-                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.6.2.3">
-                    <p id="section-toc.1-1.3.2.6.2.3.1"><a href="#section-3.6.3" class="xref">3.6.3</a>.  <a href="#name-hostile-origin" class="xref">Hostile Origin</a></p>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.7.2.3">
+                    <p id="section-toc.1-1.3.2.7.2.3.1"><a href="#section-3.7.3" class="xref">3.7.3</a>.  <a href="#name-hostile-origin" class="xref">Hostile Origin</a></p>
 </li>
-                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.6.2.4">
-                    <p id="section-toc.1-1.3.2.6.2.4.1"><a href="#section-3.6.4" class="xref">3.6.4</a>.  <a href="#name-private-browsing-modes" class="xref">Private Browsing Modes</a></p>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.7.2.4">
+                    <p id="section-toc.1-1.3.2.7.2.4.1"><a href="#section-3.7.4" class="xref">3.7.4</a>.  <a href="#name-private-browsing-modes" class="xref">Private Browsing Modes</a></p>
 </li>
                 </ul>
 </li>
@@ -1293,53 +1310,54 @@ Care must be taken to avoid such amplification attack vectors.<a href="#section-
         <h3 id="name-authentication">
 <a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-authentication" class="section-name selfRef">Authentication</a>
         </h3>
-<p id="section-3.2-1">The Web security model requires that content be authenticated cryptographically.
-In the context of unicast transport security, authentication means that content is known to have originated from the trusted peer, something that is typically enforced via a cryptographic authentication tag:<a href="#section-3.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.2-1">The Web security model requires that data delivered to applications must be authenticated as having originated from the trusted peer. (In the case of server-only transport-level authentication schemes, such as the ubiquitous TLS server-only authentication employed throughout the Web, trust in the client may be strongly established at the application layer or weakly established as nothing more than precluding a man-in-the-middle.)<a href="#section-3.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.2-2">In the unicast case, authentication of payloads in HTTPS is provided by a trusted octet stream, cryptographically resistant to tampering, bootstrapped via certificate validation and trust chain verification (either mutual or server-only, perhaps augmented with application-layer identity verification).<a href="#section-3.2-2" class="pilcrow">¶</a></p>
+<p id="section-3.2-3">Authentication of units of transport for trusted channels (think: individual packets or messages) is typically provided by a cryptographic authentication tag:<a href="#section-3.2-3" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3.2-2.1">Symmetric tags, such as symmetric message authentication codes (MACs) and authentication tags produced by authenticated encryption (AE) algorithms.
+<li class="normal" id="section-3.2-4.1">Symmetric tags, such as symmetric message authentication codes (MACs) and authentication tags produced by authenticated encryption (AE) algorithms.
 Because anyone in possession of the keying material may produce valid symmetric authentication tags, such keying material is typically known to at most two parties:
 one sender and one receiver.
-Some algorithms (such as TESLA, discussed below) relieve this constraint by imposing some different constraint on verification of tagged content.<a href="#section-3.2-2.1" class="pilcrow">¶</a>
+Some algorithms employing symmetric authentication (such as TESLA, discussed below) relieve this constraint by imposing some different constraint on verification of tagged content.<a href="#section-3.2-4.1" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-3.2-2.2">Asymmetric tags, typically signatures produced by public key cryptosystems.
-These assume that only the sender has access to the signing key, but impose no constraints on dissemination of the signature verification key.<a href="#section-3.2-2.2" class="pilcrow">¶</a>
+          <li class="normal" id="section-3.2-4.2">Asymmetric tags, typically signatures produced by public key cryptosystems.
+These assume that only the sender has access to the signing key, but impose no constraints on dissemination of the signature verification key.<a href="#section-3.2-4.2" class="pilcrow">¶</a>
 </li>
         </ul>
-<p id="section-3.2-3">In both cases:<a href="#section-3.2-3" class="pilcrow">¶</a></p>
+<p id="section-3.2-5">In both cases:<a href="#section-3.2-5" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3.2-4.1">The receiving party must have a means for establishing trust in the keying material used to verify the authentication tag.<a href="#section-3.2-4.1" class="pilcrow">¶</a>
+<li class="normal" id="section-3.2-6.1">The receiving party must have a means for establishing trust in the keying material used to verify the authentication tag.<a href="#section-3.2-6.1" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-3.2-4.2">
-            <p id="section-3.2-4.2.1">Instead of directly authenticating the protected content, the tag may protect a root of trust that itself protects cryptographically-linked content.
-Examples include:<a href="#section-3.2-4.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-3.2-6.2">
+            <p id="section-3.2-6.2.1">Instead of directly authenticating the protected content, the tag may protect a root of trust that itself protects cryptographically-linked content.
+Examples include:<a href="#section-3.2-6.2.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3.2-4.2.2.1">The TLS 1.3 handshake employing an authentication tag to reject MitM attacks against ECDH key agreement.<a href="#section-3.2-4.2.2.1" class="pilcrow">¶</a>
+<li class="normal" id="section-3.2-6.2.2.1">The TLS 1.3 handshake employing an authentication tag to reject MitM attacks against ECDH key agreement.<a href="#section-3.2-6.2.2.1" class="pilcrow">¶</a>
 </li>
-              <li class="normal" id="section-3.2-4.2.2.2">An authentication tag of a Merkle tree root protecting the content represented by the entire tree.<a href="#section-3.2-4.2.2.2" class="pilcrow">¶</a>
+              <li class="normal" id="section-3.2-6.2.2.2">An authentication tag of a Merkle tree root protecting the content represented by the entire tree.<a href="#section-3.2-6.2.2.2" class="pilcrow">¶</a>
 </li>
             </ul>
 </li>
-          <li class="normal" id="section-3.2-4.3">The authentication tag serves to provide integrity protection over the unit of content to which the tag applies, with additional mechanisms required to detect and/or manage duplication/replay, deletion/loss, and reordering within a sequence of such authenticated content units.<a href="#section-3.2-4.3" class="pilcrow">¶</a>
+          <li class="normal" id="section-3.2-6.3">The authentication tag serves to provide integrity protection over the unit of content to which the tag applies, with additional mechanisms required to detect and/or manage duplication/replay, deletion/loss, and reordering within a sequence of such authenticated content units.<a href="#section-3.2-6.3" class="pilcrow">¶</a>
 </li>
         </ul>
-<p id="section-3.2-5">Asymmetric verification of content delivered through multicast is conceptually identical to the unicast case, owing to the asymmetry of access to the signing key;
-but the symmetric case does not directly apply given that multiple receivers need access to the same key used for both signing and verification, which in a naive implementation opens up the possibility of forgery by a receiver on-path or with the ability to spoof the source.<a href="#section-3.2-5" class="pilcrow">¶</a></p>
-<p id="section-3.2-6">Multiple mechanisms providing for reliable asymmetric authentication of data delivered by multicast have been proposed over the years.<a href="#section-3.2-6" class="pilcrow">¶</a></p>
+<p id="section-3.2-7">Asymmetric verification of content delivered through multicast is conceptually identical to the unicast case, owing to the asymmetry of access to the signing key;
+but the symmetric case does not directly apply given that multiple receivers need access to the same key used for both signing and verification, which in a naive implementation opens up the possibility of forgery by a receiver on-path or with the ability to spoof the source.<a href="#section-3.2-7" class="pilcrow">¶</a></p>
+<p id="section-3.2-8">Multiple mechanisms providing for reliable asymmetric authentication of data delivered by multicast have been proposed over the years.<a href="#section-3.2-8" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3.2-7.1">TESLA <span>[<a href="#RFC4082" class="xref">RFC4082</a>]</span> achieves asymmetry between the sender and multiple receivers through timed release of symmetric keying material rather than through the assumed computational difficulty of deriving a signing key from a verification key in public key cryptosystems like RSA and ECDSA.
+<li class="normal" id="section-3.2-9.1">TESLA <span>[<a href="#RFC4082" class="xref">RFC4082</a>]</span> achieves asymmetry between the sender and multiple receivers through timed release of symmetric keying material rather than through the assumed computational difficulty of deriving a signing key from a verification key in public key cryptosystems like RSA and ECDSA.
 It employs computationally-inexpensive symmetric authentication tagging with release of the keying material to receivers only after they are assumed to have received the protected data, with any data received subsequent to scheduled key release to be discarded by the receiver.
-This requires some degree of time synchronization between clients and servers and imposes latency above one-way path delay prior to release of authenticated data to applications.<a href="#section-3.2-7.1" class="pilcrow">¶</a>
+This requires some degree of time synchronization between clients and servers and imposes latency above one-way path delay prior to release of authenticated data to applications.<a href="#section-3.2-9.1" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-3.2-7.2">Simple per-packet asymmetric signature of packet contents based on out-of-band communication of the signature's public key and algorithm, for example as described in Section 3 of <span>[<a href="#RFC6584" class="xref">RFC6584</a>]</span>.<a href="#section-3.2-7.2" class="pilcrow">¶</a>
+          <li class="normal" id="section-3.2-9.2">Simple per-packet asymmetric signature of packet contents based on out-of-band communication of the signature's public key and algorithm, for example as described in Section 3 of <span>[<a href="#RFC6584" class="xref">RFC6584</a>]</span>.<a href="#section-3.2-9.2" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-3.2-7.3">Asymmetric Manifest-based Integrity (AMBI) <span>[<a href="#AMBI" class="xref">AMBI</a>]</span> relies on an out-of-band authenticated channel for distribution of manifests containing cryptographic digests of the packets in the multicast stream.
+          <li class="normal" id="section-3.2-9.3">Asymmetric Manifest-based Integrity (AMBI) <span>[<a href="#AMBI" class="xref">AMBI</a>]</span> relies on an out-of-band authenticated channel for distribution of manifests containing cryptographic digests of the packets in the multicast stream.
 Authentication of this channel may, for instance, be provided by TLS if manifests are distributed using HTTPS from an origin known to the client to be closely affiliated with the multicast stream, such as would be the case if the manifest URL is delivered by the origin of the parent page hosting the media object.
-Authenticity in this case is a prerequisite of the out-of-band channel that AMBI builds upon to provide authenticity for the multicast data channel.<a href="#section-3.2-7.3" class="pilcrow">¶</a>
+Authenticity in this case is a prerequisite of the out-of-band channel that AMBI builds upon to provide authenticity for the multicast data channel.<a href="#section-3.2-9.3" class="pilcrow">¶</a>
 </li>
         </ul>
-<p id="section-3.2-8">Regardless of mechanism, the primary goal of authentication in the multicast context is identical to that for unicast:
+<p id="section-3.2-10">Regardless of mechanism, the primary goal of authentication in the multicast context is identical to that for unicast:
 that the content delivered to the application originated from the trusted source.
-Semantic equivalence to (D)TLS in this respect is therefore straightforwardly achieved by any number of potential mechanisms.<a href="#section-3.2-8" class="pilcrow">¶</a></p>
+Semantic equivalence to (D)TLS in this respect is therefore straightforwardly achieved by any number of potential mechanisms.<a href="#section-3.2-10" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="integrity">
@@ -1467,68 +1485,80 @@ Protocol designers and implementors are thus strongly encouraged to simplify or 
 </div>
 </section>
 </div>
-<div id="non-linkability">
+<div id="requestresponse-binding">
 <section id="section-3.5">
-        <h3 id="name-non-linkability">
-<a href="#section-3.5" class="section-number selfRef">3.5. </a><a href="#name-non-linkability" class="section-name selfRef">Non-linkability</a>
+        <h3 id="name-request-response-binding">
+<a href="#section-3.5" class="section-number selfRef">3.5. </a><a href="#name-request-response-binding" class="section-name selfRef">Request/Response Binding</a>
         </h3>
-<p id="section-3.5-1">Concern about pervasive monitoring of users culminated in the publication of <span>[<a href="#RFC7258" class="xref">RFC7258</a>]</span>, which states that "the IETF will work to mitigate the technical aspects of [pervasive monitoring]."
+<p id="section-3.5-1">In addition to requiring that application data be cryptographically authenticated, the Web security model also requires that each HTTP response must be bound to a specific HTTP request in a way that cannot be forged by an adversary.<a href="#section-3.5-1" class="pilcrow">¶</a></p>
+<p id="section-3.5-2">In the unicast case, binding of a response to a request in HTTPS is a direct consequence of the integrity guaranteed by the cryptographically protected transport stream to the image of the underlying HTTP protocol, which itself allows for no ambiguity in determining which request induced a particular response.<a href="#section-3.5-2" class="pilcrow">¶</a></p>
+<p id="section-3.5-3">Request/response binding in multicast requires additional protocol or application-layer support as multicast is naturally unidirectional and so does not carry request traffic.
+Any multicast protocol carrying Web traffic must provide a means for cryptographically binding the data delivered over a multicast channel to a specific client request.
+Failure to do so could, for example, allow an on-path adversary to swap the packets between two different multicast channels both trusted by the client without being detected prior to delivery to the application.<a href="#section-3.5-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="non-linkability">
+<section id="section-3.6">
+        <h3 id="name-non-linkability">
+<a href="#section-3.6" class="section-number selfRef">3.6. </a><a href="#name-non-linkability" class="section-name selfRef">Non-linkability</a>
+        </h3>
+<p id="section-3.6-1">Concern about pervasive monitoring of users culminated in the publication of <span>[<a href="#RFC7258" class="xref">RFC7258</a>]</span>, which states that "the IETF will work to mitigate the technical aspects of [pervasive monitoring]."
 One area of particular concern is the ability for pervasive monitoring to track individual clients across changes in network connectivity, such as being able to tell when a device or connection migrates from a wired home network to a cell network.
 This has motivated mitigations in subsequent protocol designs, such as those discussed in section 9.5 of <span>[<a href="#RFC9000" class="xref">RFC9000</a>]</span>.
-Migration of multicast group subscriptions across network connections carries the potential for correlation of metadata between multicast group subscriptions and unicast control channels, even when control channels are encrypted, so care must be taken to design protocols to avoid such correlations.<a href="#section-3.5-1" class="pilcrow">¶</a></p>
+Migration of multicast channel subscriptions across network connections carries the potential for correlation of metadata between multicast channel subscriptions and unicast control channels, even when control channels are encrypted, so care must be taken to design protocols to avoid such correlations.<a href="#section-3.6-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="browser-specific-threats">
-<section id="section-3.6">
+<section id="section-3.7">
         <h3 id="name-browser-specific-threats">
-<a href="#section-3.6" class="section-number selfRef">3.6. </a><a href="#name-browser-specific-threats" class="section-name selfRef">Browser-Specific Threats</a>
+<a href="#section-3.7" class="section-number selfRef">3.7. </a><a href="#name-browser-specific-threats" class="section-name selfRef">Browser-Specific Threats</a>
         </h3>
-<p id="section-3.6-1">The security requirements for multicast transport to a browser follow directly from the requirement that the browser's job is to protect the user.  Huang et al. <span>[<a href="#huang-w2sp" class="xref">huang-w2sp</a>]</span> summarize the core browser security guarantee as follows:<a href="#section-3.6-1" class="pilcrow">¶</a></p>
+<p id="section-3.7-1">The security requirements for multicast transport to a browser follow directly from the requirement that the browser's job is to protect the user.  Huang et al. <span>[<a href="#huang-w2sp" class="xref">huang-w2sp</a>]</span> summarize the core browser security guarantee as follows:<a href="#section-3.7-1" class="pilcrow">¶</a></p>
 <ul class="normal ulEmpty">
-<li class="normal ulEmpty" id="section-3.6-2.1">
-            <p id="section-3.6-2.1.1">Users can safely visit arbitrary web sites and execute scripts provided by those sites.<a href="#section-3.6-2.1.1" class="pilcrow">¶</a></p>
+<li class="normal ulEmpty" id="section-3.7-2.1">
+            <p id="section-3.7-2.1.1">Users can safely visit arbitrary web sites and execute scripts provided by those sites.<a href="#section-3.7-2.1.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-3.6-3">The reader will find the full discussion of the browser threat model in section 3 of <span>[<a href="#RFC8826" class="xref">RFC8826</a>]</span> helpful in understanding what follows.<a href="#section-3.6-3" class="pilcrow">¶</a></p>
+<p id="section-3.7-3">The reader will find the full discussion of the browser threat model in section 3 of <span>[<a href="#RFC8826" class="xref">RFC8826</a>]</span> helpful in understanding what follows.<a href="#section-3.7-3" class="pilcrow">¶</a></p>
 <div id="access-to-local-resources">
-<section id="section-3.6.1">
+<section id="section-3.7.1">
           <h4 id="name-access-to-local-resources">
-<a href="#section-3.6.1" class="section-number selfRef">3.6.1. </a><a href="#name-access-to-local-resources" class="section-name selfRef">Access to Local Resources</a>
+<a href="#section-3.7.1" class="section-number selfRef">3.7.1. </a><a href="#name-access-to-local-resources" class="section-name selfRef">Access to Local Resources</a>
           </h4>
-<p id="section-3.6.1-1">This document covers only unidirectional multicast from a server to (potentially many) clients, as well as associated control channels used to manage that communication and access to the content delivered via multicast.
+<p id="section-3.7.1-1">This document covers only unidirectional multicast from a server to (potentially many) clients, as well as associated control channels used to manage that communication and access to the content delivered via multicast.
 As a result, local resource access can be presumed to be limited to that already available within web applications.
-Note that these resources may include fingerprint information that can be used to identify or track individuals, such as information about the user agent, viewport size, display resolution, a concern covered in extensive detail in <span>[<a href="#RFC8942" class="xref">RFC8942</a>]</span>.<a href="#section-3.6.1-1" class="pilcrow">¶</a></p>
+Note that these resources may include fingerprint information that can be used to identify or track individuals, such as information about the user agent, viewport size, display resolution, a concern covered in extensive detail in <span>[<a href="#RFC8942" class="xref">RFC8942</a>]</span>.<a href="#section-3.7.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="injection">
-<section id="section-3.6.2">
+<section id="section-3.7.2">
           <h4 id="name-injection">
-<a href="#section-3.6.2" class="section-number selfRef">3.6.2. </a><a href="#name-injection" class="section-name selfRef">Injection</a>
+<a href="#section-3.7.2" class="section-number selfRef">3.7.2. </a><a href="#name-injection" class="section-name selfRef">Injection</a>
           </h4>
-<p id="section-3.6.2-1">In the absence of any specific mitigations, network attackers have the ability to inject or modify packets in a multicast stream.
+<p id="section-3.7.2-1">In the absence of any specific mitigations, network attackers have the ability to inject or modify packets in a multicast stream.
 On-path injection and modification are trivial, but even off-path injection is feasible for many networks, such as those that implement no protections against source address spoofing.
-Consequently, it is critical that a browser prevent any such injected or modified traffic from reaching large attack surfaces in the browser, such as the rendering code.<a href="#section-3.6.2-1" class="pilcrow">¶</a></p>
+Consequently, it is critical that a browser prevent any such injected or modified traffic from reaching large attack surfaces in the browser, such as the rendering code.<a href="#section-3.7.2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="hostile-origin">
-<section id="section-3.6.3">
+<section id="section-3.7.3">
           <h4 id="name-hostile-origin">
-<a href="#section-3.6.3" class="section-number selfRef">3.6.3. </a><a href="#name-hostile-origin" class="section-name selfRef">Hostile Origin</a>
+<a href="#section-3.7.3" class="section-number selfRef">3.7.3. </a><a href="#name-hostile-origin" class="section-name selfRef">Hostile Origin</a>
           </h4>
-<p id="section-3.6.3-1">A hostile origin could serve a Web application that attempts to join many multicast channels, overwhelming the provider's network with undesired traffic.<a href="#section-3.6.3-1" class="pilcrow">¶</a></p>
-<p id="section-3.6.3-2">The first line of defense is the browser itself:
+<p id="section-3.7.3-1">A hostile origin could serve a Web application that attempts to join many multicast channels, overwhelming the provider's network with undesired traffic.<a href="#section-3.7.3-1" class="pilcrow">¶</a></p>
+<p id="section-3.7.3-2">The first line of defense is the browser itself:
 the browser should at a minimum prevent joining of channels not associated with the hosting site.
-In the general case, this implies the need for a CORS-like mechanism for cross-origin authorization of multicast channel sharing.<a href="#section-3.6.3-2" class="pilcrow">¶</a></p>
-<p id="section-3.6.3-3">The second line of defense is the network.
-The user's upstream router can and should monitor the user's multicast behavior, implementing circuit breakers that will target unpopular content when overloaded or when an abusive subscription pattern is detected.<a href="#section-3.6.3-3" class="pilcrow">¶</a></p>
+In the general case, this implies the need for a CORS-like mechanism for cross-origin authorization of multicast channel sharing.<a href="#section-3.7.3-2" class="pilcrow">¶</a></p>
+<p id="section-3.7.3-3">The second line of defense is the network.
+The user's upstream router can and should monitor the user's multicast behavior, implementing circuit breakers that will target unpopular content when overloaded or when an abusive subscription pattern is detected.<a href="#section-3.7.3-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="private-browsing-modes">
-<section id="section-3.6.4">
+<section id="section-3.7.4">
           <h4 id="name-private-browsing-modes">
-<a href="#section-3.6.4" class="section-number selfRef">3.6.4. </a><a href="#name-private-browsing-modes" class="section-name selfRef">Private Browsing Modes</a>
+<a href="#section-3.7.4" class="section-number selfRef">3.7.4. </a><a href="#name-private-browsing-modes" class="section-name selfRef">Private Browsing Modes</a>
           </h4>
-<p id="section-3.6.4-1">Browsers that offer a private browsing mode, designed both to bypass access to client-side persistent state and to prevent broad classes of data leakage that can be leveraged by passive and active attackers alike, should require explicit user approval for joining a multicast group given the metadata exposure to network elements of IGMP and MLD messages.<a href="#section-3.6.4-1" class="pilcrow">¶</a></p>
+<p id="section-3.7.4-1">Browsers that offer a private browsing mode, designed both to bypass access to client-side persistent state and to prevent broad classes of data leakage that can be leveraged by passive and active attackers alike, should require explicit user approval for joining a multicast group given the metadata exposure to network elements of IGMP and MLD messages.<a href="#section-3.7.4-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1601,15 +1631,15 @@ The user's upstream router can and should monitor the user's multicast behavior,
 <dl class="references">
 <dt id="AMBI">[AMBI]</dt>
         <dd>
-<span class="refAuthor">Holland, J.</span> and <span class="refAuthor">K. Rose</span>, <span class="refTitle">"Asymmetric Manifest Based Integrity"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-mboned-ambi-02</span>, <time datetime="2021-07-11" class="refDate">11 July 2021</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-mboned-ambi-02">https://datatracker.ietf.org/doc/html/draft-ietf-mboned-ambi-02</a>&gt;</span>. </dd>
+<span class="refAuthor">Holland, J.</span> and <span class="refAuthor">K. Rose</span>, <span class="refTitle">"Asymmetric Manifest Based Integrity"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-mboned-ambi-03</span>, <time datetime="2022-03-07" class="refDate">7 March 2022</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-mboned-ambi-03">https://datatracker.ietf.org/doc/html/draft-ietf-mboned-ambi-03</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="huang-w2sp">[huang-w2sp]</dt>
         <dd>
-<span class="refAuthor">Huang, L-S.</span>, <span class="refAuthor">Chen, E.Y.</span>, <span class="refAuthor">Barth, A.</span>, <span class="refAuthor">Rescorla, E.</span>, and <span class="refAuthor">C. Jackson</span>, <span class="refTitle">"Talking to Yourself for Fun and Profit"</span>, <span class="seriesInfo">Web 2.0 Security and Privacy (W2SP 2011) </span>, <time datetime="2011-05" class="refDate">May 2011</time>, <span>&lt;<a href="https://ptolemy.berkeley.edu/projects/truststc/pubs/840/websocket.pdf">https://ptolemy.berkeley.edu/projects/truststc/pubs/840/websocket.pdf</a>&gt;</span>. </dd>
+<span class="refAuthor">Huang, L.-S.</span>, <span class="refAuthor">Chen, E. Y.</span>, <span class="refAuthor">Barth, A.</span>, <span class="refAuthor">Rescorla, E.</span>, and <span class="refAuthor">C. Jackson</span>, <span class="refTitle">"Talking to Yourself for Fun and Profit"</span>, <span class="seriesInfo">Web 2.0 Security and Privacy (W2SP 2011) </span>, <time datetime="2011-05" class="refDate">May 2011</time>, <span>&lt;<a href="https://ptolemy.berkeley.edu/projects/truststc/pubs/840/websocket.pdf">https://ptolemy.berkeley.edu/projects/truststc/pubs/840/websocket.pdf</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="quic-http-mcast">[quic-http-mcast]</dt>
         <dd>
-<span class="refAuthor">Pardue, L.</span>, <span class="refAuthor">Bradbury, R.</span>, and <span class="refAuthor">S. Hurst</span>, <span class="refTitle">"Hypertext Transfer Protocol (HTTP) over multicast QUIC"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-pardue-quic-http-mcast-09</span>, <time datetime="2021-08-13" class="refDate">13 August 2021</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-pardue-quic-http-mcast-09">https://datatracker.ietf.org/doc/html/draft-pardue-quic-http-mcast-09</a>&gt;</span>. </dd>
+<span class="refAuthor">Pardue, L.</span>, <span class="refAuthor">Bradbury, R.</span>, and <span class="refAuthor">S. Hurst</span>, <span class="refTitle">"Hypertext Transfer Protocol (HTTP) over multicast QUIC"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-pardue-quic-http-mcast-11</span>, <time datetime="2022-07-04" class="refDate">4 July 2022</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-pardue-quic-http-mcast-11">https://datatracker.ietf.org/doc/html/draft-pardue-quic-http-mcast-11</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC4082">[RFC4082]</dt>
         <dd>
@@ -1645,7 +1675,7 @@ The user's upstream router can and should monitor the user's multicast behavior,
 <dd class="break"></dd>
 <dt id="webtrans">[webtrans]</dt>
       <dd>
-<span class="refAuthor">Vasiliev, V.</span>, <span class="refTitle">"The WebTransport Protocol Framework"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-webtrans-overview-02</span>, <time datetime="2021-07-28" class="refDate">28 July 2021</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-webtrans-overview-02">https://datatracker.ietf.org/doc/html/draft-ietf-webtrans-overview-02</a>&gt;</span>. </dd>
+<span class="refAuthor">Vasiliev, V.</span>, <span class="refTitle">"The WebTransport Protocol Framework"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-webtrans-overview-04</span>, <time datetime="2022-07-11" class="refDate">11 July 2022</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-webtrans-overview-04">https://datatracker.ietf.org/doc/html/draft-ietf-webtrans-overview-04</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>

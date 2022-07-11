@@ -5,7 +5,7 @@
 TODO Working Group                                               K. Rose
 Internet-Draft                                                J. Holland
 Intended status: Standards Track               Akamai Technologies, Inc.
-Expires: 14 July 2022                                    10 January 2022
+Expires: 12 January 2023                                    11 July 2022
 
 
       Security and Privacy Considerations for Multicast Transports
@@ -45,7 +45,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 14 July 2022.
+   This Internet-Draft will expire on 12 January 2023.
 
 Copyright Notice
 
@@ -76,12 +76,13 @@ Table of Contents
        3.4.2.  Personal Data
        3.4.3.  Forward Secrecy
        3.4.4.  Bypassing Authentication
-     3.5.  Non-linkability
-     3.6.  Browser-Specific Threats
-       3.6.1.  Access to Local Resources
-       3.6.2.  Injection
-       3.6.3.  Hostile Origin
-       3.6.4.  Private Browsing Modes
+     3.5.  Request/Response Binding
+     3.6.  Non-linkability
+     3.7.  Browser-Specific Threats
+       3.7.1.  Access to Local Resources
+       3.7.2.  Injection
+       3.7.3.  Hostile Origin
+       3.7.4.  Private Browsing Modes
    4.  Security Considerations
    5.  IANA Considerations
    6.  References
@@ -217,10 +218,22 @@ Table of Contents
 
 3.2.  Authentication
 
-   The Web security model requires that content be authenticated
-   cryptographically.  In the context of unicast transport security,
-   authentication means that content is known to have originated from
-   the trusted peer, something that is typically enforced via a
+   The Web security model requires that data delivered to applications
+   must be authenticated as having originated from the trusted peer.
+   (In the case of server-only transport-level authentication schemes,
+   such as the ubiquitous TLS server-only authentication employed
+   throughout the Web, trust in the client may be strongly established
+   at the application layer or weakly established as nothing more than
+   precluding a man-in-the-middle.)
+
+   In the unicast case, authentication of payloads in HTTPS is provided
+   by a trusted octet stream, cryptographically resistant to tampering,
+   bootstrapped via certificate validation and trust chain verification
+   (either mutual or server-only, perhaps augmented with application-
+   layer identity verification).
+
+   Authentication of units of transport for trusted channels (think:
+   individual packets or messages) is typically provided by a
    cryptographic authentication tag:
 
    *  Symmetric tags, such as symmetric message authentication codes
@@ -228,9 +241,10 @@ Table of Contents
       encryption (AE) algorithms.  Because anyone in possession of the
       keying material may produce valid symmetric authentication tags,
       such keying material is typically known to at most two parties:
-      one sender and one receiver.  Some algorithms (such as TESLA,
-      discussed below) relieve this constraint by imposing some
-      different constraint on verification of tagged content.
+      one sender and one receiver.  Some algorithms employing symmetric
+      authentication (such as TESLA, discussed below) relieve this
+      constraint by imposing some different constraint on verification
+      of tagged content.
 
    *  Asymmetric tags, typically signatures produced by public key
       cryptosystems.  These assume that only the sender has access to
@@ -556,7 +570,30 @@ Table of Contents
    black box such on-going authentication to minimize the potential for
    implementors or users to skip such checks.
 
-3.5.  Non-linkability
+3.5.  Request/Response Binding
+
+   In addition to requiring that application data be cryptographically
+   authenticated, the Web security model also requires that each HTTP
+   response must be bound to a specific HTTP request in a way that
+   cannot be forged by an adversary.
+
+   In the unicast case, binding of a response to a request in HTTPS is a
+   direct consequence of the integrity guaranteed by the
+   cryptographically protected transport stream to the image of the
+   underlying HTTP protocol, which itself allows for no ambiguity in
+   determining which request induced a particular response.
+
+   Request/response binding in multicast requires additional protocol or
+   application-layer support as multicast is naturally unidirectional
+   and so does not carry request traffic.  Any multicast protocol
+   carrying Web traffic must provide a means for cryptographically
+   binding the data delivered over a multicast channel to a specific
+   client request.  Failure to do so could, for example, allow an on-
+   path adversary to swap the packets between two different multicast
+   channels both trusted by the client without being detected prior to
+   delivery to the application.
+
+3.6.  Non-linkability
 
    Concern about pervasive monitoring of users culminated in the
    publication of [RFC7258], which states that "the IETF will work to
@@ -566,13 +603,13 @@ Table of Contents
    as being able to tell when a device or connection migrates from a
    wired home network to a cell network.  This has motivated mitigations
    in subsequent protocol designs, such as those discussed in section
-   9.5 of [RFC9000].  Migration of multicast group subscriptions across
-   network connections carries the potential for correlation of metadata
-   between multicast group subscriptions and unicast control channels,
-   even when control channels are encrypted, so care must be taken to
-   design protocols to avoid such correlations.
+   9.5 of [RFC9000].  Migration of multicast channel subscriptions
+   across network connections carries the potential for correlation of
+   metadata between multicast channel subscriptions and unicast control
+   channels, even when control channels are encrypted, so care must be
+   taken to design protocols to avoid such correlations.
 
-3.6.  Browser-Specific Threats
+3.7.  Browser-Specific Threats
 
    The security requirements for multicast transport to a browser follow
    directly from the requirement that the browser's job is to protect
@@ -585,7 +622,7 @@ Table of Contents
    The reader will find the full discussion of the browser threat model
    in section 3 of [RFC8826] helpful in understanding what follows.
 
-3.6.1.  Access to Local Resources
+3.7.1.  Access to Local Resources
 
    This document covers only unidirectional multicast from a server to
    (potentially many) clients, as well as associated control channels
@@ -597,7 +634,7 @@ Table of Contents
    user agent, viewport size, display resolution, a concern covered in
    extensive detail in [RFC8942].
 
-3.6.2.  Injection
+3.7.2.  Injection
 
    In the absence of any specific mitigations, network attackers have
    the ability to inject or modify packets in a multicast stream.  On-
@@ -608,7 +645,7 @@ Table of Contents
    from reaching large attack surfaces in the browser, such as the
    rendering code.
 
-3.6.3.  Hostile Origin
+3.7.3.  Hostile Origin
 
    A hostile origin could serve a Web application that attempts to join
    many multicast channels, overwhelming the provider's network with
@@ -625,7 +662,7 @@ Table of Contents
    implementing circuit breakers that will target unpopular content when
    overloaded or when an abusive subscription pattern is detected.
 
-3.6.4.  Private Browsing Modes
+3.7.4.  Private Browsing Modes
 
    Browsers that offer a private browsing mode, designed both to bypass
    access to client-side persistent state and to prevent broad classes
@@ -685,12 +722,12 @@ Table of Contents
 
    [AMBI]     Holland, J. and K. Rose, "Asymmetric Manifest Based
               Integrity", Work in Progress, Internet-Draft, draft-ietf-
-              mboned-ambi-02, 11 July 2021,
+              mboned-ambi-03, 7 March 2022,
               <https://datatracker.ietf.org/doc/html/draft-ietf-mboned-
-              ambi-02>.
+              ambi-03>.
 
    [huang-w2sp]
-              Huang, L-S., Chen, E.Y., Barth, A., Rescorla, E., and C.
+              Huang, L.-S., Chen, E. Y., Barth, A., Rescorla, E., and C.
               Jackson, "Talking to Yourself for Fun and Profit", Web 2.0
               Security and Privacy (W2SP 2011) , May 2011,
               <https://ptolemy.berkeley.edu/projects/truststc/pubs/840/
@@ -699,9 +736,9 @@ Table of Contents
    [quic-http-mcast]
               Pardue, L., Bradbury, R., and S. Hurst, "Hypertext
               Transfer Protocol (HTTP) over multicast QUIC", Work in
-              Progress, Internet-Draft, draft-pardue-quic-http-mcast-09,
-              13 August 2021, <https://datatracker.ietf.org/doc/html/
-              draft-pardue-quic-http-mcast-09>.
+              Progress, Internet-Draft, draft-pardue-quic-http-mcast-11,
+              4 July 2022, <https://datatracker.ietf.org/doc/html/draft-
+              pardue-quic-http-mcast-11>.
 
    [RFC4082]  Perrig, A., Song, D., Canetti, R., Tygar, J. D., and B.
               Briscoe, "Timed Efficient Stream Loss-Tolerant
@@ -744,8 +781,8 @@ Table of Contents
 
    [webtrans] Vasiliev, V., "The WebTransport Protocol Framework", Work
               in Progress, Internet-Draft, draft-ietf-webtrans-overview-
-              02, 28 July 2021, <https://datatracker.ietf.org/doc/html/
-              draft-ietf-webtrans-overview-02>.
+              04, 11 July 2022, <https://datatracker.ietf.org/doc/html/
+              draft-ietf-webtrans-overview-04>.
 
 Acknowledgments
 
@@ -758,7 +795,6 @@ Authors' Addresses
    145 Broadway
    Cambridge, MA 02144,
    United States of America
-
    Email: krose@krose.org
 
 
@@ -767,5 +803,4 @@ Authors' Addresses
    145 Broadway
    Cambridge, MA 02144,
    United States of America
-
    Email: jakeholland.net@gmail.com
