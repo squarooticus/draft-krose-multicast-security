@@ -353,6 +353,21 @@ The user's upstream router can and should monitor the user's multicast behavior,
 Browsers that offer a private browsing mode, designed both to bypass access to client-side persistent state and to prevent broad classes of data leakage that can be leveraged by passive and active attackers alike, should require explicit user approval for joining a multicast group given the metadata exposure to network elements of IGMP and MLD messages.
 
 
+## Other Threats
+
+### Referrer Checks
+
+Unicast Web traffic has a weak form of protection against unauthorized use of content by third-party sites through referrer checks.
+Browsers send a `Referer` \[sic\] header containing the parent page URL in requests for objects referenced in that page, which allows the server to reject requests from pages not authorized to refer to such content.
+This is used, for example, to complicate the hosting of phishing sites, which could otherwise serve only the relatively small page HTML and direct the browser to fetch all other page objects from the legitimate origin.
+This is not a strong security measure, as clients may render cached versions of such elements without checking freshness with the origin;
+but it does force the attacker to duplicate, modify, and host more content to convincingly mock the target site.
+
+Protocols enabling the delivery of Web traffic over multicast should include some mechanism providing a similar degree of protection against unauthorized use.
+This is complicated by the inherently unidirectional nature of multicast traffic, which precludes any active role for the server in preventing data delivery to specific clients.
+In lieu of this, protocols should be designed in a way that allows properly-functioning clients to unilaterally reject multicast data delivered for objects referenced by pages that the server has not authorized.
+
+
 # Security Considerations
 
 This entire document is about security.
