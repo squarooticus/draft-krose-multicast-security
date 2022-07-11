@@ -148,17 +148,9 @@ Care must be taken to avoid such amplification attack vectors.
 
 ## Authentication {#authentication}
 
-The Web security model requires that:
+The Web security model requires that data delivered to applications must be authenticated as having originated from the trusted peer. (In the case of server-only transport-level authentication schemes, such as the ubiquitous TLS server-only authentication employed throughout the Web, trust in the client may be strongly established at the application layer or weakly established as nothing more than precluding a man-in-the-middle.)
 
-* Requests and responses must be authenticated as having originated from the peer. (In the case of server-only authentication schemes, this means responses from the trusted server and requests from the client browser having established trust in the server.)
-
-* Each response must be bound to a specific request.
-
-In the unicast case:
-
-* Authentication of responses in HTTPS is provided by a trusted octet stream, cryptographically resistant to tampering, bootstrapped via certificate validation and trust chain verification (either server-only or mutual).
-
-* Binding of a response to a request in HTTPS is a direct consequence of the integrity guaranteed by this trusted stream to the image of the underlying HTTP protocol, which itself allows for no ambiguity in determining which request induced a particular response.
+In the unicast case, authentication of payloads in HTTPS is provided by a trusted octet stream, cryptographically resistant to tampering, bootstrapped via certificate validation and trust chain verification (either mutual or server-only, perhaps augmented with application-layer identity verification).
 
 Authentication of units of transport for trusted channels (think: individual packets or messages) is typically provided by a cryptographic authentication tag:
 
@@ -301,12 +293,23 @@ This requirement to perform authentication checks throughout the lifetime of a s
 Protocol designers and implementors are thus strongly encouraged to simplify or even black box such on-going authentication to minimize the potential for implementors or users to skip such checks.
 
 
+## Request/Response Binding
+
+In addition to requiring that application data be cryptographically authenticated, the Web security model also requires that each HTTP response must be bound to a specific HTTP request in a way that cannot be forged by an adversary.
+
+In the unicast case, binding of a response to a request in HTTPS is a direct consequence of the integrity guaranteed by the cryptographically protected transport stream to the image of the underlying HTTP protocol, which itself allows for no ambiguity in determining which request induced a particular response.
+
+Request/response binding in multicast requires additional protocol or application-layer support as multicast is naturally unidirectional and so does not carry request traffic.
+Any multicast protocol carrying Web traffic must provide a means for cryptographically binding the data delivered over a multicast channel to a specific client request.
+Failure to do so could, for example, allow an on-path adversary to swap the packets between two different multicast channels both trusted by the client without being detected prior to delivery to the application.
+
+
 ## Non-linkability
 
 Concern about pervasive monitoring of users culminated in the publication of {{RFC7258}}, which states that "the IETF will work to mitigate the technical aspects of \[pervasive monitoring\]."
 One area of particular concern is the ability for pervasive monitoring to track individual clients across changes in network connectivity, such as being able to tell when a device or connection migrates from a wired home network to a cell network.
 This has motivated mitigations in subsequent protocol designs, such as those discussed in section 9.5 of {{RFC9000}}.
-Migration of multicast group subscriptions across network connections carries the potential for correlation of metadata between multicast group subscriptions and unicast control channels, even when control channels are encrypted, so care must be taken to design protocols to avoid such correlations.
+Migration of multicast channel subscriptions across network connections carries the potential for correlation of metadata between multicast channel subscriptions and unicast control channels, even when control channels are encrypted, so care must be taken to design protocols to avoid such correlations.
 
 
 ## Browser-Specific Threats
