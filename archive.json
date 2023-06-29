@@ -1,0 +1,336 @@
+{
+  "magic": "E!vIA5L86J2I",
+  "timestamp": "2021-08-08T00:44:46.347330+00:00",
+  "repo": "squarooticus/draft-krose-multicast-security",
+  "labels": [
+    {
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+    },
+    {
+      "name": "documentation",
+      "description": "Improvements or additions to documentation",
+      "color": "0075ca"
+    },
+    {
+      "name": "duplicate",
+      "description": "This issue or pull request already exists",
+      "color": "cfd3d7"
+    },
+    {
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+    },
+    {
+      "name": "help wanted",
+      "description": "Extra attention is needed",
+      "color": "008672"
+    },
+    {
+      "name": "good first issue",
+      "description": "Good for newcomers",
+      "color": "7057ff"
+    },
+    {
+      "name": "invalid",
+      "description": "This doesn't seem right",
+      "color": "e4e669"
+    },
+    {
+      "name": "question",
+      "description": "Further information is requested",
+      "color": "d876e3"
+    },
+    {
+      "name": "wontfix",
+      "description": "This will not be worked on",
+      "color": "ffffff"
+    }
+  ],
+  "issues": [
+    {
+      "number": 1,
+      "id": "MDU6SXNzdWU5MDk4NTU3OTc=",
+      "title": "Congestion Control in Multicast Transport Properties section",
+      "url": "https://github.com/squarooticus/draft-krose-multicast-security/issues/1",
+      "state": "OPEN",
+      "author": "GrumpyOldTroll",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "GrumpyOldTroll"
+      ],
+      "labels": [],
+      "body": "Write up a brief explanation of congestion control in multicast (with mention of security and trust of receivers), include a reference to [RFC 8085, Section 4](https://datatracker.ietf.org/doc/html/rfc8085#section-4) and maybe to https://www.youtube.com/watch?v=rzvVHYtSn4s&t=6m24s / https://datatracker.ietf.org/meeting/97/materials/slides-97-mboned-draft-jholland-cb-assisted-cc\r\n(tried to assign to myself, but no such button...)",
+      "createdAt": "2021-06-02T20:24:15Z",
+      "updatedAt": "2021-06-07T17:11:06Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 2,
+      "id": "MDU6SXNzdWU5MDk4NzIyMzA=",
+      "title": "Discuss burden on servers of stream confidentiality",
+      "url": "https://github.com/squarooticus/draft-krose-multicast-security/issues/2",
+      "state": "CLOSED",
+      "author": "squarooticus",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "Conceptually, you can make all streams look the same: LBR is 500 Kb/s with identical packet sizes for all videos; HBR is 20Mb/s with identical packet sizes for all videos. This might be absurd in reality, but it's a possibility.",
+      "createdAt": "2021-06-02T20:48:45Z",
+      "updatedAt": "2021-07-13T14:43:49Z",
+      "closedAt": "2021-07-13T14:43:49Z",
+      "comments": []
+    },
+    {
+      "number": 3,
+      "id": "MDU6SXNzdWU5MDk4NzQ0OTE=",
+      "title": "Too dismissive of replay in Authenticity and Integrity section",
+      "url": "https://github.com/squarooticus/draft-krose-multicast-security/issues/3",
+      "state": "CLOSED",
+      "author": "GrumpyOldTroll",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "last paragraph of section 4.1 maybe should talk about replay mitigation and loss detection, which is probably doable in both ambi and tesla.",
+      "createdAt": "2021-06-02T20:52:02Z",
+      "updatedAt": "2021-06-04T16:29:44Z",
+      "closedAt": "2021-06-04T16:25:11Z",
+      "comments": [
+        {
+          "author": "squarooticus",
+          "authorAssociation": "OWNER",
+          "body": "Unless I'm misunderstanding something about TESLA (which is entirely possible since I've never read the doc completely through), it doesn't have any structure in which duplication/replay/reordering would be detectable within a time interval, nor indeed anything at all for loss/deletion.",
+          "createdAt": "2021-06-04T16:29:44Z",
+          "updatedAt": "2021-06-04T16:29:44Z"
+        }
+      ]
+    },
+    {
+      "number": 6,
+      "id": "MDU6SXNzdWU5MjE2Njk5Mjk=",
+      "title": "Forward secrecy elaboration",
+      "url": "https://github.com/squarooticus/draft-krose-multicast-security/issues/6",
+      "state": "CLOSED",
+      "author": "squarooticus",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "Do we need to think more about, and then describe, a model in which forward secrecy is achieved through key management? For instance, obviously a static key protecting the payload which is protected by a rotating key which is itself protected by long-term keys provides no forward secrecy for the content.",
+      "createdAt": "2021-06-15T18:13:33Z",
+      "updatedAt": "2021-07-13T14:44:15Z",
+      "closedAt": "2021-07-13T14:44:15Z",
+      "comments": [
+        {
+          "author": "GrumpyOldTroll",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I think a rotating ephemeral key that's required to be discarded after rotation is the same as what TLS provides, right?  As long as the earlier keys aren't recoverable after rotation I think you get the same forward secrecy?\r\n\r\nBut we probably do need to think about it and describe it some.\r\n\r\nI was originally thinking extending AMBI to define the parameters for data packet encryption should work, and then maybe adding a key identifier to the manifest.  Since you raised the concern that it shouldn't be possible to start from the (S,G) )and find the key, I've been thinking that the key itself definitely shouldn't be provided from inside the AMBI metadata, but also perhaps not even the uri (and that would be another out of band thing the app would need to know in order to get started).\r\n\r\nIt's making me think maybe it's not as easy as I was hoping, and I'm not quite sure whether it should be a separate protocol or whether it should be squeezed inside AMBI.  But I think providing a key id in the manifest is useful, which pushes me toward \"integrated with AMBI\".",
+          "createdAt": "2021-06-21T22:31:21Z",
+          "updatedAt": "2021-06-21T22:31:21Z"
+        }
+      ]
+    },
+    {
+      "number": 7,
+      "id": "MDU6SXNzdWU5NDAyMDA0NzQ=",
+      "title": "Suggestion: Section about threat actors?",
+      "url": "https://github.com/squarooticus/draft-krose-multicast-security/issues/7",
+      "state": "OPEN",
+      "author": "GrumpyOldTroll",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "I suspect it would be useful to organize the threats in terms of threat actors, the actions they can take with their consequences if unaddressed, and what countermeasures mitigate those actions and how.\r\n\r\nI think this will make it clearer, but even more I hope that this can be a useful place to collect feedback and other concerns.",
+      "createdAt": "2021-07-08T20:34:14Z",
+      "updatedAt": "2021-07-08T20:34:14Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 8,
+      "id": "MDU6SXNzdWU5NDAyMzMzMDI=",
+      "title": "k-anonymity to on-path observers?",
+      "url": "https://github.com/squarooticus/draft-krose-multicast-security/issues/8",
+      "state": "CLOSED",
+      "author": "GrumpyOldTroll",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "I think multicast has some privacy benefits relative to unicast that aren't yet captured here but should probably be articulated.\r\n\r\nFor unicast, an on-path observer has access to metadata like total amount of data, count of packets, port & protocol, and source address of traffic sent to and from each client IP, which can be tied to the address assigned to a location at a time by the AS that owns the IP.\r\n\r\nFor multicast traffic, an on-path observer would have much more limited information.  An observer would need knowledge of topology to know the downstream locations from a given network location, but still would have no way to know who has subscribed.",
+      "createdAt": "2021-07-08T21:24:23Z",
+      "updatedAt": "2021-07-13T14:44:22Z",
+      "closedAt": "2021-07-13T14:44:22Z",
+      "comments": []
+    },
+    {
+      "number": 9,
+      "id": "MDU6SXNzdWU5NDE2MzgyNjI=",
+      "title": "Amplification attack vector?",
+      "url": "https://github.com/squarooticus/draft-krose-multicast-security/issues/9",
+      "state": "CLOSED",
+      "author": "squarooticus",
+      "authorAssociation": "OWNER",
+      "assignees": [
+        "GrumpyOldTroll"
+      ],
+      "labels": [],
+      "body": "You had this:\r\n\r\n> TODO: maybe some mention that higher-level protocols can provide reliability (e.g. 5740 (norm)/5775 (alc) and/or flute(6726)/fcast(6968) that use alc, plus draft-pardue-quic-http-mcast), but this may introduce different risks from spoofing if per-packet authenticity is not provided.  For example, in an application with unicast recovery for a reliable object that's constructed out of 1k packets, injecting a single spoofed packet amplifies by 1k * number of receivers, if they all recover the whole reliable object.  Also: determine whether this mention belongs in this section--maybe better as a ref to a different section here?\r\n\r\nI don't understand what is being suggested here. How does injection cause all the clients to generate recovery requests?",
+      "createdAt": "2021-07-12T03:45:29Z",
+      "updatedAt": "2021-07-13T14:45:11Z",
+      "closedAt": "2021-07-13T14:45:11Z",
+      "comments": [
+        {
+          "author": "GrumpyOldTroll",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Here I'm talking about mechanisms that build a block out of unauthenticated packets, and then the block gets authenticated as a whole.\r\n\r\nIf injecting a packet causes a successful build of a block that fails authentication, then users would fall back to another method to recover the block, for example fetching it with unicast.\r\n\r\nSo when the superbowl is on and you're using 1.4MB segments (composed of ~1k packets each), then someone injects a spoofed packet that causes a mistaken build of the segment, everybody has to get that missed segment at the same time and it messes everything up.  By providing per-packet authentication, you can prevent the attempt to construct a block using a bad packet, and thus prevent the invalidating of 999 other packets that had been legitimately received.",
+          "createdAt": "2021-07-12T03:52:57Z",
+          "updatedAt": "2021-07-12T03:52:57Z"
+        },
+        {
+          "author": "squarooticus",
+          "authorAssociation": "OWNER",
+          "body": "Got it.",
+          "createdAt": "2021-07-12T03:53:43Z",
+          "updatedAt": "2021-07-12T03:53:43Z"
+        },
+        {
+          "author": "squarooticus",
+          "authorAssociation": "OWNER",
+          "body": "Right, so it's actually 1.4 MB * number of receivers, not 1 KB (in the case you're talking about).",
+          "createdAt": "2021-07-12T03:55:13Z",
+          "updatedAt": "2021-07-12T03:55:13Z"
+        },
+        {
+          "author": "GrumpyOldTroll",
+          "authorAssociation": "COLLABORATOR",
+          "body": "1k packets * packet size * number of receivers.  Yes.\r\n\r\nSegments can of course also be bigger, but as an example 1000 packets per segment is not unreasonably low or high.  Probably on the lower side, I guess, but reasonable.",
+          "createdAt": "2021-07-12T07:29:43Z",
+          "updatedAt": "2021-07-12T07:29:43Z"
+        },
+        {
+          "author": "squarooticus",
+          "authorAssociation": "OWNER",
+          "body": "I read \"1k packets\" as \"packets of size 1 KB\". That explains the confusion. Anyway, I think I've covered this in an understandable way without reference to specific numbers, but feel free to reopen this issue if you think otherwise.",
+          "createdAt": "2021-07-13T14:45:11Z",
+          "updatedAt": "2021-07-13T14:45:11Z"
+        }
+      ]
+    },
+    {
+      "number": 10,
+      "id": "MDU6SXNzdWU5NDE2NTMzOTE=",
+      "title": "TODO: Dangers of manipulation without violating authentication and how to manage this.",
+      "url": "https://github.com/squarooticus/draft-krose-multicast-security/issues/10",
+      "state": "CLOSED",
+      "author": "squarooticus",
+      "authorAssociation": "OWNER",
+      "assignees": [
+        "GrumpyOldTroll"
+      ],
+      "labels": [],
+      "body": "I didn't leave myself enough information in this TODO to understand what the actual concern is. Ideas?",
+      "createdAt": "2021-07-12T04:18:42Z",
+      "updatedAt": "2021-07-13T14:45:25Z",
+      "closedAt": "2021-07-13T14:45:25Z",
+      "comments": [
+        {
+          "author": "GrumpyOldTroll",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I assume this is talking about fields that are not authenticated?  Like maybe IP length with evil UDP options appended?  Or I guess dropping packets?  Not sure what else isn't authenticated, but since this isn't specific to AMBI maybe there's header fields not covered by TESLA in some cases or something?\r\nAlso possibly things like discovery?\r\n\r\nNothing else coming to mind.  I don't recall talking about this in particular...",
+          "createdAt": "2021-07-12T05:23:50Z",
+          "updatedAt": "2021-07-12T05:23:50Z"
+        }
+      ]
+    },
+    {
+      "number": 11,
+      "id": "MDU6SXNzdWU5NTMzMjE2MzQ=",
+      "title": "Peeking at unauthenticated data",
+      "url": "https://github.com/squarooticus/draft-krose-multicast-security/issues/11",
+      "state": "CLOSED",
+      "author": "squarooticus",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "Address the issue of being able to look at data prior to authentication. This is a problem that is probably unavoidable in any symmetric cryptosystem in which more than two parties have access to the key.",
+      "createdAt": "2021-07-26T22:01:43Z",
+      "updatedAt": "2021-08-06T16:46:14Z",
+      "closedAt": "2021-08-06T16:46:14Z",
+      "comments": []
+    }
+  ],
+  "pulls": [
+    {
+      "number": 4,
+      "id": "MDExOlB1bGxSZXF1ZXN0NjYyMDgxNzQ3",
+      "title": "Tweaks",
+      "url": "https://github.com/squarooticus/draft-krose-multicast-security/pull/4",
+      "state": "MERGED",
+      "author": "GrumpyOldTroll",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2021-06-04T21:52:06Z",
+      "updatedAt": "2021-06-07T17:00:35Z",
+      "baseRepository": "squarooticus/draft-krose-multicast-security",
+      "baseRefName": "master",
+      "baseRefOid": "fef7651a77a637816b7ed8a2e23dc15d429d1abc",
+      "headRepository": "squarooticus/draft-krose-multicast-security",
+      "headRefName": "tweaks",
+      "headRefOid": "de9516f8478ffeaca33f1073c73343dc6590926e",
+      "closedAt": "2021-06-07T17:00:35Z",
+      "mergedAt": "2021-06-07T17:00:35Z",
+      "mergedBy": "squarooticus",
+      "mergeCommit": {
+        "oid": "117fc25120648c527889cc66eab69b344a8ff6f7"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 5,
+      "id": "MDExOlB1bGxSZXF1ZXN0NjcwMTYzMTk4",
+      "title": "minor editorial suggestions",
+      "url": "https://github.com/squarooticus/draft-krose-multicast-security/pull/5",
+      "state": "MERGED",
+      "author": "GrumpyOldTroll",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2021-06-15T07:53:54Z",
+      "updatedAt": "2021-06-15T14:01:13Z",
+      "baseRepository": "squarooticus/draft-krose-multicast-security",
+      "baseRefName": "master",
+      "baseRefOid": "557f222c62e13a02b5a09ff75b208db52aad77e5",
+      "headRepository": "squarooticus/draft-krose-multicast-security",
+      "headRefName": "minor-edits2",
+      "headRefOid": "45fa8d067ade9b60284d39d6271acb0743533d2d",
+      "closedAt": "2021-06-15T14:01:13Z",
+      "mergedAt": "2021-06-15T14:01:13Z",
+      "mergedBy": "squarooticus",
+      "mergeCommit": {
+        "oid": "6fa200bac444b62e6c18096d43515e167a3923c9"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3Njg0MDUwMjQ5",
+          "commit": {
+            "abbreviatedOid": "45fa8d0"
+          },
+          "author": "squarooticus",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2021-06-15T14:01:02Z",
+          "updatedAt": "2021-06-15T14:01:02Z",
+          "comments": []
+        }
+      ]
+    }
+  ]
+}
