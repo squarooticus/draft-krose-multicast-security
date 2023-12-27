@@ -11,24 +11,24 @@
        Interdomain multicast has unique potential to solve delivery scalability for popular content, but it carries a set of security and privacy issues that differ from those in unicast delivery.
 This document analyzes the security threats unique to multicast-based delivery for Internet and Web traffic under the Internet and Web threat models. 
     " name="description">
-<meta content="xml2rfc 3.17.4" name="generator">
+<meta content="xml2rfc 3.19.0" name="generator">
 <meta content="Internet-Draft" name="keyword">
 <meta content="draft-krose-multicast-security-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.17.4
-    Python 3.11.4
-    ConfigArgParse 1.5.3
+  xml2rfc 3.19.0
+    Python 3.11.6
+    ConfigArgParse 1.7
     google-i18n-address 3.1.0
     intervaltree 3.1.0
     Jinja2 3.1.2
-    lxml 4.9.2
-    platformdirs 3.8.0
+    lxml 4.9.3
+    platformdirs 4.1.0
     pycountry 22.3.5
-    PyYAML 6.0
+    PyYAML 6.0.1
     requests 2.31.0
-    setuptools 67.7.2
+    setuptools 68.2.2
     six 1.16.0
-    wcwidth 0.2.6
+    wcwidth 0.2.12
 -->
 <link href="draft-krose-multicast-security.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
@@ -651,7 +651,7 @@ sub, sup {
 }
 #toc nav li {
   line-height: 1.3em;
-  margin: 0.75em 0;
+  margin: 2px 0;
   padding-left: 1.2em;
   text-indent: -1.2em;
 }
@@ -744,7 +744,7 @@ hr.addr {
     z-index: 2;
     top: 0;
     right: 0;
-    padding: 0;
+    padding: 1px 0 0 0;
     margin: 0;
     border-bottom: 1px solid #ccc;
     opacity: 0.6;
@@ -868,16 +868,13 @@ hr.addr {
     border-top: none;
     padding-top: 0;
   }
-  figure, pre {
+  figure, pre, .vcard {
     page-break-inside: avoid;
-  }
-  figure {
-    overflow: scroll;
   }
   h1, h2, h3, h4, h5, h6 {
     page-break-after: avoid;
   }
-  h2+*, h3+*, h4+*, h5+*, h6+* {
+  :is(h2, h3, h4, h5, h6)+*, dd {
     page-break-before: avoid;
   }
   pre {
@@ -890,6 +887,9 @@ hr.addr {
   }
   td {
     border-top: 1px solid #ddd;
+  }
+  .toplink {
+    display: none;
   }
 }
 
@@ -991,28 +991,6 @@ address div.right {
   text-align: right;
 }
 
-/* Give the table caption label the same styling as the figcaption */
-
-@media print {
-  .toplink {
-    display: none;
-  }
-
-  /* avoid overwriting the top border line with the ToC header */
-  #toc {
-    padding-top: 1px;
-  }
-
-  /* Avoid page breaks inside dl and author address entries */
-  dd {
-    page-break-before: avoid;
-  }
-  .vcard {
-    page-break-inside: avoid;
-  }
-
-}
-
 /* Dark mode. */
 @media (prefers-color-scheme: dark) {
 :root {
@@ -1049,11 +1027,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">Multicast Transport Security</td>
-<td class="right">June 2023</td>
+<td class="right">December 2023</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Rose &amp; Holland</td>
-<td class="center">Expires 31 December 2023</td>
+<td class="center">Expires 29 June 2024</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1066,12 +1044,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-krose-multicast-security-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2023-06-29" class="published">29 June 2023</time>
+<time datetime="2023-12-27" class="published">27 December 2023</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2023-12-31">31 December 2023</time></dd>
+<dd class="expires"><time datetime="2024-06-29">29 June 2024</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1118,7 +1096,7 @@ This document analyzes the security threats unique to multicast-based delivery f
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 31 December 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 29 June 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1263,11 +1241,14 @@ This document analyzes the security threats unique to multicast-based delivery f
         </h3>
 <p id="section-1.1-1">This document assumes readers have a basic understanding of some background topics, specifically:<a href="#section-1.1-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-1.1-2.1">The Internet threat model as defined in Section 3 of <span>[<a href="#RFC3552" class="cite xref">RFC3552</a>]</span>.<a href="#section-1.1-2.1" class="pilcrow">¶</a>
+<li class="normal" id="section-1.1-2.1">
+            <p id="section-1.1-2.1.1">The Internet threat model as defined in Section 3 of <span>[<a href="#RFC3552" class="cite xref">RFC3552</a>]</span>.<a href="#section-1.1-2.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-1.1-2.2">The Security Considerations for UDP Usage Guidelines as described in Section 6 of <span>[<a href="#RFC8085" class="cite xref">RFC8085</a>]</span>, since application layer multicast traffic is generally carried over UDP.<a href="#section-1.1-2.2" class="pilcrow">¶</a>
+          <li class="normal" id="section-1.1-2.2">
+            <p id="section-1.1-2.2.1">The Security Considerations for UDP Usage Guidelines as described in Section 6 of <span>[<a href="#RFC8085" class="cite xref">RFC8085</a>]</span>, since application layer multicast traffic is generally carried over UDP.<a href="#section-1.1-2.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-1.1-2.3">Source-specific multicast, as described in <span>[<a href="#RFC4607" class="cite xref">RFC4607</a>]</span>.  This document focuses on interdomain multicast, therefore any-source multicast is out of scope in accordance with the deprecation of interdomain any-source multicast in <span>[<a href="#RFC8815" class="cite xref">RFC8815</a>]</span>.<a href="#section-1.1-2.3" class="pilcrow">¶</a>
+          <li class="normal" id="section-1.1-2.3">
+            <p id="section-1.1-2.3.1">Source-specific multicast, as described in <span>[<a href="#RFC4607" class="cite xref">RFC4607</a>]</span>.  This document focuses on interdomain multicast, therefore any-source multicast is out of scope in accordance with the deprecation of interdomain any-source multicast in <span>[<a href="#RFC8815" class="cite xref">RFC8815</a>]</span>.<a href="#section-1.1-2.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
@@ -1279,13 +1260,17 @@ This document analyzes the security threats unique to multicast-based delivery f
         </h3>
 <p id="section-1.2-1">The Web security model, while not yet documented authoritatively in a single reference, nevertheless strongly influences Web client implementations, and has generally been interpreted to require certain properties of underlying transports such as:<a href="#section-1.2-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-1.2-2.1">Confidentiality: A passive observer must not be able to identify or access content through simple observation of the bits being delivered, up to the limits of metadata privacy (such as traffic analysis, peer identity, application/transport/security-layer protocol design constraints, etc.).<a href="#section-1.2-2.1" class="pilcrow">¶</a>
+<li class="normal" id="section-1.2-2.1">
+            <p id="section-1.2-2.1.1">Confidentiality: A passive observer must not be able to identify or access content through simple observation of the bits being delivered, up to the limits of metadata privacy (such as traffic analysis, peer identity, application/transport/security-layer protocol design constraints, etc.).<a href="#section-1.2-2.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-1.2-2.2">Authenticity: A receiver must be able to cryptographically verify that the delivered content originated from the desired source.<a href="#section-1.2-2.2" class="pilcrow">¶</a>
+          <li class="normal" id="section-1.2-2.2">
+            <p id="section-1.2-2.2.1">Authenticity: A receiver must be able to cryptographically verify that the delivered content originated from the desired source.<a href="#section-1.2-2.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-1.2-2.3">Integrity: A receiver must be able to distinguish between original content as sent from the desired source and content modified in some way (including through deletion) by an attacker.<a href="#section-1.2-2.3" class="pilcrow">¶</a>
+          <li class="normal" id="section-1.2-2.3">
+            <p id="section-1.2-2.3.1">Integrity: A receiver must be able to distinguish between original content as sent from the desired source and content modified in some way (including through deletion) by an attacker.<a href="#section-1.2-2.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-1.2-2.4">Non-linkability: A passive observer must not be able to link a single user across multiple devices or a single client roaming across multiple networks.<a href="#section-1.2-2.4" class="pilcrow">¶</a>
+          <li class="normal" id="section-1.2-2.4">
+            <p id="section-1.2-2.4.1">Non-linkability: A passive observer must not be able to link a single user across multiple devices or a single client roaming across multiple networks.<a href="#section-1.2-2.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <p id="section-1.2-3">For unicast transport, TLS <span>[<a href="#RFC8446" class="cite xref">RFC8446</a>]</span> satisfies these requirements, therefore Web Transport <span>[<a href="#webtrans" class="cite xref">webtrans</a>]</span> proposes to require qualifying transport protocols to use "TLS or a semantically equivalent security protocol".<a href="#section-1.2-3" class="pilcrow">¶</a></p>
@@ -1340,45 +1325,54 @@ Care must be taken to avoid such amplification attack vectors.<a href="#section-
 <p id="section-3.2-2">In the unicast case, authentication of payloads in HTTPS is provided by a trusted octet stream, cryptographically resistant to tampering, bootstrapped via certificate validation and trust chain verification (either mutual or server-only, perhaps augmented with application-layer identity verification).<a href="#section-3.2-2" class="pilcrow">¶</a></p>
 <p id="section-3.2-3">Authentication of units of transport for trusted channels (think: individual packets or messages) is typically provided by a cryptographic authentication tag:<a href="#section-3.2-3" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3.2-4.1">Symmetric tags, such as symmetric message authentication codes (MACs) and authentication tags produced by authenticated encryption (AE) algorithms.
+<li class="normal" id="section-3.2-4.1">
+            <p id="section-3.2-4.1.1">Symmetric tags, such as symmetric message authentication codes (MACs) and authentication tags produced by authenticated encryption (AE) algorithms.
 Because anyone in possession of the keying material may produce valid symmetric authentication tags, such keying material is typically known to at most two parties:
 one sender and one receiver.
-Some algorithms employing symmetric authentication (such as TESLA, discussed below) relieve this constraint by imposing some different constraint on verification of tagged content.<a href="#section-3.2-4.1" class="pilcrow">¶</a>
+Some algorithms employing symmetric authentication (such as TESLA, discussed below) relieve this constraint by imposing some different constraint on verification of tagged content.<a href="#section-3.2-4.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-3.2-4.2">Asymmetric tags, typically signatures produced by public key cryptosystems.
-These assume that only the sender has access to the signing key, but impose no constraints on dissemination of the signature verification key.<a href="#section-3.2-4.2" class="pilcrow">¶</a>
+          <li class="normal" id="section-3.2-4.2">
+            <p id="section-3.2-4.2.1">Asymmetric tags, typically signatures produced by public key cryptosystems.
+These assume that only the sender has access to the signing key, but impose no constraints on dissemination of the signature verification key.<a href="#section-3.2-4.2.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <p id="section-3.2-5">In both cases:<a href="#section-3.2-5" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3.2-6.1">The receiving party must have a means for establishing trust in the keying material used to verify the authentication tag.<a href="#section-3.2-6.1" class="pilcrow">¶</a>
+<li class="normal" id="section-3.2-6.1">
+            <p id="section-3.2-6.1.1">The receiving party must have a means for establishing trust in the keying material used to verify the authentication tag.<a href="#section-3.2-6.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-3.2-6.2">
             <p id="section-3.2-6.2.1">Instead of directly authenticating the protected content, the tag may protect a root of trust that itself protects cryptographically-linked content.
 Examples include:<a href="#section-3.2-6.2.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3.2-6.2.2.1">The TLS 1.3 handshake employing an authentication tag to reject MitM attacks against ECDH key agreement.<a href="#section-3.2-6.2.2.1" class="pilcrow">¶</a>
+<li class="normal" id="section-3.2-6.2.2.1">
+                <p id="section-3.2-6.2.2.1.1">The TLS 1.3 handshake employing an authentication tag to reject MitM attacks against ECDH key agreement.<a href="#section-3.2-6.2.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-3.2-6.2.2.2">An authentication tag of a Merkle tree root protecting the content represented by the entire tree.<a href="#section-3.2-6.2.2.2" class="pilcrow">¶</a>
+              <li class="normal" id="section-3.2-6.2.2.2">
+                <p id="section-3.2-6.2.2.2.1">An authentication tag of a Merkle tree root protecting the content represented by the entire tree.<a href="#section-3.2-6.2.2.2.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
-          <li class="normal" id="section-3.2-6.3">The authentication tag serves to provide integrity protection over the unit of content to which the tag applies, with additional mechanisms required to detect and/or manage duplication/replay, deletion/loss, and reordering within a sequence of such authenticated content units.<a href="#section-3.2-6.3" class="pilcrow">¶</a>
+          <li class="normal" id="section-3.2-6.3">
+            <p id="section-3.2-6.3.1">The authentication tag serves to provide integrity protection over the unit of content to which the tag applies, with additional mechanisms required to detect and/or manage duplication/replay, deletion/loss, and reordering within a sequence of such authenticated content units.<a href="#section-3.2-6.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <p id="section-3.2-7">Asymmetric verification of content delivered through multicast is conceptually identical to the unicast case, owing to the asymmetry of access to the signing key;
 but the symmetric case does not directly apply given that multiple receivers need access to the same key used for both signing and verification, which in a naïve implementation opens up the possibility of forgery by a receiver on-path or with the ability to spoof the source.<a href="#section-3.2-7" class="pilcrow">¶</a></p>
 <p id="section-3.2-8">Multiple mechanisms providing for reliable asymmetric authentication of data delivered by multicast have been proposed over the years.<a href="#section-3.2-8" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3.2-9.1">TESLA <span>[<a href="#RFC4082" class="cite xref">RFC4082</a>]</span> achieves asymmetry between the sender and multiple receivers through timed release of symmetric keying material rather than through the assumed computational difficulty of deriving a signing key from a verification key in public key cryptosystems like RSA and ECDSA.
+<li class="normal" id="section-3.2-9.1">
+            <p id="section-3.2-9.1.1">TESLA <span>[<a href="#RFC4082" class="cite xref">RFC4082</a>]</span> achieves asymmetry between the sender and multiple receivers through timed release of symmetric keying material rather than through the assumed computational difficulty of deriving a signing key from a verification key in public key cryptosystems like RSA and ECDSA.
 It employs computationally-inexpensive symmetric authentication tagging with release of the keying material to receivers only after they are assumed to have received the protected data, with any data received subsequent to scheduled key release to be discarded by the receiver.
-This requires some degree of time synchronization between clients and servers and imposes latency above one-way path delay prior to release of authenticated data to applications.<a href="#section-3.2-9.1" class="pilcrow">¶</a>
+This requires some degree of time synchronization between clients and servers and imposes latency above one-way path delay prior to release of authenticated data to applications.<a href="#section-3.2-9.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-3.2-9.2">Simple per-packet asymmetric signature of packet contents based on out-of-band communication of the signature's public key and algorithm, for example as described in Section 3 of <span>[<a href="#RFC6584" class="cite xref">RFC6584</a>]</span>.<a href="#section-3.2-9.2" class="pilcrow">¶</a>
+          <li class="normal" id="section-3.2-9.2">
+            <p id="section-3.2-9.2.1">Simple per-packet asymmetric signature of packet contents based on out-of-band communication of the signature's public key and algorithm, for example as described in Section 3 of <span>[<a href="#RFC6584" class="cite xref">RFC6584</a>]</span>.<a href="#section-3.2-9.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-3.2-9.3">Asymmetric Manifest-based Integrity (AMBI) <span>[<a href="#AMBI" class="cite xref">AMBI</a>]</span> relies on an out-of-band authenticated channel for distribution of manifests containing cryptographic digests of the packets in the multicast stream.
+          <li class="normal" id="section-3.2-9.3">
+            <p id="section-3.2-9.3.1">Asymmetric Manifest-based Integrity (AMBI) <span>[<a href="#AMBI" class="cite xref">AMBI</a>]</span> relies on an out-of-band authenticated channel for distribution of manifests containing cryptographic digests of the packets in the multicast stream.
 Authentication of this channel may, for instance, be provided by TLS if manifests are distributed using HTTPS from an origin known to the client to be closely affiliated with the multicast stream, such as would be the case if the manifest URL is delivered by the origin of the parent page hosting the media object.
-Authenticity in this case is a prerequisite of the out-of-band channel that AMBI builds upon to provide authenticity for the multicast data channel.<a href="#section-3.2-9.3" class="pilcrow">¶</a>
+Authenticity in this case is a prerequisite of the out-of-band channel that AMBI builds upon to provide authenticity for the multicast data channel.<a href="#section-3.2-9.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <p id="section-3.2-10">Regardless of mechanism, the primary goal of authentication in the multicast context is identical to that for unicast:
@@ -1401,11 +1395,14 @@ UDP, the transport protocol atop which multicast applications are typically buil
 Additionally, UDP by itself provides no protection against off-path spoofing or injection.
 Multicast has therefore traditionally been used for applications that can deal with a modest loss of integrity through application-layer mitigations such as:<a href="#section-3.3-2" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3.3-3.1">Packet indexes to reveal duplication/replay and reordering, and to complicate off-path spoofing and injection<a href="#section-3.3-3.1" class="pilcrow">¶</a>
+<li class="normal" id="section-3.3-3.1">
+            <p id="section-3.3-3.1.1">Packet indexes to reveal duplication/replay and reordering, and to complicate off-path spoofing and injection<a href="#section-3.3-3.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-3.3-3.2">Deletion coding to allow for passive recovery from loss/deletion<a href="#section-3.3-3.2" class="pilcrow">¶</a>
+          <li class="normal" id="section-3.3-3.2">
+            <p id="section-3.3-3.2.1">Deletion coding to allow for passive recovery from loss/deletion<a href="#section-3.3-3.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-3.3-3.3">Graceful degradation in response to loss/deletion, exemplified by video codecs designed to tolerate loss<a href="#section-3.3-3.3" class="pilcrow">¶</a>
+          <li class="normal" id="section-3.3-3.3">
+            <p id="section-3.3-3.3.1">Graceful degradation in response to loss/deletion, exemplified by video codecs designed to tolerate loss<a href="#section-3.3-3.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <p id="section-3.3-4">A baseline for multicast transport integrity that makes sense within the Web security model requires that we first define the minimally acceptable integrity requirements for data that may be presented to a user or otherwise input to the browser's trusted computing base.
@@ -1416,9 +1413,11 @@ for example, if authentication is provided at packet granularity, modified or fo
 Lacking a bidirectional relationship at the transport layer, however, applications relying on multicast must otherwise provide for detection of and/or recovery from packet duplication/replay, loss/deletion, and reordering.
 Some of these functions, too, may be provided by the authentication layer. For instance:<a href="#section-3.3-5" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3.3-6.1">TESLA prevents replay and reveals reordering, but only across time intervals. An application requiring finer-grained countermeasures against duplication/replay or reordering, or indeed any countermeasure to deletion/loss, would need to provide that via custom support (e.g., through the introduction of packet sequence numbers) or via an intermediate-layer protocol providing those functions.<a href="#section-3.3-6.1" class="pilcrow">¶</a>
+<li class="normal" id="section-3.3-6.1">
+            <p id="section-3.3-6.1.1">TESLA prevents replay and reveals reordering, but only across time intervals. An application requiring finer-grained countermeasures against duplication/replay or reordering, or indeed any countermeasure to deletion/loss, would need to provide that via custom support (e.g., through the introduction of packet sequence numbers) or via an intermediate-layer protocol providing those functions.<a href="#section-3.3-6.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-3.3-6.2">AMBI by design provides strong protection against duplication/replay and reveals reordering and deletion/loss of content packets through a strict in-order manifest of packet digests.<a href="#section-3.3-6.2" class="pilcrow">¶</a>
+          <li class="normal" id="section-3.3-6.2">
+            <p id="section-3.3-6.2.1">AMBI by design provides strong protection against duplication/replay and reveals reordering and deletion/loss of content packets through a strict in-order manifest of packet digests.<a href="#section-3.3-6.2.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
@@ -1457,10 +1456,11 @@ In the unicast case, an on-path observer has access to metadata specific to endp
 Widespread near-simultaneous unicast download events, such as those triggered by the release of a video game update or of an episode of a popular streaming video series, expose the identities of consumers of such content anywhere along the path from end users' devices to the origin through very elementary traffic analysis, unless measures are taken by the end user or content provider to hide the traffic, such as by mixing it with other traffic in a way that complicates disentangling individual flows.
 A properly-designed virtual private network (VPN) link could, for example, obfuscate flow-identifying information in traffic to a given user, at the expense of using greater bandwidth (for added chaff) and of loudly signaling to passive observers the presence of a VPN link.<a href="#section-3.4.1-3.1.4" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="section-3.4.1-3.2">There is no standard mechanism in the multicast protocol ecosystem by which a passive observer may derive separate but related content or metadata from the multicast channel itself:
+            <li class="normal" id="section-3.4.1-3.2">
+              <p id="section-3.4.1-3.2.1">There is no standard mechanism in the multicast protocol ecosystem by which a passive observer may derive separate but related content or metadata from the multicast channel itself:
 in particular, if a multicast stream is encrypted using a key delivered out-of-band, there is no general means by which a passive observer could directly derive the source location of the keying material.
 For a passive observer to know what encrypted content is being delivered to a particular user whose channel subscriptions are known they would need to already know what content is available via that channel, either via traffic analysis such as in the case of passive observation of unicast TLS, or via a priori knowledge of related content that references the channel.
-A dragnet cataloging all content available through a particular origin is an example of the latter, but could be further mitigated via controlled access to index information, or via periodic changes in multicast source, group, or keying material, or some combination of the three.<a href="#section-3.4.1-3.2" class="pilcrow">¶</a>
+A dragnet cataloging all content available through a particular origin is an example of the latter, but could be further mitigated via controlled access to index information, or via periodic changes in multicast source, group, or keying material, or some combination of the three.<a href="#section-3.4.1-3.2.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 </section>
@@ -1633,6 +1633,7 @@ In lieu of this, protocols should be designed in a way that allows properly-func
       <h2 id="name-references">
 <a href="#section-6" class="section-number selfRef">6. </a><a href="#name-references" class="section-name selfRef">References</a>
       </h2>
+<div id="sec-normative-references">
 <section id="section-6.1">
         <h3 id="name-normative-references">
 <a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
@@ -1672,6 +1673,8 @@ In lieu of this, protocols should be designed in a way that allows properly-func
 <dd class="break"></dd>
 </dl>
 </section>
+</div>
+<div id="sec-informative-references">
 <section id="section-6.2">
         <h3 id="name-informative-references">
 <a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
@@ -1723,10 +1726,11 @@ In lieu of this, protocols should be designed in a way that allows properly-func
 <dd class="break"></dd>
 <dt id="webtrans">[webtrans]</dt>
       <dd>
-<span class="refAuthor">Vasiliev, V.</span>, <span class="refTitle">"The WebTransport Protocol Framework"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-webtrans-overview-05</span>, <time datetime="2023-01-24" class="refDate">24 January 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-webtrans-overview-05">https://datatracker.ietf.org/doc/html/draft-ietf-webtrans-overview-05</a>&gt;</span>. </dd>
+<span class="refAuthor">Vasiliev, V.</span>, <span class="refTitle">"The WebTransport Protocol Framework"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-webtrans-overview-06</span>, <time datetime="2023-09-06" class="refDate">6 September 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-webtrans-overview-06">https://datatracker.ietf.org/doc/html/draft-ietf-webtrans-overview-06</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
+</div>
 </section>
 <div id="acknowledgments">
 <section id="appendix-A">
