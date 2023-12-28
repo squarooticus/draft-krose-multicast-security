@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2021-08-08T00:44:46.347330+00:00",
+  "timestamp": "2023-12-28T00:05:18.579525+00:00",
   "repo": "squarooticus/draft-krose-multicast-security",
   "labels": [
     {
@@ -24,14 +24,14 @@
       "color": "a2eeef"
     },
     {
-      "name": "help wanted",
-      "description": "Extra attention is needed",
-      "color": "008672"
-    },
-    {
       "name": "good first issue",
       "description": "Good for newcomers",
       "color": "7057ff"
+    },
+    {
+      "name": "help wanted",
+      "description": "Extra attention is needed",
+      "color": "008672"
     },
     {
       "name": "invalid",
@@ -47,6 +47,11 @@
       "name": "wontfix",
       "description": "This will not be worked on",
       "color": "ffffff"
+    },
+    {
+      "name": "114 draft deadline",
+      "description": "",
+      "color": "d4c5f9"
     }
   ],
   "issues": [
@@ -259,6 +264,116 @@
       "updatedAt": "2021-08-06T16:46:14Z",
       "closedAt": "2021-08-06T16:46:14Z",
       "comments": []
+    },
+    {
+      "number": 12,
+      "id": "I_kwDOFhM1zs49zpw-",
+      "title": "Address binding of request to response",
+      "url": "https://github.com/squarooticus/draft-krose-multicast-security/issues/12",
+      "state": "CLOSED",
+      "author": "GrumpyOldTroll",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "squarooticus"
+      ],
+      "labels": [
+        "114 draft deadline"
+      ],
+      "body": "Comment from EKR on secdispatch:\r\n> S 3.2.\r\n>\r\n>    The Web security model requires that content be authenticated\r\n>    cryptographically.  In the context of unicast transport security,\r\n>    authentication means that content is known to have originated from\r\n>    the trusted peer, something that is typically enforced via a\r\n>    cryptographic authentication tag:\r\n>\r\n> This is true, but I think misses an important property of Web\r\n> authentication, which is the binding between the request and\r\n> the response. I.e., the property is not just that the message\r\n> came from the peer but also that it came in response to a given\r\n> request.\r\n",
+      "createdAt": "2021-10-27T04:03:01Z",
+      "updatedAt": "2022-07-11T21:53:34Z",
+      "closedAt": "2022-07-11T21:53:34Z",
+      "comments": [
+        {
+          "author": "squarooticus",
+          "authorAssociation": "OWNER",
+          "body": "@GrumpyOldTroll The PR isn't ready yet, but I have to run for now and I wanted you to look at what I've started to put together. Comments welcome on the above commit.",
+          "createdAt": "2021-11-03T22:54:26Z",
+          "updatedAt": "2021-11-03T22:54:26Z"
+        }
+      ]
+    },
+    {
+      "number": 14,
+      "id": "I_kwDOFhM1zs4_sWUB",
+      "title": "Scaling and privacy considerations are linked",
+      "url": "https://github.com/squarooticus/draft-krose-multicast-security/issues/14",
+      "state": "OPEN",
+      "author": "squarooticus",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "Summary: scalability is a prerequisite for growth in high-volume traffic. So it's going to happen one way or the other. There is a good argument to be made that bringing it into the light via SDO action, with attention paid to privacy, is going to produce better outcomes than the alternative, which will be a proprietary/closed solution.",
+      "createdAt": "2021-12-01T16:05:32Z",
+      "updatedAt": "2021-12-01T16:05:32Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 15,
+      "id": "I_kwDOFhM1zs5Nb8XS",
+      "title": "Referer equivalent?",
+      "url": "https://github.com/squarooticus/draft-krose-multicast-security/issues/15",
+      "state": "CLOSED",
+      "author": "squarooticus",
+      "authorAssociation": "OWNER",
+      "assignees": [
+        "squarooticus"
+      ],
+      "labels": [
+        "114 draft deadline"
+      ],
+      "body": "Need to solve the problem of akarnai.com telling you to pull from an official Akamai (S,G), which can be foiled by Referer checks in the unicast web.\r\n\r\n> e.g. if a different legitimate quic connection says someone else's quic multicast stream is theirs, that's maybe a problem worth protecting against. Maybe we need a periodic asymmetric challenge? I'm thinking send a public key on the multicast channel and in the unicast channels send an individualized MAC signed with the private key and verify it with the public key, so that in addition to validating that the unicast server knows the contents of the multicast packets via the hashes it supplies, the multicast stream provides a way for the client to validate that the unicast stream is authorized to use it for data transport via proof they know the private key corresponding to the public key that arrived on the multicast channel. Note this doesn't prevent unauthorized receipt of multicast data packets, but does prevent a quic server from lying when claiming a multicast data channel belongs to it, preventing legit receivers from consuming it.\r\n> alternatively, can the multicast channel just periodically say what domain name is expected for the quic connection and get the same crypto guarantee of a proper sender via the domain's cert, which was already checked on the unicast channel?)",
+      "createdAt": "2022-07-08T15:31:54Z",
+      "updatedAt": "2022-07-11T22:22:49Z",
+      "closedAt": "2022-07-11T22:22:48Z",
+      "comments": [
+        {
+          "author": "squarooticus",
+          "authorAssociation": "OWNER",
+          "body": "Resolved by 75bd7e9.",
+          "createdAt": "2022-07-11T22:22:48Z",
+          "updatedAt": "2022-07-11T22:22:48Z"
+        }
+      ]
+    },
+    {
+      "number": 17,
+      "id": "I_kwDOFhM1zs5Nnq1N",
+      "title": "Referrer checks vs. origin checks?",
+      "url": "https://github.com/squarooticus/draft-krose-multicast-security/issues/17",
+      "state": "OPEN",
+      "author": "GrumpyOldTroll",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "The new referrer checks section from (https://github.com/squarooticus/draft-krose-multicast-security/commit/75bd7e9b801da1dbbbd95d570dab51f7bdbb43c4) talks about server-side referer checks, but I'm not sure this is as relevant as providing a mechanism to ensure the origin policy (particularly the same-origin policy) can be enforced on the client side.\r\n\r\nMaybe we need references about it too?\r\n- https://datatracker.ietf.org/doc/html/rfc6454 (maybe section 3 specifically, but maybe the whole doc)\r\n- https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS\r\n- https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy\r\n\r\nAlso maybe it's worth walking thru an example somehow--if a connection established via evil.example.com is able to tell clients to receive and interpret legitimate multicast traffic being sent by good.example.com, then unless there are mechanisms ensuring the multicast traffic is tied to the good.example.com origin, the content from bad.example.com would be able to circumvent the same-origin policy wrt that content.",
+      "createdAt": "2022-07-12T15:45:20Z",
+      "updatedAt": "2022-08-05T16:01:19Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "squarooticus",
+          "authorAssociation": "OWNER",
+          "body": "I'll update before I-D submission reopens in two weeks.",
+          "createdAt": "2022-07-12T16:10:49Z",
+          "updatedAt": "2022-07-12T16:10:49Z"
+        },
+        {
+          "author": "squarooticus",
+          "authorAssociation": "OWNER",
+          "body": "Think about adding the hostname to the key derivation to cryptographically link the channel data to the hostname the client intends to connect to. @GrumpyOldTroll ",
+          "createdAt": "2022-08-05T15:18:23Z",
+          "updatedAt": "2022-08-05T15:18:23Z"
+        },
+        {
+          "author": "squarooticus",
+          "authorAssociation": "OWNER",
+          "body": "Want hostname to bind content to the same *entity* as the unicast connection. Could include port, (S,G) IPs, but those aren't necessary to prevent cross-origin leeching because incorrect data wouldn't pass the integrity check.",
+          "createdAt": "2022-08-05T16:01:19Z",
+          "updatedAt": "2022-08-05T16:01:19Z"
+        }
+      ]
     }
   ],
   "pulls": [
@@ -274,7 +389,7 @@
       "labels": [],
       "body": "",
       "createdAt": "2021-06-04T21:52:06Z",
-      "updatedAt": "2021-06-07T17:00:35Z",
+      "updatedAt": "2022-07-12T12:34:21Z",
       "baseRepository": "squarooticus/draft-krose-multicast-security",
       "baseRefName": "master",
       "baseRefOid": "fef7651a77a637816b7ed8a2e23dc15d429d1abc",
@@ -331,6 +446,84 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 13,
+      "id": "PR_kwDOFhM1zs4uEK-i",
+      "title": "Beef up the privacy analysis",
+      "url": "https://github.com/squarooticus/draft-krose-multicast-security/pull/13",
+      "state": "MERGED",
+      "author": "squarooticus",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": " * Add more text to the privacy section to bolster the case for the\r\n   benefits of k-anonymity over unicast for large simultaneous download\r\n   events.",
+      "createdAt": "2021-11-03T21:53:41Z",
+      "updatedAt": "2022-07-12T12:34:11Z",
+      "baseRepository": "squarooticus/draft-krose-multicast-security",
+      "baseRefName": "master",
+      "baseRefOid": "f41baa6d40e61773dc45445b0f5f8b60cdf09655",
+      "headRepository": "squarooticus/draft-krose-multicast-security",
+      "headRefName": "beef-up-privacy-analysis",
+      "headRefOid": "dbd8d182efaaf23541b9128501972a93ca05ba94",
+      "closedAt": "2021-11-03T22:41:29Z",
+      "mergedAt": "2021-11-03T22:41:29Z",
+      "mergedBy": "GrumpyOldTroll",
+      "mergeCommit": {
+        "oid": "2e3fc269a3b32a5b6e4bcc82c50ec819d7827d31"
+      },
+      "comments": [
+        {
+          "author": "brettsheffield",
+          "authorAssociation": "NONE",
+          "body": "Nice work. I think most people overlook these benefits. The idea that multicast is somehow less secure or private, is quite pervasive, when the opposite is true.",
+          "createdAt": "2021-11-03T22:30:35Z",
+          "updatedAt": "2021-11-03T22:30:35Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOFhM1zs4vg-Iu",
+          "commit": {
+            "abbreviatedOid": "dbd8d18"
+          },
+          "author": "GrumpyOldTroll",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "lgtm. thanks.",
+          "createdAt": "2021-11-03T22:38:07Z",
+          "updatedAt": "2021-11-03T22:38:07Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 16,
+      "id": "PR_kwDOFhM1zs47OSwk",
+      "title": "Add section on request/response binding",
+      "url": "https://github.com/squarooticus/draft-krose-multicast-security/pull/16",
+      "state": "MERGED",
+      "author": "squarooticus",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-07-11T21:52:34Z",
+      "updatedAt": "2022-07-12T12:34:08Z",
+      "baseRepository": "squarooticus/draft-krose-multicast-security",
+      "baseRefName": "master",
+      "baseRefOid": "4a4e37b06634d78b5f715b5968af6135c1dd59b8",
+      "headRepository": "squarooticus/draft-krose-multicast-security",
+      "headRefName": "12-binding-response-to-request",
+      "headRefOid": "78967f6eeb9a121d582f85552cb0bd57e17a97c4",
+      "closedAt": "2022-07-11T21:53:33Z",
+      "mergedAt": "2022-07-11T21:53:33Z",
+      "mergedBy": "squarooticus",
+      "mergeCommit": {
+        "oid": "4f09125f8c54167b238685510f781249917d506b"
+      },
+      "comments": [],
+      "reviews": []
     }
   ]
 }
