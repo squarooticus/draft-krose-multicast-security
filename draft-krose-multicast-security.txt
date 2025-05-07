@@ -3,9 +3,12 @@
 
 
 TODO Working Group                                               K. Rose
-Internet-Draft                                                J. Holland
-Intended status: Standards Track               Akamai Technologies, Inc.
-Expires: 8 November 2025                                      7 May 2025
+Internet-Draft                                 Akamai Technologies, Inc.
+Intended status: Standards Track                               M. Franke
+Expires: 8 November 2025                                       TU Berlin
+                                                              J. Holland
+                                               Akamai Technologies, Inc.
+                                                              7 May 2025
 
 
       Security and Privacy Considerations for Multicast Transports
@@ -824,6 +827,12 @@ Authors' Addresses
    Cambridge, MA 02144,
    United States of America
    Email: krose@krose.org
+
+
+   Max Franke
+   TU Berlin
+   Germany
+   Email: mfranke@inet.tu-berlin.de
 
 
    Jake Holland

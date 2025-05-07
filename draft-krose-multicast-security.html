@@ -6,6 +6,7 @@
 <meta content="initial-scale=1.0" name="viewport">
 <title>Security and Privacy Considerations for Multicast Transports</title>
 <meta content="Kyle Rose" name="author">
+<meta content="Max Franke" name="author">
 <meta content="Jake Holland" name="author">
 <meta content="
        Interdomain multicast has unique potential to solve delivery scalability for popular content, but it carries a set of security and privacy issues that differ from those in unicast delivery.
@@ -1049,7 +1050,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <td class="right">May 2025</td>
 </tr></thead>
 <tfoot><tr>
-<td class="left">Rose &amp; Holland</td>
+<td class="left">Rose, et al.</td>
 <td class="center">Expires 8 November 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
@@ -1074,6 +1075,10 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <div class="author">
       <div class="author-name">K. Rose</div>
 <div class="org">Akamai Technologies, Inc.</div>
+</div>
+<div class="author">
+      <div class="author-name">M. Franke</div>
+<div class="org">TU Berlin</div>
 </div>
 <div class="author">
       <div class="author-name">J. Holland</div>
@@ -1340,7 +1345,8 @@ Care must be taken to avoid such amplification attack vectors.<a href="#section-
         <h3 id="name-authentication">
 <a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-authentication" class="section-name selfRef">Authentication</a>
         </h3>
-<p id="section-3.2-1">The Web security model requires that data delivered to applications must be authenticated as having originated from the trusted peer. (In the case of server-only transport-level authentication schemes, such as the ubiquitous TLS server-only authentication employed throughout the Web, trust in the client may be strongly established at the application layer or weakly established as nothing more than precluding a man-in-the-middle.)<a href="#section-3.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.2-1">The Web security model requires that data delivered to applications must be authenticated as having originated from the trusted peer.
+(In the case of server-only transport-level authentication schemes, such as the ubiquitous TLS server-only authentication employed throughout the Web, trust in the client may be strongly established at the application layer or weakly established as nothing more than precluding a man-in-the-middle.)<a href="#section-3.2-1" class="pilcrow">¶</a></p>
 <p id="section-3.2-2">In the unicast case, authentication of payloads in HTTPS is provided by a trusted octet stream, cryptographically resistant to tampering, bootstrapped via certificate validation and trust chain verification (either mutual or server-only, perhaps augmented with application-layer identity verification).<a href="#section-3.2-2" class="pilcrow">¶</a></p>
 <p id="section-3.2-3">Authentication of units of transport for trusted channels (think: individual packets or messages) is typically provided by a cryptographic authentication tag:<a href="#section-3.2-3" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -1776,6 +1782,15 @@ In lieu of this, protocols should be designed in a way that allows properly-func
 <div class="email">
 <span>Email:</span>
 <a href="mailto:krose@krose.org" class="email">krose@krose.org</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Max Franke</span></div>
+<div dir="auto" class="left"><span class="org">TU Berlin</span></div>
+<div dir="auto" class="left"><span class="country-name">Germany</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:mfranke@inet.tu-berlin.de" class="email">mfranke@inet.tu-berlin.de</a>
 </div>
 </address>
 <address class="vcard">
