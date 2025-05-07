@@ -23,6 +23,12 @@ author:
     country: United States of America
     email: krose@krose.org
  -
+    ins: M. Franke
+    name: Max Franke
+    org: TU Berlin
+    email: mfranke@inet.tu-berlin.de
+    country: Germany
+ -
     ins: J. Holland
     name: Jake Holland
     organization: Akamai Technologies, Inc.
@@ -148,7 +154,8 @@ Care must be taken to avoid such amplification attack vectors.
 
 ## Authentication {#authentication}
 
-The Web security model requires that data delivered to applications must be authenticated as having originated from the trusted peer. (In the case of server-only transport-level authentication schemes, such as the ubiquitous TLS server-only authentication employed throughout the Web, trust in the client may be strongly established at the application layer or weakly established as nothing more than precluding a man-in-the-middle.)
+The Web security model requires that data delivered to applications must be authenticated as having originated from the trusted peer.
+(In the case of server-only transport-level authentication schemes, such as the ubiquitous TLS server-only authentication employed throughout the Web, trust in the client may be strongly established at the application layer or weakly established as nothing more than precluding a man-in-the-middle.)
 
 In the unicast case, authentication of payloads in HTTPS is provided by a trusted octet stream, cryptographically resistant to tampering, bootstrapped via certificate validation and trust chain verification (either mutual or server-only, perhaps augmented with application-layer identity verification).
 
