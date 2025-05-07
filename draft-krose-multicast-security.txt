@@ -5,7 +5,7 @@
 TODO Working Group                                               K. Rose
 Internet-Draft                                                J. Holland
 Intended status: Standards Track               Akamai Technologies, Inc.
-Expires: 31 December 2023                                   29 June 2023
+Expires: 8 November 2025                                      7 May 2025
 
 
       Security and Privacy Considerations for Multicast Transports
@@ -42,11 +42,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 31 December 2023.
+   This Internet-Draft will expire on 8 November 2025.
 
 Copyright Notice
 
-   Copyright (c) 2023 IETF Trust and the persons identified as the
+   Copyright (c) 2025 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -747,11 +747,11 @@ Table of Contents
 
 6.2.  Informative References
 
-   [AMBI]     Holland, J. and K. Rose, "Asymmetric Manifest Based
-              Integrity", Work in Progress, Internet-Draft, draft-ietf-
-              mboned-ambi-03, 7 March 2022,
+   [AMBI]     Holland, J., Rose, K., and M. Franke, "Asymmetric Manifest
+              Based Integrity", Work in Progress, Internet-Draft, draft-
+              ietf-mboned-ambi-04, 7 May 2025,
               <https://datatracker.ietf.org/doc/html/draft-ietf-mboned-
-              ambi-03>.
+              ambi-04>.
 
    [huang-w2sp]
               Huang, L.-S., Chen, E. Y., Barth, A., Rescorla, E., and C.
@@ -808,9 +808,9 @@ Table of Contents
 
    [webtrans] Vasiliev, V., "The WebTransport Protocol Framework", Work
               in Progress, Internet-Draft, draft-ietf-webtrans-overview-
-              05, 24 January 2023,
+              09, 25 February 2025,
               <https://datatracker.ietf.org/doc/html/draft-ietf-
-              webtrans-overview-05>.
+              webtrans-overview-09>.
 
 Acknowledgments
 
