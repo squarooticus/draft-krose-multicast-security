@@ -83,6 +83,16 @@ informative:
                 ins: C. Jackson
         target: https://ptolemy.berkeley.edu/projects/truststc/pubs/840/websocket.pdf
 
+    k-anonymity:
+        target: https://dataprivacylab.org/dataprivacy/projects/kanonymity/paper3.pdf
+        title: "k-Anonymity: a model for protecting privacy"
+        author:
+            -
+                ins: P. Samarati
+            -
+                ins: L. Sweeney
+        date: 1998-05
+
 --- abstract
 
 Interdomain multicast has unique potential to solve delivery scalability for popular content, but it carries a set of security and privacy issues that differ from those in unicast delivery.
@@ -257,7 +267,7 @@ Assuming application-layer unicast control plane traffic is properly secured, id
     Notwithstanding linkability via data or metadata from application-layer control flows, an on-path observer can thus only directly determine that some entity downstream of that path element has joined a particular multicast channel (in SSM {{RFC4607}}, identified by the (source, group) pair of IP addresses).
 Lacking a destination address, increasing the specificity of receiver identification would require an observer to obtain monitoring points closer to the user or to manipulate a user into revealing metadata out-of-band that the observer can tie to the user via traffic analysis or other means.
 
-    This is a form of k-anonymity not available to unicast transports.
+    This is a form of k-anonymity {{k-anonymity}} not available to unicast transports.
 In the unicast case, an on-path observer has access to metadata specific to endpoint address pairs, including total flow size, packet count, port and protocol, which (in combination with other metadata) can later be tied to the user, site, service, and/or location assigned to each address at the given time.
 
     Widespread near-simultaneous unicast download events, such as those triggered by the release of a video game update or of an episode of a popular streaming video series, expose the identities of consumers of such content anywhere along the path from end users' devices to the origin through very elementary traffic analysis, unless measures are taken by the end user or content provider to hide the traffic, such as by mixing it with other traffic in a way that complicates disentangling individual flows.
