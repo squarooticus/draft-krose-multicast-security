@@ -5,10 +5,10 @@
 TODO Working Group                                               K. Rose
 Internet-Draft                                 Akamai Technologies, Inc.
 Intended status: Standards Track                               M. Franke
-Expires: 8 November 2025                                       TU Berlin
+Expires: 23 November 2025                                      TU Berlin
                                                               J. Holland
                                                Akamai Technologies, Inc.
-                                                              7 May 2025
+                                                             22 May 2025
 
 
       Security and Privacy Considerations for Multicast Transports
@@ -45,7 +45,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 8 November 2025.
+   This Internet-Draft will expire on 23 November 2025.
 
 Copyright Notice
 
@@ -448,12 +448,13 @@ Table of Contents
       metadata out-of-band that the observer can tie to the user via
       traffic analysis or other means.
 
-      This is a form of k-anonymity not available to unicast transports.
-      In the unicast case, an on-path observer has access to metadata
-      specific to endpoint address pairs, including total flow size,
-      packet count, port and protocol, which (in combination with other
-      metadata) can later be tied to the user, site, service, and/or
-      location assigned to each address at the given time.
+      This is a form of k-anonymity [k-anonymity] not available to
+      unicast transports.  In the unicast case, an on-path observer has
+      access to metadata specific to endpoint address pairs, including
+      total flow size, packet count, port and protocol, which (in
+      combination with other metadata) can later be tied to the user,
+      site, service, and/or location assigned to each address at the
+      given time.
 
       Widespread near-simultaneous unicast download events, such as
       those triggered by the release of a video game update or of an
@@ -762,6 +763,12 @@ Table of Contents
               Security and Privacy (W2SP 2011) , May 2011,
               <https://ptolemy.berkeley.edu/projects/truststc/pubs/840/
               websocket.pdf>.
+
+   [k-anonymity]
+              Samarati, P. and L. Sweeney, "k-Anonymity: a model for
+              protecting privacy", May 1998,
+              <https://dataprivacylab.org/dataprivacy/projects/
+              kanonymity/paper3.pdf>.
 
    [quic-http-mcast]
               Pardue, L., Bradbury, R., and S. Hurst, "Hypertext
