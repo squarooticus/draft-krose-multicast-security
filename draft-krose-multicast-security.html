@@ -12,22 +12,22 @@
        Interdomain multicast has unique potential to solve delivery scalability for popular content, but it carries a set of security and privacy issues that differ from those in unicast delivery.
 This document analyzes the security threats unique to multicast-based delivery for Internet and Web traffic under the Internet and Web threat models. 
     " name="description">
-<meta content="xml2rfc 3.28.1" name="generator">
+<meta content="xml2rfc 3.30.0" name="generator">
 <meta content="Internet-Draft" name="keyword">
 <meta content="draft-krose-multicast-security-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.28.1
-    Python 3.12.10
+  xml2rfc 3.30.0
+    Python 3.12.11
     ConfigArgParse 1.7
     google-i18n-address 3.1.1
     intervaltree 3.1.0
     Jinja2 3.1.6
-    lxml 5.3.0
+    lxml 5.3.1
     platformdirs 4.3.8
     pycountry 24.6.1
     PyYAML 6.0.2
-    requests 2.32.3
-    setuptools 70.3.0
+    requests 2.32.4
+    setuptools 80.9.0
     wcwidth 0.2.13
 -->
 <link href="draft-krose-multicast-security.xml" rel="alternate" type="application/rfc+xml">
@@ -1047,11 +1047,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">Multicast Transport Security</td>
-<td class="right">May 2025</td>
+<td class="right">August 2025</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Rose, et al.</td>
-<td class="center">Expires 23 November 2025</td>
+<td class="center">Expires 3 February 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1064,12 +1064,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-krose-multicast-security-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-05-22" class="published">22 May 2025</time>
+<time datetime="2025-08-02" class="published">2 August 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
-<dd class="intended-status">Standards Track</dd>
+<dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-11-23">23 November 2025</time></dd>
+<dd class="expires"><time datetime="2026-02-03">3 February 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1120,7 +1120,7 @@ This document analyzes the security threats unique to multicast-based delivery f
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 23 November 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 3 February 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1161,92 +1161,89 @@ This document analyzes the security threats unique to multicast-based delivery f
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2">
-            <p id="section-toc.1-1.2.1"><a href="#section-2" class="auto internal xref">2</a>.  <a href="#name-conventions-and-definitions" class="internal xref">Conventions and Definitions</a></p>
+            <p id="section-toc.1-1.2.1"><a href="#section-2" class="auto internal xref">2</a>.  <a href="#name-threat-model" class="internal xref">Threat Model</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.1">
+                <p id="section-toc.1-1.2.2.1.1"><a href="#section-2.1" class="auto internal xref">2.1</a>.  <a href="#name-multicast-transport-propert" class="internal xref">Multicast Transport Properties</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.2">
+                <p id="section-toc.1-1.2.2.2.1"><a href="#section-2.2" class="auto internal xref">2.2</a>.  <a href="#name-authentication" class="internal xref">Authentication</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.3">
+                <p id="section-toc.1-1.2.2.3.1"><a href="#section-2.3" class="auto internal xref">2.3</a>.  <a href="#name-integrity" class="internal xref">Integrity</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.4">
+                <p id="section-toc.1-1.2.2.4.1"><a href="#section-2.4" class="auto internal xref">2.4</a>.  <a href="#name-confidentiality" class="internal xref">Confidentiality</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.4.2.1">
+                    <p id="section-toc.1-1.2.2.4.2.1.1"><a href="#section-2.4.1" class="auto internal xref">2.4.1</a>.  <a href="#name-privacy" class="internal xref">Privacy</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.4.2.2">
+                    <p id="section-toc.1-1.2.2.4.2.2.1"><a href="#section-2.4.2" class="auto internal xref">2.4.2</a>.  <a href="#name-personal-data" class="internal xref">Personal Data</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.4.2.3">
+                    <p id="section-toc.1-1.2.2.4.2.3.1"><a href="#section-2.4.3" class="auto internal xref">2.4.3</a>.  <a href="#name-forward-secrecy" class="internal xref">Forward Secrecy</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.4.2.4">
+                    <p id="section-toc.1-1.2.2.4.2.4.1"><a href="#section-2.4.4" class="auto internal xref">2.4.4</a>.  <a href="#name-bypassing-authentication" class="internal xref">Bypassing Authentication</a></p>
+</li>
+                </ul>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.5">
+                <p id="section-toc.1-1.2.2.5.1"><a href="#section-2.5" class="auto internal xref">2.5</a>.  <a href="#name-request-response-binding" class="internal xref">Request/Response Binding</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.6">
+                <p id="section-toc.1-1.2.2.6.1"><a href="#section-2.6" class="auto internal xref">2.6</a>.  <a href="#name-non-linkability" class="internal xref">Non-linkability</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.7">
+                <p id="section-toc.1-1.2.2.7.1"><a href="#section-2.7" class="auto internal xref">2.7</a>.  <a href="#name-browser-specific-threats" class="internal xref">Browser-Specific Threats</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.7.2.1">
+                    <p id="section-toc.1-1.2.2.7.2.1.1"><a href="#section-2.7.1" class="auto internal xref">2.7.1</a>.  <a href="#name-access-to-local-resources" class="internal xref">Access to Local Resources</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.7.2.2">
+                    <p id="section-toc.1-1.2.2.7.2.2.1"><a href="#section-2.7.2" class="auto internal xref">2.7.2</a>.  <a href="#name-injection" class="internal xref">Injection</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.7.2.3">
+                    <p id="section-toc.1-1.2.2.7.2.3.1"><a href="#section-2.7.3" class="auto internal xref">2.7.3</a>.  <a href="#name-hostile-origin" class="internal xref">Hostile Origin</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.7.2.4">
+                    <p id="section-toc.1-1.2.2.7.2.4.1"><a href="#section-2.7.4" class="auto internal xref">2.7.4</a>.  <a href="#name-private-browsing-modes" class="internal xref">Private Browsing Modes</a></p>
+</li>
+                </ul>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.8">
+                <p id="section-toc.1-1.2.2.8.1"><a href="#section-2.8" class="auto internal xref">2.8</a>.  <a href="#name-other-threats" class="internal xref">Other Threats</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.8.2.1">
+                    <p id="section-toc.1-1.2.2.8.2.1.1"><a href="#section-2.8.1" class="auto internal xref">2.8.1</a>.  <a href="#name-referrer-checks" class="internal xref">Referrer Checks</a></p>
+</li>
+                </ul>
+</li>
+            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
-            <p id="section-toc.1-1.3.1"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-threat-model" class="internal xref">Threat Model</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1">
-                <p id="section-toc.1-1.3.2.1.1"><a href="#section-3.1" class="auto internal xref">3.1</a>.  <a href="#name-multicast-transport-propert" class="internal xref">Multicast Transport Properties</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.2">
-                <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="auto internal xref">3.2</a>.  <a href="#name-authentication" class="internal xref">Authentication</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3">
-                <p id="section-toc.1-1.3.2.3.1"><a href="#section-3.3" class="auto internal xref">3.3</a>.  <a href="#name-integrity" class="internal xref">Integrity</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.4">
-                <p id="section-toc.1-1.3.2.4.1"><a href="#section-3.4" class="auto internal xref">3.4</a>.  <a href="#name-confidentiality" class="internal xref">Confidentiality</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.4.2.1">
-                    <p id="section-toc.1-1.3.2.4.2.1.1"><a href="#section-3.4.1" class="auto internal xref">3.4.1</a>.  <a href="#name-privacy" class="internal xref">Privacy</a></p>
-</li>
-                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.4.2.2">
-                    <p id="section-toc.1-1.3.2.4.2.2.1"><a href="#section-3.4.2" class="auto internal xref">3.4.2</a>.  <a href="#name-personal-data" class="internal xref">Personal Data</a></p>
-</li>
-                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.4.2.3">
-                    <p id="section-toc.1-1.3.2.4.2.3.1"><a href="#section-3.4.3" class="auto internal xref">3.4.3</a>.  <a href="#name-forward-secrecy" class="internal xref">Forward Secrecy</a></p>
-</li>
-                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.4.2.4">
-                    <p id="section-toc.1-1.3.2.4.2.4.1"><a href="#section-3.4.4" class="auto internal xref">3.4.4</a>.  <a href="#name-bypassing-authentication" class="internal xref">Bypassing Authentication</a></p>
-</li>
-                </ul>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.5">
-                <p id="section-toc.1-1.3.2.5.1"><a href="#section-3.5" class="auto internal xref">3.5</a>.  <a href="#name-request-response-binding" class="internal xref">Request/Response Binding</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.6">
-                <p id="section-toc.1-1.3.2.6.1"><a href="#section-3.6" class="auto internal xref">3.6</a>.  <a href="#name-non-linkability" class="internal xref">Non-linkability</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.7">
-                <p id="section-toc.1-1.3.2.7.1"><a href="#section-3.7" class="auto internal xref">3.7</a>.  <a href="#name-browser-specific-threats" class="internal xref">Browser-Specific Threats</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.7.2.1">
-                    <p id="section-toc.1-1.3.2.7.2.1.1"><a href="#section-3.7.1" class="auto internal xref">3.7.1</a>.  <a href="#name-access-to-local-resources" class="internal xref">Access to Local Resources</a></p>
-</li>
-                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.7.2.2">
-                    <p id="section-toc.1-1.3.2.7.2.2.1"><a href="#section-3.7.2" class="auto internal xref">3.7.2</a>.  <a href="#name-injection" class="internal xref">Injection</a></p>
-</li>
-                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.7.2.3">
-                    <p id="section-toc.1-1.3.2.7.2.3.1"><a href="#section-3.7.3" class="auto internal xref">3.7.3</a>.  <a href="#name-hostile-origin" class="internal xref">Hostile Origin</a></p>
-</li>
-                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.7.2.4">
-                    <p id="section-toc.1-1.3.2.7.2.4.1"><a href="#section-3.7.4" class="auto internal xref">3.7.4</a>.  <a href="#name-private-browsing-modes" class="internal xref">Private Browsing Modes</a></p>
-</li>
-                </ul>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.8">
-                <p id="section-toc.1-1.3.2.8.1"><a href="#section-3.8" class="auto internal xref">3.8</a>.  <a href="#name-other-threats" class="internal xref">Other Threats</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.8.2.1">
-                    <p id="section-toc.1-1.3.2.8.2.1.1"><a href="#section-3.8.1" class="auto internal xref">3.8.1</a>.  <a href="#name-referrer-checks" class="internal xref">Referrer Checks</a></p>
-</li>
-                </ul>
-</li>
-            </ul>
+            <p id="section-toc.1-1.3.1"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
-            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
-            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
-</li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
-            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-references" class="internal xref">References</a></p>
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-references" class="internal xref">References</a></p>
 <ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1">
-                <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="auto internal xref">6.1</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1">
+                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="auto internal xref">5.1</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
 </li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2">
-                <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="auto internal xref">6.2</a>.  <a href="#name-informative-references" class="internal xref">Informative References</a></p>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2">
+                <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="auto internal xref">5.2</a>.  <a href="#name-informative-references" class="internal xref">Informative References</a></p>
 </li>
             </ul>
 </li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
-            <p id="section-toc.1-1.7.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
+            <p id="section-toc.1-1.6.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
 </li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
-            <p id="section-toc.1-1.8.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
+            <p id="section-toc.1-1.7.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
 </li>
         </ul>
 </nav>
@@ -1305,333 +1302,322 @@ This document instead explicitly describes a security and privacy threat model f
 </div>
 </section>
 </div>
-<div id="conventions-and-definitions">
-<section id="section-2">
-      <h2 id="name-conventions-and-definitions">
-<a href="#section-2" class="section-number selfRef">2. </a><a href="#name-conventions-and-definitions" class="section-name selfRef">Conventions and Definitions</a>
-      </h2>
-<p id="section-2-1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
-"SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this
-document are to be interpreted as described in BCP 14 <span>[<a href="#RFC2119" class="cite xref">RFC2119</a>]</span> <span>[<a href="#RFC8174" class="cite xref">RFC8174</a>]</span>
-when, and only when, they appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶</a></p>
-</section>
-</div>
 <div id="threat-model">
-<section id="section-3">
+<section id="section-2">
       <h2 id="name-threat-model">
-<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-threat-model" class="section-name selfRef">Threat Model</a>
+<a href="#section-2" class="section-number selfRef">2. </a><a href="#name-threat-model" class="section-name selfRef">Threat Model</a>
       </h2>
-<p id="section-3-1">Fundamentally, multicast is simply an addressing scheme in which the destination address identifies more than one unique receiver;
-that said, this has implications for protocol design that differ greatly from those for unicast addressing.<a href="#section-3-1" class="pilcrow">¶</a></p>
-<p id="section-3-2">Given the virtually unbounded potential for attacks targeting data confidentiality and user privacy, we attempt to make the description of a multicast threat model tractable by taking the approach of highlighting areas in which multicast differs from unicast or poses novel challenges that are not addressed at a layer unconcerned with the addressing scheme.<a href="#section-3-2" class="pilcrow">¶</a></p>
+<p id="section-2-1">Fundamentally, multicast is simply an addressing scheme in which the destination address identifies more than one unique receiver;
+that said, this has implications for protocol design that differ greatly from those for unicast addressing.<a href="#section-2-1" class="pilcrow">¶</a></p>
+<p id="section-2-2">Given the virtually unbounded potential for attacks targeting data confidentiality and user privacy, we attempt to make the description of a multicast threat model tractable by taking the approach of highlighting areas in which multicast differs from unicast or poses novel challenges that are not addressed at a layer unconcerned with the addressing scheme.<a href="#section-2-2" class="pilcrow">¶</a></p>
 <div id="multicast-transport-properties">
-<section id="section-3.1">
+<section id="section-2.1">
         <h3 id="name-multicast-transport-propert">
-<a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-multicast-transport-propert" class="section-name selfRef">Multicast Transport Properties</a>
+<a href="#section-2.1" class="section-number selfRef">2.1. </a><a href="#name-multicast-transport-propert" class="section-name selfRef">Multicast Transport Properties</a>
         </h3>
-<p id="section-3.1-1">Unlike typical unicast transport protocols, multicast transports are naturally unidirectional.
+<p id="section-2.1-1">Unlike typical unicast transport protocols, multicast transports are naturally unidirectional.
 Use cases for multicast transports typically involve one or a small number of senders transmitting data to a large number of receivers.
-The sender may not know who the receivers are, or even how many of them there are, although a sender may require a pre-existing out-of-band relationship with receivers for the received data to be useful, such as via distribution of decryption keys only to authorized receivers.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
-<p id="section-3.1-2">Applications built atop multicast IP or UDP must provide a mechanism for congestion control, just as those built atop unicast IP or UDP must.
-Although multicast applications compliant with Section 4.1 of <span>[<a href="#RFC8085" class="cite xref">RFC8085</a>]</span> will implement congestion control, in the context of a threat model it is important to note that malicious clients might attempt to use non-compliant subscriptions to multicast traffic as part of a DoS attack where possible, and that some applications might not be compliant with the recommendations for congestion control implementations.<a href="#section-3.1-2" class="pilcrow">¶</a></p>
-<p id="section-3.1-3">IP and UDP provide no native reliability mechanism, whether for unicast or multicast transmission.
+The sender may not know who the receivers are, or even how many of them there are, although a sender may require a pre-existing out-of-band relationship with receivers for the received data to be useful, such as via distribution of decryption keys only to authorized receivers.<a href="#section-2.1-1" class="pilcrow">¶</a></p>
+<p id="section-2.1-2">Applications built atop multicast IP or UDP must provide a mechanism for congestion control, just as those built atop unicast IP or UDP must.
+Although multicast applications compliant with Section 4.1 of <span>[<a href="#RFC8085" class="cite xref">RFC8085</a>]</span> will implement congestion control, in the context of a threat model it is important to note that malicious clients might attempt to use non-compliant subscriptions to multicast traffic as part of a DoS attack where possible, and that some applications might not be compliant with the recommendations for congestion control implementations.<a href="#section-2.1-2" class="pilcrow">¶</a></p>
+<p id="section-2.1-3">IP and UDP provide no native reliability mechanism, whether for unicast or multicast transmission.
 Protocols leveraging multicast may add mechanisms for reliable delivery (see <span>[<a href="#RFC5740" class="cite xref">RFC5740</a>]</span>, <span>[<a href="#RFC5775" class="cite xref">RFC5775</a>]</span>, and <span>[<a href="#quic-http-mcast" class="cite xref">quic-http-mcast</a>]</span> for examples), but this may expand the attack surface against content providers if per-packet authenticity is not provided.
 For example, in an application with unicast recovery for objects constructed out of multiple packets and which is limited to object-level authentication, if a packet is injected into the multicast stream receivers will fail to authenticate an entire object, necessitating unicast recovery by every receiver for the entire object.
-Care must be taken to avoid such amplification attack vectors.<a href="#section-3.1-3" class="pilcrow">¶</a></p>
+Care must be taken to avoid such amplification attack vectors.<a href="#section-2.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="authentication">
-<section id="section-3.2">
+<section id="section-2.2">
         <h3 id="name-authentication">
-<a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-authentication" class="section-name selfRef">Authentication</a>
+<a href="#section-2.2" class="section-number selfRef">2.2. </a><a href="#name-authentication" class="section-name selfRef">Authentication</a>
         </h3>
-<p id="section-3.2-1">The Web security model requires that data delivered to applications must be authenticated as having originated from the trusted peer.
-(In the case of server-only transport-level authentication schemes, such as the ubiquitous TLS server-only authentication employed throughout the Web, trust in the client may be strongly established at the application layer or weakly established as nothing more than precluding a man-in-the-middle.)<a href="#section-3.2-1" class="pilcrow">¶</a></p>
-<p id="section-3.2-2">In the unicast case, authentication of payloads in HTTPS is provided by a trusted octet stream, cryptographically resistant to tampering, bootstrapped via certificate validation and trust chain verification (either mutual or server-only, perhaps augmented with application-layer identity verification).<a href="#section-3.2-2" class="pilcrow">¶</a></p>
-<p id="section-3.2-3">Authentication of units of transport for trusted channels (think: individual packets or messages) is typically provided by a cryptographic authentication tag:<a href="#section-3.2-3" class="pilcrow">¶</a></p>
+<p id="section-2.2-1">The Web security model requires that data delivered to applications must be authenticated as having originated from the trusted peer.
+(In the case of server-only transport-level authentication schemes, such as the ubiquitous TLS server-only authentication employed throughout the Web, trust in the client may be strongly established at the application layer or weakly established as nothing more than precluding a man-in-the-middle.)<a href="#section-2.2-1" class="pilcrow">¶</a></p>
+<p id="section-2.2-2">In the unicast case, authentication of payloads in HTTPS is provided by a trusted octet stream, cryptographically resistant to tampering, bootstrapped via certificate validation and trust chain verification (either mutual or server-only, perhaps augmented with application-layer identity verification).<a href="#section-2.2-2" class="pilcrow">¶</a></p>
+<p id="section-2.2-3">Authentication of units of transport for trusted channels (think: individual packets or messages) is typically provided by a cryptographic authentication tag:<a href="#section-2.2-3" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3.2-4.1">
-            <p id="section-3.2-4.1.1">Symmetric tags, such as symmetric message authentication codes (MACs) and authentication tags produced by authenticated encryption (AE) algorithms.
+<li class="normal" id="section-2.2-4.1">
+            <p id="section-2.2-4.1.1">Symmetric tags, such as symmetric message authentication codes (MACs) and authentication tags produced by authenticated encryption (AE) algorithms.
 Because anyone in possession of the keying material may produce valid symmetric authentication tags, such keying material is typically known to at most two parties:
 one sender and one receiver.
-Some algorithms employing symmetric authentication (such as TESLA, discussed below) relieve this constraint by imposing some different constraint on verification of tagged content.<a href="#section-3.2-4.1.1" class="pilcrow">¶</a></p>
+Some algorithms employing symmetric authentication (such as TESLA, discussed below) relieve this constraint by imposing some different constraint on verification of tagged content.<a href="#section-2.2-4.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-3.2-4.2">
-            <p id="section-3.2-4.2.1">Asymmetric tags, typically signatures produced by public key cryptosystems.
-These assume that only the sender has access to the signing key, but impose no constraints on dissemination of the signature verification key.<a href="#section-3.2-4.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-2.2-4.2">
+            <p id="section-2.2-4.2.1">Asymmetric tags, typically signatures produced by public key cryptosystems.
+These assume that only the sender has access to the signing key, but impose no constraints on dissemination of the signature verification key.<a href="#section-2.2-4.2.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-3.2-5">In both cases:<a href="#section-3.2-5" class="pilcrow">¶</a></p>
+<p id="section-2.2-5">In both cases:<a href="#section-2.2-5" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3.2-6.1">
-            <p id="section-3.2-6.1.1">The receiving party must have a means for establishing trust in the keying material used to verify the authentication tag.<a href="#section-3.2-6.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-2.2-6.1">
+            <p id="section-2.2-6.1.1">The receiving party must have a means for establishing trust in the keying material used to verify the authentication tag.<a href="#section-2.2-6.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-3.2-6.2">
-            <p id="section-3.2-6.2.1">Instead of directly authenticating the protected content, the tag may protect a root of trust that itself protects cryptographically-linked content.
-Examples include:<a href="#section-3.2-6.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-2.2-6.2">
+            <p id="section-2.2-6.2.1">Instead of directly authenticating the protected content, the tag may protect a root of trust that itself protects cryptographically-linked content.
+Examples include:<a href="#section-2.2-6.2.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3.2-6.2.2.1">
-                <p id="section-3.2-6.2.2.1.1">The TLS 1.3 handshake employing an authentication tag to reject MitM attacks against ECDH key agreement.<a href="#section-3.2-6.2.2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-2.2-6.2.2.1">
+                <p id="section-2.2-6.2.2.1.1">The TLS 1.3 handshake employing an authentication tag to reject MitM attacks against ECDH key agreement.<a href="#section-2.2-6.2.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-3.2-6.2.2.2">
-                <p id="section-3.2-6.2.2.2.1">An authentication tag of a Merkle tree root protecting the content represented by the entire tree.<a href="#section-3.2-6.2.2.2.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-2.2-6.2.2.2">
+                <p id="section-2.2-6.2.2.2.1">An authentication tag of a Merkle tree root protecting the content represented by the entire tree.<a href="#section-2.2-6.2.2.2.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
-          <li class="normal" id="section-3.2-6.3">
-            <p id="section-3.2-6.3.1">The authentication tag serves to provide integrity protection over the unit of content to which the tag applies, with additional mechanisms required to detect and/or manage duplication/replay, deletion/loss, and reordering within a sequence of such authenticated content units.<a href="#section-3.2-6.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-2.2-6.3">
+            <p id="section-2.2-6.3.1">The authentication tag serves to provide integrity protection over the unit of content to which the tag applies, with additional mechanisms required to detect and/or manage duplication/replay, deletion/loss, and reordering within a sequence of such authenticated content units.<a href="#section-2.2-6.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-3.2-7">Asymmetric verification of content delivered through multicast is conceptually identical to the unicast case, owing to the asymmetry of access to the signing key;
-but the symmetric case does not directly apply given that multiple receivers need access to the same key used for both signing and verification, which in a naïve implementation opens up the possibility of forgery by a receiver on-path or with the ability to spoof the source.<a href="#section-3.2-7" class="pilcrow">¶</a></p>
-<p id="section-3.2-8">Multiple mechanisms providing for reliable asymmetric authentication of data delivered by multicast have been proposed over the years.<a href="#section-3.2-8" class="pilcrow">¶</a></p>
+<p id="section-2.2-7">Asymmetric verification of content delivered through multicast is conceptually identical to the unicast case, owing to the asymmetry of access to the signing key;
+but the symmetric case does not directly apply given that multiple receivers need access to the same key used for both signing and verification, which in a naïve implementation opens up the possibility of forgery by a receiver on-path or with the ability to spoof the source.<a href="#section-2.2-7" class="pilcrow">¶</a></p>
+<p id="section-2.2-8">Multiple mechanisms providing for reliable asymmetric authentication of data delivered by multicast have been proposed over the years.<a href="#section-2.2-8" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3.2-9.1">
-            <p id="section-3.2-9.1.1">TESLA <span>[<a href="#RFC4082" class="cite xref">RFC4082</a>]</span> achieves asymmetry between the sender and multiple receivers through timed release of symmetric keying material rather than through the assumed computational difficulty of deriving a signing key from a verification key in public key cryptosystems like RSA and ECDSA.
+<li class="normal" id="section-2.2-9.1">
+            <p id="section-2.2-9.1.1">TESLA <span>[<a href="#RFC4082" class="cite xref">RFC4082</a>]</span> achieves asymmetry between the sender and multiple receivers through timed release of symmetric keying material rather than through the assumed computational difficulty of deriving a signing key from a verification key in public key cryptosystems like RSA and ECDSA.
 It employs computationally-inexpensive symmetric authentication tagging with release of the keying material to receivers only after they are assumed to have received the protected data, with any data received subsequent to scheduled key release to be discarded by the receiver.
-This requires some degree of time synchronization between clients and servers and imposes latency above one-way path delay prior to release of authenticated data to applications.<a href="#section-3.2-9.1.1" class="pilcrow">¶</a></p>
+This requires some degree of time synchronization between clients and servers and imposes latency above one-way path delay prior to release of authenticated data to applications.<a href="#section-2.2-9.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-3.2-9.2">
-            <p id="section-3.2-9.2.1">Simple per-packet asymmetric signature of packet contents based on out-of-band communication of the signature's public key and algorithm, for example as described in Section 3 of <span>[<a href="#RFC6584" class="cite xref">RFC6584</a>]</span>.<a href="#section-3.2-9.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-2.2-9.2">
+            <p id="section-2.2-9.2.1">Simple per-packet asymmetric signature of packet contents based on out-of-band communication of the signature's public key and algorithm, for example as described in Section 3 of <span>[<a href="#RFC6584" class="cite xref">RFC6584</a>]</span>.<a href="#section-2.2-9.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-3.2-9.3">
-            <p id="section-3.2-9.3.1">Asymmetric Manifest-based Integrity (AMBI) <span>[<a href="#AMBI" class="cite xref">AMBI</a>]</span> relies on an out-of-band authenticated channel for distribution of manifests containing cryptographic digests of the packets in the multicast stream.
+          <li class="normal" id="section-2.2-9.3">
+            <p id="section-2.2-9.3.1">Asymmetric Manifest-based Integrity (AMBI) <span>[<a href="#AMBI" class="cite xref">AMBI</a>]</span> relies on an out-of-band authenticated channel for distribution of manifests containing cryptographic digests of the packets in the multicast stream.
 Authentication of this channel may, for instance, be provided by TLS if manifests are distributed using HTTPS from an origin known to the client to be closely affiliated with the multicast stream, such as would be the case if the manifest URL is delivered by the origin of the parent page hosting the media object.
-Authenticity in this case is a prerequisite of the out-of-band channel that AMBI builds upon to provide authenticity for the multicast data channel.<a href="#section-3.2-9.3.1" class="pilcrow">¶</a></p>
+Authenticity in this case is a prerequisite of the out-of-band channel that AMBI builds upon to provide authenticity for the multicast data channel.<a href="#section-2.2-9.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-3.2-10">Regardless of mechanism, the primary goal of authentication in the multicast context is identical to that for unicast:
+<p id="section-2.2-10">Regardless of mechanism, the primary goal of authentication in the multicast context is identical to that for unicast:
 that the content delivered to the application originated from the trusted source.
-Semantic equivalence to (D)TLS in this respect is therefore straightforwardly achieved by any number of potential mechanisms.<a href="#section-3.2-10" class="pilcrow">¶</a></p>
+Semantic equivalence to (D)TLS in this respect is therefore straightforwardly achieved by any number of potential mechanisms.<a href="#section-2.2-10" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="integrity">
-<section id="section-3.3">
+<section id="section-2.3">
         <h3 id="name-integrity">
-<a href="#section-3.3" class="section-number selfRef">3.3. </a><a href="#name-integrity" class="section-name selfRef">Integrity</a>
+<a href="#section-2.3" class="section-number selfRef">2.3. </a><a href="#name-integrity" class="section-name selfRef">Integrity</a>
         </h3>
-<p id="section-3.3-1">Integrity in the Web security model for unicast is closely tied to the features provided by transports that enabled the Web from its earliest days.
+<p id="section-2.3-1">Integrity in the Web security model for unicast is closely tied to the features provided by transports that enabled the Web from its earliest days.
 TCP, the transport substrate for the original HTTP, provides in-order delivery, reliability via retransmission, packet de-duplication, and modest protection against replay and forgery by certain classes of adversaries.
 SSL and TLS later greatly strengthened those protections.
 Web applications universally rely on these integrity assumptions for even the most basic operations.
-It is no surprise, then, that when QUIC was subsequently designed with HTTP as the model application, initial requirements included the integrity guarantees provided by TCP at the granularity of an individual stream.<a href="#section-3.3-1" class="pilcrow">¶</a></p>
-<p id="section-3.3-2">Multicast applications by contrast have different integrity assumptions owing to the multicast transport legacy.
+It is no surprise, then, that when QUIC was subsequently designed with HTTP as the model application, initial requirements included the integrity guarantees provided by TCP at the granularity of an individual stream.<a href="#section-2.3-1" class="pilcrow">¶</a></p>
+<p id="section-2.3-2">Multicast applications by contrast have different integrity assumptions owing to the multicast transport legacy.
 UDP, the transport protocol atop which multicast applications are typically built, provides no native reliability, in-order delivery, de-duplication, or protection against replay or forgery.
 Additionally, UDP by itself provides no protection against off-path spoofing or injection.
-Multicast has therefore traditionally been used for applications that can deal with a modest loss of integrity through application-layer mitigations such as:<a href="#section-3.3-2" class="pilcrow">¶</a></p>
+Multicast has therefore traditionally been used for applications that can deal with a modest loss of integrity through application-layer mitigations such as:<a href="#section-2.3-2" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3.3-3.1">
-            <p id="section-3.3-3.1.1">Packet indexes to reveal duplication/replay and reordering, and to complicate off-path spoofing and injection<a href="#section-3.3-3.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-2.3-3.1">
+            <p id="section-2.3-3.1.1">Packet indexes to reveal duplication/replay and reordering, and to complicate off-path spoofing and injection<a href="#section-2.3-3.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-3.3-3.2">
-            <p id="section-3.3-3.2.1">Deletion coding to allow for passive recovery from loss/deletion<a href="#section-3.3-3.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-2.3-3.2">
+            <p id="section-2.3-3.2.1">Deletion coding to allow for passive recovery from loss/deletion<a href="#section-2.3-3.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-3.3-3.3">
-            <p id="section-3.3-3.3.1">Graceful degradation in response to loss/deletion, exemplified by video codecs designed to tolerate loss<a href="#section-3.3-3.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-2.3-3.3">
+            <p id="section-2.3-3.3.1">Graceful degradation in response to loss/deletion, exemplified by video codecs designed to tolerate loss<a href="#section-2.3-3.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-3.3-4">A baseline for multicast transport integrity that makes sense within the Web security model requires that we first define the minimally acceptable integrity requirements for data that may be presented to a user or otherwise input to the browser's trusted computing base.
+<p id="section-2.3-4">A baseline for multicast transport integrity that makes sense within the Web security model requires that we first define the minimally acceptable integrity requirements for data that may be presented to a user or otherwise input to the browser's trusted computing base.
 We propose that the proper minimal standard given the variety of potential use cases, including many that have no need for reliable or in-order delivery, is to require protection against replay, injection, and modification and the ability to detect deletion, loss, or reordering.
-This standard will necessarily constrain conformant application-layer protocol design, just as the Web security model adds constraints to vanilla TCP.<a href="#section-3.3-4" class="pilcrow">¶</a></p>
-<p id="section-3.3-5">Integrity in multicast, as in the unicast case, is partially provided by the authentication mechanism:
+This standard will necessarily constrain conformant application-layer protocol design, just as the Web security model adds constraints to vanilla TCP.<a href="#section-2.3-4" class="pilcrow">¶</a></p>
+<p id="section-2.3-5">Integrity in multicast, as in the unicast case, is partially provided by the authentication mechanism:
 for example, if authentication is provided at packet granularity, modified or forged packets will fail to authenticate and will thus not be delivered to the application.
 Lacking a bidirectional relationship at the transport layer, however, applications relying on multicast must otherwise provide for detection of and/or recovery from packet duplication/replay, loss/deletion, and reordering.
-Some of these functions, too, may be provided by the authentication layer. For instance:<a href="#section-3.3-5" class="pilcrow">¶</a></p>
+Some of these functions, too, may be provided by the authentication layer. For instance:<a href="#section-2.3-5" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3.3-6.1">
-            <p id="section-3.3-6.1.1">TESLA prevents replay and reveals reordering, but only across time intervals. An application requiring finer-grained countermeasures against duplication/replay or reordering, or indeed any countermeasure to deletion/loss, would need to provide that via custom support (e.g., through the introduction of packet sequence numbers) or via an intermediate-layer protocol providing those functions.<a href="#section-3.3-6.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-2.3-6.1">
+            <p id="section-2.3-6.1.1">TESLA prevents replay and reveals reordering, but only across time intervals. An application requiring finer-grained countermeasures against duplication/replay or reordering, or indeed any countermeasure to deletion/loss, would need to provide that via custom support (e.g., through the introduction of packet sequence numbers) or via an intermediate-layer protocol providing those functions.<a href="#section-2.3-6.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-3.3-6.2">
-            <p id="section-3.3-6.2.1">AMBI by design provides strong protection against duplication/replay and reveals reordering and deletion/loss of content packets through a strict in-order manifest of packet digests.<a href="#section-3.3-6.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-2.3-6.2">
+            <p id="section-2.3-6.2.1">AMBI by design provides strong protection against duplication/replay and reveals reordering and deletion/loss of content packets through a strict in-order manifest of packet digests.<a href="#section-2.3-6.2.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
 </div>
 <div id="confidentiality">
-<section id="section-3.4">
+<section id="section-2.4">
         <h3 id="name-confidentiality">
-<a href="#section-3.4" class="section-number selfRef">3.4. </a><a href="#name-confidentiality" class="section-name selfRef">Confidentiality</a>
+<a href="#section-2.4" class="section-number selfRef">2.4. </a><a href="#name-confidentiality" class="section-name selfRef">Confidentiality</a>
         </h3>
-<p id="section-3.4-1">In the unicast transport security context, confidentiality implies that an observer (passive or active) without pre-existing access to keying material must not be able to decrypt the bytes on the wire or identify the content being transferred, even if that adversary has access to the decrypted content via other means.
+<p id="section-2.4-1">In the unicast transport security context, confidentiality implies that an observer (passive or active) without pre-existing access to keying material must not be able to decrypt the bytes on the wire or identify the content being transferred, even if that adversary has access to the decrypted content via other means.
 In practice, the former is trivially achieved through the use of authenticated key exchange and modern symmetric ciphers, but the latter is an ideal that is rarely possible owing to the substantial metadata in the clear on the public Internet:
 traffic analysis can make use of packet sizes and timing, endpoint identities, biases in application-layer protocol designs, side channels, and other such metadata to reveal an often surprising amount of information about the encrypted payload without needing access to any keying material.
 (Conceptually, one could make many streams appear identical to a passive observer: video streams, for example, could be bucketed into a small number of bitrates with identical packet sizes and pacing via padding of the actual content.
-This would increase overhead for servers and networks, primarily in terms of bandwidth utilization, that may be operationally unacceptable.)<a href="#section-3.4-1" class="pilcrow">¶</a></p>
-<p id="section-3.4-2">Multicast additionally introduces the complication that all receivers of a stream, even if such a stream is encrypted, receive the same payload (loss and duplication notwithstanding).
-This introduces novel privacy concerns that do not apply to unicast transports.<a href="#section-3.4-2" class="pilcrow">¶</a></p>
+This would increase overhead for servers and networks, primarily in terms of bandwidth utilization, that may be operationally unacceptable.)<a href="#section-2.4-1" class="pilcrow">¶</a></p>
+<p id="section-2.4-2">Multicast additionally introduces the complication that all receivers of a stream, even if such a stream is encrypted, receive the same payload (loss and duplication notwithstanding).
+This introduces novel privacy concerns that do not apply to unicast transports.<a href="#section-2.4-2" class="pilcrow">¶</a></p>
 <div id="privacy">
-<section id="section-3.4.1">
+<section id="section-2.4.1">
           <h4 id="name-privacy">
-<a href="#section-3.4.1" class="section-number selfRef">3.4.1. </a><a href="#name-privacy" class="section-name selfRef">Privacy</a>
+<a href="#section-2.4.1" class="section-number selfRef">2.4.1. </a><a href="#name-privacy" class="section-name selfRef">Privacy</a>
           </h4>
-<p id="section-3.4.1-1">In contrast to (say) unicast TLS, on-path monitoring can trivially prove that identical content was delivered to multiple receivers, irrespective of payload encryption.
-Furthermore, since those receivers all require the same keying material to decrypt the received payload, a compromise of any single receiver's device exposes decryption keys, and therefore the plaintext content, to the attacker.<a href="#section-3.4.1-1" class="pilcrow">¶</a></p>
-<p id="section-3.4.1-2">That having been said, however, there are factors and practices that help mitigate these additional risks:<a href="#section-3.4.1-2" class="pilcrow">¶</a></p>
+<p id="section-2.4.1-1">In contrast to (say) unicast TLS, on-path monitoring can trivially prove that identical content was delivered to multiple receivers, irrespective of payload encryption.
+Furthermore, since those receivers all require the same keying material to decrypt the received payload, a compromise of any single receiver's device exposes decryption keys, and therefore the plaintext content, to the attacker.<a href="#section-2.4.1-1" class="pilcrow">¶</a></p>
+<p id="section-2.4.1-2">That having been said, however, there are factors and practices that help mitigate these additional risks:<a href="#section-2.4.1-2" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3.4.1-3.1">
-              <p id="section-3.4.1-3.1.1">Multicast delivery is unidirectional from content provider to consumer and has no end-to-end unicast control channel association at the transport-layer, though such associations are generally unavoidable at the application layer (a common case likely being a referring web page).
-Assuming application-layer unicast control plane traffic is properly secured, identifiable plaintext control messages are limited to IGMP or MLD messages intercepted by (and not retransmitted with user-identifying information by) a user's upstream router.<a href="#section-3.4.1-3.1.1" class="pilcrow">¶</a></p>
-<p id="section-3.4.1-3.1.2">
+<li class="normal" id="section-2.4.1-3.1">
+              <p id="section-2.4.1-3.1.1">Multicast delivery is unidirectional from content provider to consumer and has no end-to-end unicast control channel association at the transport-layer, though such associations are generally unavoidable at the application layer (a common case likely being a referring web page).
+Assuming application-layer unicast control plane traffic is properly secured, identifiable plaintext control messages are limited to IGMP or MLD messages intercepted by (and not retransmitted with user-identifying information by) a user's upstream router.<a href="#section-2.4.1-3.1.1" class="pilcrow">¶</a></p>
+<p id="section-2.4.1-3.1.2">
 Notwithstanding linkability via data or metadata from application-layer control flows, an on-path observer can thus only directly determine that some entity downstream of that path element has joined a particular multicast channel (in SSM <span>[<a href="#RFC4607" class="cite xref">RFC4607</a>]</span>, identified by the (source, group) pair of IP addresses).
-Lacking a destination address, increasing the specificity of receiver identification would require an observer to obtain monitoring points closer to the user or to manipulate a user into revealing metadata out-of-band that the observer can tie to the user via traffic analysis or other means.<a href="#section-3.4.1-3.1.2" class="pilcrow">¶</a></p>
-<p id="section-3.4.1-3.1.3">
+Lacking a destination address, increasing the specificity of receiver identification would require an observer to obtain monitoring points closer to the user or to manipulate a user into revealing metadata out-of-band that the observer can tie to the user via traffic analysis or other means.<a href="#section-2.4.1-3.1.2" class="pilcrow">¶</a></p>
+<p id="section-2.4.1-3.1.3">
 This is a form of k-anonymity <span>[<a href="#k-anonymity" class="cite xref">k-anonymity</a>]</span> not available to unicast transports.
-In the unicast case, an on-path observer has access to metadata specific to endpoint address pairs, including total flow size, packet count, port and protocol, which (in combination with other metadata) can later be tied to the user, site, service, and/or location assigned to each address at the given time.<a href="#section-3.4.1-3.1.3" class="pilcrow">¶</a></p>
-<p id="section-3.4.1-3.1.4">
+In the unicast case, an on-path observer has access to metadata specific to endpoint address pairs, including total flow size, packet count, port and protocol, which (in combination with other metadata) can later be tied to the user, site, service, and/or location assigned to each address at the given time.<a href="#section-2.4.1-3.1.3" class="pilcrow">¶</a></p>
+<p id="section-2.4.1-3.1.4">
 Widespread near-simultaneous unicast download events, such as those triggered by the release of a video game update or of an episode of a popular streaming video series, expose the identities of consumers of such content anywhere along the path from end users' devices to the origin through very elementary traffic analysis, unless measures are taken by the end user or content provider to hide the traffic, such as by mixing it with other traffic in a way that complicates disentangling individual flows.
-A properly-designed virtual private network (VPN) link could, for example, obfuscate flow-identifying information in traffic to a given user, at the expense of using greater bandwidth (for added chaff) and of loudly signaling to passive observers the presence of a VPN link.<a href="#section-3.4.1-3.1.4" class="pilcrow">¶</a></p>
+A properly-designed virtual private network (VPN) link could, for example, obfuscate flow-identifying information in traffic to a given user, at the expense of using greater bandwidth (for added chaff) and of loudly signaling to passive observers the presence of a VPN link.<a href="#section-2.4.1-3.1.4" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="section-3.4.1-3.2">
-              <p id="section-3.4.1-3.2.1">There is no standard mechanism in the multicast protocol ecosystem by which a passive observer may derive separate but related content or metadata from the multicast channel itself:
+            <li class="normal" id="section-2.4.1-3.2">
+              <p id="section-2.4.1-3.2.1">There is no standard mechanism in the multicast protocol ecosystem by which a passive observer may derive separate but related content or metadata from the multicast channel itself:
 in particular, if a multicast stream is encrypted using a key delivered out-of-band, there is no general means by which a passive observer could directly derive the source location of the keying material.
 For a passive observer to know what encrypted content is being delivered to a particular user whose channel subscriptions are known they would need to already know what content is available via that channel, either via traffic analysis such as in the case of passive observation of unicast TLS, or via a priori knowledge of related content that references the channel.
-A dragnet cataloging all content available through a particular origin is an example of the latter, but could be further mitigated via controlled access to index information, or via periodic changes in multicast source, group, or keying material, or some combination of the three.<a href="#section-3.4.1-3.2.1" class="pilcrow">¶</a></p>
+A dragnet cataloging all content available through a particular origin is an example of the latter, but could be further mitigated via controlled access to index information, or via periodic changes in multicast source, group, or keying material, or some combination of the three.<a href="#section-2.4.1-3.2.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 </section>
 </div>
 <div id="personaldata">
-<section id="section-3.4.2">
+<section id="section-2.4.2">
           <h4 id="name-personal-data">
-<a href="#section-3.4.2" class="section-number selfRef">3.4.2. </a><a href="#name-personal-data" class="section-name selfRef">Personal Data</a>
+<a href="#section-2.4.2" class="section-number selfRef">2.4.2. </a><a href="#name-personal-data" class="section-name selfRef">Personal Data</a>
           </h4>
-<p id="section-3.4.2-1">A sender has responsibility not to expose personal information broadly. This is not a consideration unique to multicast delivery:
-an irresponsible service could publish a web page with Social Security numbers or push its server TLS private key into the certificate transparency log as easily as it could multicast personal data to a large set of receivers.<a href="#section-3.4.2-1" class="pilcrow">¶</a></p>
-<p id="section-3.4.2-2">The Web security model partially mitigates negligence on the part of senders by mandating the use of secure transports:
+<p id="section-2.4.2-1">A sender has responsibility not to expose personal information broadly. This is not a consideration unique to multicast delivery:
+an irresponsible service could publish a web page with Social Security numbers or push its server TLS private key into the certificate transparency log as easily as it could multicast personal data to a large set of receivers.<a href="#section-2.4.2-1" class="pilcrow">¶</a></p>
+<p id="section-2.4.2-2">The Web security model partially mitigates negligence on the part of senders by mandating the use of secure transports:
 prohibiting the fetching of mixed content on a single page prevents a server from sending private data to a browser in the clear.
-The main effect is to raise the bar closer to requiring bad faith or willful irresponsibility on the part of senders in revealing personal information.<a href="#section-3.4.2-2" class="pilcrow">¶</a></p>
-<p id="section-3.4.2-3">Multicast by its very nature is not generally suitable for transport of personal data:
+The main effect is to raise the bar closer to requiring bad faith or willful irresponsibility on the part of senders in revealing personal information.<a href="#section-2.4.2-2" class="pilcrow">¶</a></p>
+<p id="section-2.4.2-3">Multicast by its very nature is not generally suitable for transport of personal data:
 since the main value of leveraging a multicast transport is to deliver the same data to a large pool of receivers, such content must not include confidential personal information.
 Senders already have a responsibility to handle private information in a way that respects the privacy of users:
-the availability of multicast transports does not further complicate this responsibility.<a href="#section-3.4.2-3" class="pilcrow">¶</a></p>
+the availability of multicast transports does not further complicate this responsibility.<a href="#section-2.4.2-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="forward-secrecy">
-<section id="section-3.4.3">
+<section id="section-2.4.3">
           <h4 id="name-forward-secrecy">
-<a href="#section-3.4.3" class="section-number selfRef">3.4.3. </a><a href="#name-forward-secrecy" class="section-name selfRef">Forward Secrecy</a>
+<a href="#section-2.4.3" class="section-number selfRef">2.4.3. </a><a href="#name-forward-secrecy" class="section-name selfRef">Forward Secrecy</a>
           </h4>
-<p id="section-3.4.3-1">Forward secrecy (also called "perfect forward secrecy" or "PFS" and defined in <span>[<a href="#RFC4949" class="cite xref">RFC4949</a>]</span>) is a countermeasure against attackers that record encrypted traffic with the intent of later decrypting it should the communicating parties' long-term keys be compromised.
-Forward secrecy for protocols leveraging time-limited keys to protect a communication session ("session keys") requires that such session keys be unrecoverable by an attacker that later compromises the long-term keys used to negotiate or deliver those session keys.<a href="#section-3.4.3-1" class="pilcrow">¶</a></p>
-<p id="section-3.4.3-2">As noted earlier, confidential content delivered via multicast will necessarily imply delivery of the same keying material to multiple receivers, rather than negotiation of a unique key as is typical in the unicast case.
+<p id="section-2.4.3-1">Forward secrecy (also called "perfect forward secrecy" or "PFS" and defined in <span>[<a href="#RFC4949" class="cite xref">RFC4949</a>]</span>) is a countermeasure against attackers that record encrypted traffic with the intent of later decrypting it should the communicating parties' long-term keys be compromised.
+Forward secrecy for protocols leveraging time-limited keys to protect a communication session ("session keys") requires that such session keys be unrecoverable by an attacker that later compromises the long-term keys used to negotiate or deliver those session keys.<a href="#section-2.4.3-1" class="pilcrow">¶</a></p>
+<p id="section-2.4.3-2">As noted earlier, confidential content delivered via multicast will necessarily imply delivery of the same keying material to multiple receivers, rather than negotiation of a unique key as is typical in the unicast case.
 Presumably, such receivers will need to be individually authenticated and authorized by the content provider prior to delivery of decryption keys.
-If this authorization and key delivery mechanism employs a forward secret unicast transport such as TLS 1.3, then so long as these encryption keys are ephemeral (that is, rotated periodically and discarded after rotation) the multicast payloads will also effectively be forward secret beyond the time interval of rotation, which we can consider to be the session duration.<a href="#section-3.4.3-2" class="pilcrow">¶</a></p>
+If this authorization and key delivery mechanism employs a forward secret unicast transport such as TLS 1.3, then so long as these encryption keys are ephemeral (that is, rotated periodically and discarded after rotation) the multicast payloads will also effectively be forward secret beyond the time interval of rotation, which we can consider to be the session duration.<a href="#section-2.4.3-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="bypassing-authentication">
-<section id="section-3.4.4">
+<section id="section-2.4.4">
           <h4 id="name-bypassing-authentication">
-<a href="#section-3.4.4" class="section-number selfRef">3.4.4. </a><a href="#name-bypassing-authentication" class="section-name selfRef">Bypassing Authentication</a>
+<a href="#section-2.4.4" class="section-number selfRef">2.4.4. </a><a href="#name-bypassing-authentication" class="section-name selfRef">Bypassing Authentication</a>
           </h4>
-<p id="section-3.4.4-1">Protocols should be designed to discourage implementations from making use of unauthenticated data.
+<p id="section-2.4.4-1">Protocols should be designed to discourage implementations from making use of unauthenticated data.
 The usual approach to enforcing this is to entangle decryption and authentication where possible, for example via use of primitives such as authenticated encryption.
 While ultimately authentication checks are independent of decryption (at least in classical cryptography), use of such primitives to minimize the number of places in which an incomplete or lazy implementation can avoid such checks constitutes best practice.
 TLS 1.3, for instance, mandates AE for all symmetric cryptographic operations:
-without writing one's own AE cipher implementation that purposely skips the authentication tag check, this leaves establishment of trust in the peer certificate as the only practical step an implementation can skip without impacting the ability to make use of the decrypted content.<a href="#section-3.4.4-1" class="pilcrow">¶</a></p>
-<p id="section-3.4.4-2">The situation in multicast is complicated by the need for more than two parties to have access to symmetric keys that would used to secure payloads via AE in the unicast case.
-As discussed in <a href="#authentication" class="auto internal xref">Section 3.2</a>, it is imperative for protocols to provide, and for receivers to leverage, some kind of asymmetry in authentication of each content unit prior to any use of said content to eliminate the ability for an attacker in possession of a shared symmetric key (possibly including an authorized receiver) to inject forged data into a stream that other receivers would then validate and deliver to applications.
+without writing one's own AE cipher implementation that purposely skips the authentication tag check, this leaves establishment of trust in the peer certificate as the only practical step an implementation can skip without impacting the ability to make use of the decrypted content.<a href="#section-2.4.4-1" class="pilcrow">¶</a></p>
+<p id="section-2.4.4-2">The situation in multicast is complicated by the need for more than two parties to have access to symmetric keys that would used to secure payloads via AE in the unicast case.
+As discussed in <a href="#authentication" class="auto internal xref">Section 2.2</a>, it is imperative for protocols to provide, and for receivers to leverage, some kind of asymmetry in authentication of each content unit prior to any use of said content to eliminate the ability for an attacker in possession of a shared symmetric key (possibly including an authorized receiver) to inject forged data into a stream that other receivers would then validate and deliver to applications.
 This requirement to perform authentication checks throughout the lifetime of a stream that are separate from, and orthogonal to, content decryption adds an extra dimension of risk from implementation incorrectness, because such authentication becomes an on-going process rather than the result of a one-time certificate check at connection establishment.
-Protocol designers and implementors are thus strongly encouraged to simplify or even black box such on-going authentication to minimize the potential for implementors or users to skip such checks.<a href="#section-3.4.4-2" class="pilcrow">¶</a></p>
+Protocol designers and implementors are thus strongly encouraged to simplify or even black box such on-going authentication to minimize the potential for implementors or users to skip such checks.<a href="#section-2.4.4-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
 </div>
 <div id="requestresponse-binding">
-<section id="section-3.5">
+<section id="section-2.5">
         <h3 id="name-request-response-binding">
-<a href="#section-3.5" class="section-number selfRef">3.5. </a><a href="#name-request-response-binding" class="section-name selfRef">Request/Response Binding</a>
+<a href="#section-2.5" class="section-number selfRef">2.5. </a><a href="#name-request-response-binding" class="section-name selfRef">Request/Response Binding</a>
         </h3>
-<p id="section-3.5-1">In addition to requiring that application data be cryptographically authenticated, the Web security model also requires that each HTTP response must be bound to a specific HTTP request in a way that cannot be forged by an adversary.<a href="#section-3.5-1" class="pilcrow">¶</a></p>
-<p id="section-3.5-2">In the unicast case, binding of a response to a request in HTTPS is a direct consequence of the integrity guaranteed by the cryptographically protected transport stream to the image of the underlying HTTP protocol, which itself allows for no ambiguity in determining which request induced a particular response.<a href="#section-3.5-2" class="pilcrow">¶</a></p>
-<p id="section-3.5-3">Request/response binding in multicast requires additional protocol or application-layer support as multicast is naturally unidirectional and so does not carry request traffic.
+<p id="section-2.5-1">In addition to requiring that application data be cryptographically authenticated, the Web security model also requires that each HTTP response must be bound to a specific HTTP request in a way that cannot be forged by an adversary.<a href="#section-2.5-1" class="pilcrow">¶</a></p>
+<p id="section-2.5-2">In the unicast case, binding of a response to a request in HTTPS is a direct consequence of the integrity guaranteed by the cryptographically protected transport stream to the image of the underlying HTTP protocol, which itself allows for no ambiguity in determining which request induced a particular response.<a href="#section-2.5-2" class="pilcrow">¶</a></p>
+<p id="section-2.5-3">Request/response binding in multicast requires additional protocol or application-layer support as multicast is naturally unidirectional and so does not carry request traffic.
 Any multicast protocol carrying Web traffic must provide a means for cryptographically binding the data delivered over a multicast channel to a specific client request.
-Failure to do so could, for example, allow an on-path adversary to swap the packets between two different multicast channels both trusted by the client without being detected prior to delivery to the application.<a href="#section-3.5-3" class="pilcrow">¶</a></p>
+Failure to do so could, for example, allow an on-path adversary to swap the packets between two different multicast channels both trusted by the client without being detected prior to delivery to the application.<a href="#section-2.5-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="non-linkability">
-<section id="section-3.6">
+<section id="section-2.6">
         <h3 id="name-non-linkability">
-<a href="#section-3.6" class="section-number selfRef">3.6. </a><a href="#name-non-linkability" class="section-name selfRef">Non-linkability</a>
+<a href="#section-2.6" class="section-number selfRef">2.6. </a><a href="#name-non-linkability" class="section-name selfRef">Non-linkability</a>
         </h3>
-<p id="section-3.6-1">Concern about pervasive monitoring of users culminated in the publication of <span>[<a href="#RFC7258" class="cite xref">RFC7258</a>]</span>, which states that "the IETF will work to mitigate the technical aspects of [pervasive monitoring]."
+<p id="section-2.6-1">Concern about pervasive monitoring of users culminated in the publication of <span>[<a href="#RFC7258" class="cite xref">RFC7258</a>]</span>, which states that "the IETF will work to mitigate the technical aspects of [pervasive monitoring]."
 One area of particular concern is the ability for pervasive monitoring to track individual clients across changes in network connectivity, such as being able to tell when a device or connection migrates from a wired home network to a cell network.
 This has motivated mitigations in subsequent protocol designs, such as those discussed in section 9.5 of <span>[<a href="#RFC9000" class="cite xref">RFC9000</a>]</span>.
-Migration of multicast channel subscriptions across network connections carries the potential for correlation of metadata between multicast channel subscriptions and unicast control channels, even when control channels are encrypted, so care must be taken to design protocols to avoid such correlations.<a href="#section-3.6-1" class="pilcrow">¶</a></p>
+Migration of multicast channel subscriptions across network connections carries the potential for correlation of metadata between multicast channel subscriptions and unicast control channels, even when control channels are encrypted, so care must be taken to design protocols to avoid such correlations.<a href="#section-2.6-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="browser-specific-threats">
-<section id="section-3.7">
+<section id="section-2.7">
         <h3 id="name-browser-specific-threats">
-<a href="#section-3.7" class="section-number selfRef">3.7. </a><a href="#name-browser-specific-threats" class="section-name selfRef">Browser-Specific Threats</a>
+<a href="#section-2.7" class="section-number selfRef">2.7. </a><a href="#name-browser-specific-threats" class="section-name selfRef">Browser-Specific Threats</a>
         </h3>
-<p id="section-3.7-1">The security requirements for multicast transport to a browser follow directly from the requirement that the browser's job is to protect the user.  Huang et al. <span>[<a href="#huang-w2sp" class="cite xref">huang-w2sp</a>]</span> summarize the core browser security guarantee as follows:<a href="#section-3.7-1" class="pilcrow">¶</a></p>
+<p id="section-2.7-1">The security requirements for multicast transport to a browser follow directly from the requirement that the browser's job is to protect the user.  Huang et al. <span>[<a href="#huang-w2sp" class="cite xref">huang-w2sp</a>]</span> summarize the core browser security guarantee as follows:<a href="#section-2.7-1" class="pilcrow">¶</a></p>
 <ul class="normal ulEmpty">
-<li class="normal ulEmpty" id="section-3.7-2.1">
-            <p id="section-3.7-2.1.1">Users can safely visit arbitrary web sites and execute scripts provided by those sites.<a href="#section-3.7-2.1.1" class="pilcrow">¶</a></p>
+<li class="normal ulEmpty" id="section-2.7-2.1">
+            <p id="section-2.7-2.1.1">Users can safely visit arbitrary web sites and execute scripts provided by those sites.<a href="#section-2.7-2.1.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-3.7-3">The reader will find the full discussion of the browser threat model in section 3 of <span>[<a href="#RFC8826" class="cite xref">RFC8826</a>]</span> helpful in understanding what follows.<a href="#section-3.7-3" class="pilcrow">¶</a></p>
+<p id="section-2.7-3">The reader will find the full discussion of the browser threat model in section 3 of <span>[<a href="#RFC8826" class="cite xref">RFC8826</a>]</span> helpful in understanding what follows.<a href="#section-2.7-3" class="pilcrow">¶</a></p>
 <div id="access-to-local-resources">
-<section id="section-3.7.1">
+<section id="section-2.7.1">
           <h4 id="name-access-to-local-resources">
-<a href="#section-3.7.1" class="section-number selfRef">3.7.1. </a><a href="#name-access-to-local-resources" class="section-name selfRef">Access to Local Resources</a>
+<a href="#section-2.7.1" class="section-number selfRef">2.7.1. </a><a href="#name-access-to-local-resources" class="section-name selfRef">Access to Local Resources</a>
           </h4>
-<p id="section-3.7.1-1">This document covers only unidirectional multicast from a server to (potentially many) clients, as well as associated control channels used to manage that communication and access to the content delivered via multicast.
+<p id="section-2.7.1-1">This document covers only unidirectional multicast from a server to (potentially many) clients, as well as associated control channels used to manage that communication and access to the content delivered via multicast.
 As a result, local resource access can be presumed to be limited to that already available within web applications.
-Note that these resources may include fingerprint information that can be used to identify or track individuals, such as information about the user agent, viewport size, display resolution, a concern covered in extensive detail in <span>[<a href="#RFC8942" class="cite xref">RFC8942</a>]</span>.<a href="#section-3.7.1-1" class="pilcrow">¶</a></p>
+Note that these resources may include fingerprint information that can be used to identify or track individuals, such as information about the user agent, viewport size, display resolution, a concern covered in extensive detail in <span>[<a href="#RFC8942" class="cite xref">RFC8942</a>]</span>.<a href="#section-2.7.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="injection">
-<section id="section-3.7.2">
+<section id="section-2.7.2">
           <h4 id="name-injection">
-<a href="#section-3.7.2" class="section-number selfRef">3.7.2. </a><a href="#name-injection" class="section-name selfRef">Injection</a>
+<a href="#section-2.7.2" class="section-number selfRef">2.7.2. </a><a href="#name-injection" class="section-name selfRef">Injection</a>
           </h4>
-<p id="section-3.7.2-1">In the absence of any specific mitigations, network attackers have the ability to inject or modify packets in a multicast stream.
+<p id="section-2.7.2-1">In the absence of any specific mitigations, network attackers have the ability to inject or modify packets in a multicast stream.
 On-path injection and modification are trivial, but even off-path injection is feasible for many networks, such as those that implement no protections against source address spoofing.
-Consequently, it is critical that a browser prevent any such injected or modified traffic from reaching large attack surfaces in the browser, such as the rendering code.<a href="#section-3.7.2-1" class="pilcrow">¶</a></p>
+Consequently, it is critical that a browser prevent any such injected or modified traffic from reaching large attack surfaces in the browser, such as the rendering code.<a href="#section-2.7.2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="hostile-origin">
-<section id="section-3.7.3">
+<section id="section-2.7.3">
           <h4 id="name-hostile-origin">
-<a href="#section-3.7.3" class="section-number selfRef">3.7.3. </a><a href="#name-hostile-origin" class="section-name selfRef">Hostile Origin</a>
+<a href="#section-2.7.3" class="section-number selfRef">2.7.3. </a><a href="#name-hostile-origin" class="section-name selfRef">Hostile Origin</a>
           </h4>
-<p id="section-3.7.3-1">A hostile origin could serve a Web application that attempts to join many multicast channels, overwhelming the provider's network with undesired traffic.<a href="#section-3.7.3-1" class="pilcrow">¶</a></p>
-<p id="section-3.7.3-2">The first line of defense is the browser itself:
+<p id="section-2.7.3-1">A hostile origin could serve a Web application that attempts to join many multicast channels, overwhelming the provider's network with undesired traffic.<a href="#section-2.7.3-1" class="pilcrow">¶</a></p>
+<p id="section-2.7.3-2">The first line of defense is the browser itself:
 the browser should at a minimum prevent joining of channels not associated with the hosting site.
-In the general case, this implies the need for a CORS-like mechanism for cross-origin authorization of multicast channel sharing.<a href="#section-3.7.3-2" class="pilcrow">¶</a></p>
-<p id="section-3.7.3-3">The second line of defense is the network.
-The user's upstream router can and should monitor the user's multicast behavior, implementing circuit breakers that will target unpopular content when overloaded or when an abusive subscription pattern is detected.<a href="#section-3.7.3-3" class="pilcrow">¶</a></p>
+In the general case, this implies the need for a CORS-like mechanism for cross-origin authorization of multicast channel sharing.<a href="#section-2.7.3-2" class="pilcrow">¶</a></p>
+<p id="section-2.7.3-3">The second line of defense is the network.
+The user's upstream router can and should monitor the user's multicast behavior, implementing circuit breakers that will target unpopular content when overloaded or when an abusive subscription pattern is detected.<a href="#section-2.7.3-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="private-browsing-modes">
-<section id="section-3.7.4">
+<section id="section-2.7.4">
           <h4 id="name-private-browsing-modes">
-<a href="#section-3.7.4" class="section-number selfRef">3.7.4. </a><a href="#name-private-browsing-modes" class="section-name selfRef">Private Browsing Modes</a>
+<a href="#section-2.7.4" class="section-number selfRef">2.7.4. </a><a href="#name-private-browsing-modes" class="section-name selfRef">Private Browsing Modes</a>
           </h4>
-<p id="section-3.7.4-1">Browsers that offer a private browsing mode, designed both to bypass access to client-side persistent state and to prevent broad classes of data leakage that can be leveraged by passive and active attackers alike, should require explicit user approval for joining a multicast group given the metadata exposure to network elements of IGMP and MLD messages.<a href="#section-3.7.4-1" class="pilcrow">¶</a></p>
+<p id="section-2.7.4-1">Browsers that offer a private browsing mode, designed both to bypass access to client-side persistent state and to prevent broad classes of data leakage that can be leveraged by passive and active attackers alike, should require explicit user approval for joining a multicast group given the metadata exposure to network elements of IGMP and MLD messages.<a href="#section-2.7.4-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
 </div>
 <div id="other-threats">
-<section id="section-3.8">
+<section id="section-2.8">
         <h3 id="name-other-threats">
-<a href="#section-3.8" class="section-number selfRef">3.8. </a><a href="#name-other-threats" class="section-name selfRef">Other Threats</a>
+<a href="#section-2.8" class="section-number selfRef">2.8. </a><a href="#name-other-threats" class="section-name selfRef">Other Threats</a>
         </h3>
 <div id="referrer-checks">
-<section id="section-3.8.1">
+<section id="section-2.8.1">
           <h4 id="name-referrer-checks">
-<a href="#section-3.8.1" class="section-number selfRef">3.8.1. </a><a href="#name-referrer-checks" class="section-name selfRef">Referrer Checks</a>
+<a href="#section-2.8.1" class="section-number selfRef">2.8.1. </a><a href="#name-referrer-checks" class="section-name selfRef">Referrer Checks</a>
           </h4>
-<p id="section-3.8.1-1">Unicast Web traffic has a weak form of protection against unauthorized use of content by third-party sites through referrer checks.
+<p id="section-2.8.1-1">Unicast Web traffic has a weak form of protection against unauthorized use of content by third-party sites through referrer checks.
 Browsers send a <code>Referer</code> [sic] header containing the parent page URL in requests for objects referenced in that page, which allows the server to reject requests from pages not authorized to refer to such content.
 This is used, for example, to complicate the hosting of phishing sites, which could otherwise serve only the relatively small page HTML and direct the browser to fetch all other page objects from the legitimate origin.
 This is not a strong security measure, as clients may render cached versions of such elements without checking freshness with the origin;
-but it does force the attacker to duplicate, modify, and host more content to convincingly mock the target site.<a href="#section-3.8.1-1" class="pilcrow">¶</a></p>
-<p id="section-3.8.1-2">Protocols enabling the delivery of Web traffic over multicast should include some mechanism providing a similar degree of protection against unauthorized use.
+but it does force the attacker to duplicate, modify, and host more content to convincingly mock the target site.<a href="#section-2.8.1-1" class="pilcrow">¶</a></p>
+<p id="section-2.8.1-2">Protocols enabling the delivery of Web traffic over multicast should include some mechanism providing a similar degree of protection against unauthorized use.
 This is complicated by the inherently unidirectional nature of multicast traffic, which precludes any active role for the server in preventing data delivery to specific clients.
-In lieu of this, protocols should be designed in a way that allows properly-functioning clients to unilaterally reject multicast data delivered for objects referenced by pages that the server has not authorized.<a href="#section-3.8.1-2" class="pilcrow">¶</a></p>
+In lieu of this, protocols should be designed in a way that allows properly-functioning clients to unilaterally reject multicast data delivered for objects referenced by pages that the server has not authorized.<a href="#section-2.8.1-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1639,36 +1625,32 @@ In lieu of this, protocols should be designed in a way that allows properly-func
 </section>
 </div>
 <div id="security-considerations">
-<section id="section-4">
+<section id="section-3">
       <h2 id="name-security-considerations">
-<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
       </h2>
-<p id="section-4-1">This entire document is about security.<a href="#section-4-1" class="pilcrow">¶</a></p>
+<p id="section-3-1">This entire document is about security.<a href="#section-3-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="iana-considerations">
-<section id="section-5">
+<section id="section-4">
       <h2 id="name-iana-considerations">
-<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
       </h2>
-<p id="section-5-1">This document has no IANA actions.<a href="#section-5-1" class="pilcrow">¶</a></p>
+<p id="section-4-1">This document has no IANA actions.<a href="#section-4-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sec-combined-references">
-<section id="section-6">
+<section id="section-5">
       <h2 id="name-references">
-<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-references" class="section-name selfRef">References</a>
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-references" class="section-name selfRef">References</a>
       </h2>
 <div id="sec-normative-references">
-<section id="section-6.1">
+<section id="section-5.1">
         <h3 id="name-normative-references">
-<a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
         </h3>
 <dl class="references">
-<dt id="RFC2119">[RFC2119]</dt>
-        <dd>
-<span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2119">https://www.rfc-editor.org/rfc/rfc2119</a>&gt;</span>. </dd>
-<dd class="break"></dd>
 <dt id="RFC3552">[RFC3552]</dt>
         <dd>
 <span class="refAuthor">Rescorla, E.</span> and <span class="refAuthor">B. Korver</span>, <span class="refTitle">"Guidelines for Writing RFC Text on Security Considerations"</span>, <span class="seriesInfo">BCP 72</span>, <span class="seriesInfo">RFC 3552</span>, <span class="seriesInfo">DOI 10.17487/RFC3552</span>, <time datetime="2003-07" class="refDate">July 2003</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc3552">https://www.rfc-editor.org/rfc/rfc3552</a>&gt;</span>. </dd>
@@ -1689,10 +1671,6 @@ In lieu of this, protocols should be designed in a way that allows properly-func
         <dd>
 <span class="refAuthor">Eggert, L.</span>, <span class="refAuthor">Fairhurst, G.</span>, and <span class="refAuthor">G. Shepherd</span>, <span class="refTitle">"UDP Usage Guidelines"</span>, <span class="seriesInfo">BCP 145</span>, <span class="seriesInfo">RFC 8085</span>, <span class="seriesInfo">DOI 10.17487/RFC8085</span>, <time datetime="2017-03" class="refDate">March 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8085">https://www.rfc-editor.org/rfc/rfc8085</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="RFC8174">[RFC8174]</dt>
-        <dd>
-<span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8174">https://www.rfc-editor.org/rfc/rfc8174</a>&gt;</span>. </dd>
-<dd class="break"></dd>
 <dt id="RFC8815">[RFC8815]</dt>
       <dd>
 <span class="refAuthor">Abrahamsson, M.</span>, <span class="refAuthor">Chown, T.</span>, <span class="refAuthor">Giuliano, L.</span>, and <span class="refAuthor">T. Eckert</span>, <span class="refTitle">"Deprecating Any-Source Multicast (ASM) for Interdomain Multicast"</span>, <span class="seriesInfo">BCP 229</span>, <span class="seriesInfo">RFC 8815</span>, <span class="seriesInfo">DOI 10.17487/RFC8815</span>, <time datetime="2020-08" class="refDate">August 2020</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8815">https://www.rfc-editor.org/rfc/rfc8815</a>&gt;</span>. </dd>
@@ -1701,9 +1679,9 @@ In lieu of this, protocols should be designed in a way that allows properly-func
 </section>
 </div>
 <div id="sec-informative-references">
-<section id="section-6.2">
+<section id="section-5.2">
         <h3 id="name-informative-references">
-<a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
+<a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
         </h3>
 <dl class="references">
 <dt id="AMBI">[AMBI]</dt>
@@ -1756,7 +1734,7 @@ In lieu of this, protocols should be designed in a way that allows properly-func
 <dd class="break"></dd>
 <dt id="webtrans">[webtrans]</dt>
       <dd>
-<span class="refAuthor">Vasiliev, V.</span>, <span class="refTitle">"The WebTransport Protocol Framework"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-webtrans-overview-09</span>, <time datetime="2025-02-25" class="refDate">25 February 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-webtrans-overview-09">https://datatracker.ietf.org/doc/html/draft-ietf-webtrans-overview-09</a>&gt;</span>. </dd>
+<span class="refAuthor">Kinnear, E.</span> and <span class="refAuthor">V. Vasiliev</span>, <span class="refTitle">"The WebTransport Protocol Framework"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-webtrans-overview-10</span>, <time datetime="2025-07-07" class="refDate">7 July 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-webtrans-overview-10">https://datatracker.ietf.org/doc/html/draft-ietf-webtrans-overview-10</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>

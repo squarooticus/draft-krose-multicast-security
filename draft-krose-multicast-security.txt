@@ -4,11 +4,11 @@
 
 TODO Working Group                                               K. Rose
 Internet-Draft                                 Akamai Technologies, Inc.
-Intended status: Standards Track                               M. Franke
-Expires: 23 November 2025                                      TU Berlin
+Intended status: Informational                                 M. Franke
+Expires: 3 February 2026                                       TU Berlin
                                                               J. Holland
                                                Akamai Technologies, Inc.
-                                                             22 May 2025
+                                                           2 August 2025
 
 
       Security and Privacy Considerations for Multicast Transports
@@ -45,7 +45,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 23 November 2025.
+   This Internet-Draft will expire on 3 February 2026.
 
 Copyright Notice
 
@@ -66,30 +66,29 @@ Table of Contents
    1.  Introduction
      1.1.  Background
      1.2.  Web Security Model
-   2.  Conventions and Definitions
-   3.  Threat Model
-     3.1.  Multicast Transport Properties
-     3.2.  Authentication
-     3.3.  Integrity
-     3.4.  Confidentiality
-       3.4.1.  Privacy
-       3.4.2.  Personal Data
-       3.4.3.  Forward Secrecy
-       3.4.4.  Bypassing Authentication
-     3.5.  Request/Response Binding
-     3.6.  Non-linkability
-     3.7.  Browser-Specific Threats
-       3.7.1.  Access to Local Resources
-       3.7.2.  Injection
-       3.7.3.  Hostile Origin
-       3.7.4.  Private Browsing Modes
-     3.8.  Other Threats
-       3.8.1.  Referrer Checks
-   4.  Security Considerations
-   5.  IANA Considerations
-   6.  References
-     6.1.  Normative References
-     6.2.  Informative References
+   2.  Threat Model
+     2.1.  Multicast Transport Properties
+     2.2.  Authentication
+     2.3.  Integrity
+     2.4.  Confidentiality
+       2.4.1.  Privacy
+       2.4.2.  Personal Data
+       2.4.3.  Forward Secrecy
+       2.4.4.  Bypassing Authentication
+     2.5.  Request/Response Binding
+     2.6.  Non-linkability
+     2.7.  Browser-Specific Threats
+       2.7.1.  Access to Local Resources
+       2.7.2.  Injection
+       2.7.3.  Hostile Origin
+       2.7.4.  Private Browsing Modes
+     2.8.  Other Threats
+       2.8.1.  Referrer Checks
+   3.  Security Considerations
+   4.  IANA Considerations
+   5.  References
+     5.1.  Normative References
+     5.2.  Informative References
    Acknowledgments
    Authors' Addresses
 
@@ -162,15 +161,7 @@ Table of Contents
    protocol were to be made available via a different interface within
    clients constrained by the Web security model.
 
-2.  Conventions and Definitions
-
-   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
-   "OPTIONAL" in this document are to be interpreted as described in BCP
-   14 [RFC2119] [RFC8174] when, and only when, they appear in all
-   capitals, as shown here.
-
-3.  Threat Model
+2.  Threat Model
 
    Fundamentally, multicast is simply an addressing scheme in which the
    destination address identifies more than one unique receiver; that
@@ -184,7 +175,7 @@ Table of Contents
    novel challenges that are not addressed at a layer unconcerned with
    the addressing scheme.
 
-3.1.  Multicast Transport Properties
+2.1.  Multicast Transport Properties
 
    Unlike typical unicast transport protocols, multicast transports are
    naturally unidirectional.  Use cases for multicast transports
@@ -218,7 +209,7 @@ Table of Contents
    entire object.  Care must be taken to avoid such amplification attack
    vectors.
 
-3.2.  Authentication
+2.2.  Authentication
 
    The Web security model requires that data delivered to applications
    must be authenticated as having originated from the trusted peer.
@@ -320,7 +311,7 @@ Table of Contents
    Semantic equivalence to (D)TLS in this respect is therefore
    straightforwardly achieved by any number of potential mechanisms.
 
-3.3.  Integrity
+2.3.  Integrity
 
    Integrity in the Web security model for unicast is closely tied to
    the features provided by transports that enabled the Web from its
@@ -387,7 +378,7 @@ Table of Contents
       replay and reveals reordering and deletion/loss of content packets
       through a strict in-order manifest of packet digests.
 
-3.4.  Confidentiality
+2.4.  Confidentiality
 
    In the unicast transport security context, confidentiality implies
    that an observer (passive or active) without pre-existing access to
@@ -414,7 +405,7 @@ Table of Contents
    payload (loss and duplication notwithstanding).  This introduces
    novel privacy concerns that do not apply to unicast transports.
 
-3.4.1.  Privacy
+2.4.1.  Privacy
 
    In contrast to (say) unicast TLS, on-path monitoring can trivially
    prove that identical content was delivered to multiple receivers,
@@ -488,7 +479,7 @@ Table of Contents
       changes in multicast source, group, or keying material, or some
       combination of the three.
 
-3.4.2.  Personal Data
+2.4.2.  Personal Data
 
    A sender has responsibility not to expose personal information
    broadly.  This is not a consideration unique to multicast delivery:
@@ -513,7 +504,7 @@ Table of Contents
    in a way that respects the privacy of users: the availability of
    multicast transports does not further complicate this responsibility.
 
-3.4.3.  Forward Secrecy
+2.4.3.  Forward Secrecy
 
    Forward secrecy (also called "perfect forward secrecy" or "PFS" and
    defined in [RFC4949]) is a countermeasure against attackers that
@@ -537,7 +528,7 @@ Table of Contents
    interval of rotation, which we can consider to be the session
    duration.
 
-3.4.4.  Bypassing Authentication
+2.4.4.  Bypassing Authentication
 
    Protocols should be designed to discourage implementations from
    making use of unauthenticated data.  The usual approach to enforcing
@@ -557,7 +548,7 @@ Table of Contents
    The situation in multicast is complicated by the need for more than
    two parties to have access to symmetric keys that would used to
    secure payloads via AE in the unicast case.  As discussed in
-   Section 3.2, it is imperative for protocols to provide, and for
+   Section 2.2, it is imperative for protocols to provide, and for
    receivers to leverage, some kind of asymmetry in authentication of
    each content unit prior to any use of said content to eliminate the
    ability for an attacker in possession of a shared symmetric key
@@ -573,7 +564,7 @@ Table of Contents
    black box such on-going authentication to minimize the potential for
    implementors or users to skip such checks.
 
-3.5.  Request/Response Binding
+2.5.  Request/Response Binding
 
    In addition to requiring that application data be cryptographically
    authenticated, the Web security model also requires that each HTTP
@@ -596,7 +587,7 @@ Table of Contents
    channels both trusted by the client without being detected prior to
    delivery to the application.
 
-3.6.  Non-linkability
+2.6.  Non-linkability
 
    Concern about pervasive monitoring of users culminated in the
    publication of [RFC7258], which states that "the IETF will work to
@@ -612,7 +603,7 @@ Table of Contents
    channels, even when control channels are encrypted, so care must be
    taken to design protocols to avoid such correlations.
 
-3.7.  Browser-Specific Threats
+2.7.  Browser-Specific Threats
 
    The security requirements for multicast transport to a browser follow
    directly from the requirement that the browser's job is to protect
@@ -625,7 +616,7 @@ Table of Contents
    The reader will find the full discussion of the browser threat model
    in section 3 of [RFC8826] helpful in understanding what follows.
 
-3.7.1.  Access to Local Resources
+2.7.1.  Access to Local Resources
 
    This document covers only unidirectional multicast from a server to
    (potentially many) clients, as well as associated control channels
@@ -637,7 +628,7 @@ Table of Contents
    user agent, viewport size, display resolution, a concern covered in
    extensive detail in [RFC8942].
 
-3.7.2.  Injection
+2.7.2.  Injection
 
    In the absence of any specific mitigations, network attackers have
    the ability to inject or modify packets in a multicast stream.  On-
@@ -648,7 +639,7 @@ Table of Contents
    from reaching large attack surfaces in the browser, such as the
    rendering code.
 
-3.7.3.  Hostile Origin
+2.7.3.  Hostile Origin
 
    A hostile origin could serve a Web application that attempts to join
    many multicast channels, overwhelming the provider's network with
@@ -665,7 +656,7 @@ Table of Contents
    implementing circuit breakers that will target unpopular content when
    overloaded or when an abusive subscription pattern is detected.
 
-3.7.4.  Private Browsing Modes
+2.7.4.  Private Browsing Modes
 
    Browsers that offer a private browsing mode, designed both to bypass
    access to client-side persistent state and to prevent broad classes
@@ -674,9 +665,9 @@ Table of Contents
    group given the metadata exposure to network elements of IGMP and MLD
    messages.
 
-3.8.  Other Threats
+2.8.  Other Threats
 
-3.8.1.  Referrer Checks
+2.8.1.  Referrer Checks
 
    Unicast Web traffic has a weak form of protection against
    unauthorized use of content by third-party sites through referrer
@@ -702,22 +693,17 @@ Table of Contents
    data delivered for objects referenced by pages that the server has
    not authorized.
 
-4.  Security Considerations
+3.  Security Considerations
 
    This entire document is about security.
 
-5.  IANA Considerations
+4.  IANA Considerations
 
    This document has no IANA actions.
 
-6.  References
+5.  References
 
-6.1.  Normative References
-
-   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
-              Requirement Levels", BCP 14, RFC 2119,
-              DOI 10.17487/RFC2119, March 1997,
-              <https://www.rfc-editor.org/rfc/rfc2119>.
+5.1.  Normative References
 
    [RFC3552]  Rescorla, E. and B. Korver, "Guidelines for Writing RFC
               Text on Security Considerations", BCP 72, RFC 3552,
@@ -740,16 +726,12 @@ Table of Contents
               Guidelines", BCP 145, RFC 8085, DOI 10.17487/RFC8085,
               March 2017, <https://www.rfc-editor.org/rfc/rfc8085>.
 
-   [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
-              2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
-              May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
-
    [RFC8815]  Abrahamsson, M., Chown, T., Giuliano, L., and T. Eckert,
               "Deprecating Any-Source Multicast (ASM) for Interdomain
               Multicast", BCP 229, RFC 8815, DOI 10.17487/RFC8815,
               August 2020, <https://www.rfc-editor.org/rfc/rfc8815>.
 
-6.2.  Informative References
+5.2.  Informative References
 
    [AMBI]     Holland, J., Rose, K., and M. Franke, "Asymmetric Manifest
               Based Integrity", Work in Progress, Internet-Draft, draft-
@@ -816,11 +798,11 @@ Table of Contents
               DOI 10.17487/RFC9000, May 2021,
               <https://www.rfc-editor.org/rfc/rfc9000>.
 
-   [webtrans] Vasiliev, V., "The WebTransport Protocol Framework", Work
-              in Progress, Internet-Draft, draft-ietf-webtrans-overview-
-              09, 25 February 2025,
+   [webtrans] Kinnear, E. and V. Vasiliev, "The WebTransport Protocol
+              Framework", Work in Progress, Internet-Draft, draft-ietf-
+              webtrans-overview-10, 7 July 2025,
               <https://datatracker.ietf.org/doc/html/draft-ietf-
-              webtrans-overview-09>.
+              webtrans-overview-10>.
 
 Acknowledgments
 
