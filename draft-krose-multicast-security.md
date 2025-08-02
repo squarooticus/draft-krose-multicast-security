@@ -3,7 +3,7 @@ docname: draft-krose-multicast-security-latest
 title: Security and Privacy Considerations for Multicast Transports
 abbrev: Multicast Transport Security
 date:
-category: std
+category: info
 
 ipr: trust200902
 area: General
@@ -38,17 +38,14 @@ author:
     email: jakeholland.net@gmail.com
 
 normative:
-    RFC2119:
     RFC3552:
     RFC4949:
     RFC4607:
     RFC7258:
     RFC8085:
-    RFC8174:
     RFC8815:
 
 informative:
-
     RFC4082:
     RFC5740:
     RFC5775:
@@ -129,14 +126,6 @@ For unicast communication this is sensible and meaningful (if imprecise) for an 
 This document instead explicitly describes a security and privacy threat model for multicast transports in order to extend the Web security model to accommodate multicast delivery in a way that fits within the spirit of how that model is generally interpreted for unicast.
 
 Although defining the security protections necessary to make multicast traffic suitable for Web Transport is a key goal for this document, many of the security considerations described here would be equally necessary to consider if a higher level multicast transport protocol were to be made available via a different interface within clients constrained by the Web security model.
-
-
-# Conventions and Definitions
-
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
-"SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this
-document are to be interpreted as described in BCP 14 {{RFC2119}} {{!RFC8174}}
-when, and only when, they appear in all capitals, as shown here.
 
 
 # Threat Model
