@@ -1,5 +1,5 @@
 ---
-docname: draft-krose-multicast-security-latest
+docname: draft-ietf-mboned-multicast-security-latest
 title: Security and Privacy Considerations for Multicast Transports
 abbrev: Multicast Transport Security
 date:
