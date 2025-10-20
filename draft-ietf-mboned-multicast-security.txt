@@ -5,14 +5,14 @@
 TODO Working Group                                               K. Rose
 Internet-Draft                                 Akamai Technologies, Inc.
 Intended status: Informational                                 M. Franke
-Expires: 3 February 2026                                       TU Berlin
+Expires: 23 April 2026                                         TU Berlin
                                                               J. Holland
                                                Akamai Technologies, Inc.
-                                                           2 August 2025
+                                                         20 October 2025
 
 
       Security and Privacy Considerations for Multicast Transports
-                 draft-krose-multicast-security-latest
+              draft-ietf-mboned-multicast-security-latest
 
 Abstract
 
@@ -45,7 +45,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 3 February 2026.
+   This Internet-Draft will expire on 23 April 2026.
 
 Copyright Notice
 
@@ -735,9 +735,9 @@ Table of Contents
 
    [AMBI]     Holland, J., Rose, K., and M. Franke, "Asymmetric Manifest
               Based Integrity", Work in Progress, Internet-Draft, draft-
-              ietf-mboned-ambi-04, 7 May 2025,
+              ietf-mboned-ambi-05, 17 October 2025,
               <https://datatracker.ietf.org/doc/html/draft-ietf-mboned-
-              ambi-04>.
+              ambi-05>.
 
    [huang-w2sp]
               Huang, L.-S., Chen, E. Y., Barth, A., Rescorla, E., and C.
