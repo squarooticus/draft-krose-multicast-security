@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-01-30T00:06:27.235541+00:00",
+  "timestamp": "2026-05-21T00:44:04.405780+00:00",
   "repo": "squarooticus/draft-krose-multicast-security",
   "labels": [
     {
@@ -374,6 +374,86 @@
           "updatedAt": "2022-08-05T16:01:19Z"
         }
       ]
+    },
+    {
+      "number": 18,
+      "id": "I_kwDOFhM1zs8AAAABCyD97w",
+      "title": "Restructure",
+      "url": "https://github.com/squarooticus/draft-krose-multicast-security/issues/18",
+      "state": "OPEN",
+      "author": "MaxF12",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "I think it would make sense to move 2.1 to section 1 or its own extended section. I think discussing the transport properties inherent to multicast are separate from the threat model itself and should not be mixed with it. ",
+      "createdAt": "2026-05-19T22:56:12Z",
+      "updatedAt": "2026-05-19T22:56:12Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 19,
+      "id": "I_kwDOFhM1zs8AAAABCyGZJg",
+      "title": "\"multicast IP or UDP\"",
+      "url": "https://github.com/squarooticus/draft-krose-multicast-security/issues/19",
+      "state": "OPEN",
+      "author": "MaxF12",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This sentence shows up a few times and I am not sure what it's trying to say; I think since we are heading towards QUIC now discussing specific limitations specific to UDP is probably not super useful. This also comes back up for congestion control etc. \nI think in section 2 we should focus on how the typical threats, assumptions etc. the web security model outlines change due to  inherent properties of IP multicast. \nHow they might be mitigated at the transport layer I'd probably move to a separate section 3.",
+      "createdAt": "2026-05-19T23:04:15Z",
+      "updatedAt": "2026-05-19T23:04:15Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 20,
+      "id": "I_kwDOFhM1zs8AAAABCyIuCg",
+      "title": "Requirement to detect deletion, loss and reordering",
+      "url": "https://github.com/squarooticus/draft-krose-multicast-security/issues/20",
+      "state": "OPEN",
+      "author": "MaxF12",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "If this is a hard requirement we need to keep we should probably better explain why does are required to guarantee integrity, at least to me currently it isnt quite clear at least.",
+      "createdAt": "2026-05-19T23:11:46Z",
+      "updatedAt": "2026-05-19T23:11:46Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 21,
+      "id": "I_kwDOFhM1zs8AAAABCyJU_w",
+      "title": "Too much unicast discussion",
+      "url": "https://github.com/squarooticus/draft-krose-multicast-security/issues/21",
+      "state": "OPEN",
+      "author": "MaxF12",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "There seems to be some parts that seem somewhat out of scope,  e.g. the lengthy discussion about near-simultaneous unicast download events in section 2.4.1 and how to mitigate privacy risks related to them. \n\nIn 2.2, due to multicast being unidirectional anyway, we can probably save on some of the discussion on server vs. client authentication.",
+      "createdAt": "2026-05-19T23:13:43Z",
+      "updatedAt": "2026-05-19T23:23:14Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 22,
+      "id": "I_kwDOFhM1zs8AAAABCyK16A",
+      "title": "Request/response binding",
+      "url": "https://github.com/squarooticus/draft-krose-multicast-security/issues/22",
+      "state": "OPEN",
+      "author": "MaxF12",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "I can't quite follow the discussion in this section. Isn't the request in the multicast case simply the entire multicast channel itself? I.e. a client \"requests\" to join a channel by sending out IGMP/MLD and the response then is everything carried on that channel. \nAlso, I think the described attack vector of a bad actor swapping packets of two different trusted multicast channels needs some more explanation. If the channels both have integrity guarantees how would swapping the packets be an issue? Wouldn't they simply fail the integrity checks and be dropped?",
+      "createdAt": "2026-05-19T23:18:57Z",
+      "updatedAt": "2026-05-19T23:18:57Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
