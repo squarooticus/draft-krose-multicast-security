@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-05-21T00:44:04.405780+00:00",
+  "timestamp": "2026-07-05T02:41:58.667335+00:00",
   "repo": "squarooticus/draft-krose-multicast-security",
   "labels": [
     {
@@ -452,6 +452,22 @@
       "body": "I can't quite follow the discussion in this section. Isn't the request in the multicast case simply the entire multicast channel itself? I.e. a client \"requests\" to join a channel by sending out IGMP/MLD and the response then is everything carried on that channel. \nAlso, I think the described attack vector of a bad actor swapping packets of two different trusted multicast channels needs some more explanation. If the channels both have integrity guarantees how would swapping the packets be an issue? Wouldn't they simply fail the integrity checks and be dropped?",
       "createdAt": "2026-05-19T23:18:57Z",
       "updatedAt": "2026-05-19T23:18:57Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 23,
+      "id": "I_kwDOFhM1zs8AAAABHd8rwg",
+      "title": "Mention class of passive attack outlined in draft-jholland-quic-multicast.md#163",
+      "url": "https://github.com/squarooticus/draft-krose-multicast-security/issues/23",
+      "state": "OPEN",
+      "author": "squarooticus",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "https://github.com/GrumpyOldTroll/draft-jholland-quic-multicast/pull/163/changes#top\n\nFrom the line \"Hashing the protected packet avoids exposing information about plaintext contents to entities that can observe MC_INTEGRITY frames but do not have the channel packet protection keys.\"",
+      "createdAt": "2026-07-02T16:00:34Z",
+      "updatedAt": "2026-07-02T16:00:34Z",
       "closedAt": null,
       "comments": []
     }
