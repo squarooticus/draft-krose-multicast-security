@@ -5,10 +5,10 @@
 TODO Working Group                                               K. Rose
 Internet-Draft                                 Akamai Technologies, Inc.
 Intended status: Informational                                 M. Franke
-Expires: 20 April 2026                                         TU Berlin
+Expires: 29 April 2027                                         TU Berlin
                                                               J. Holland
                                                Akamai Technologies, Inc.
-                                                         17 October 2025
+                                                         26 October 2026
 
 
       Security and Privacy Considerations for Multicast Transports
@@ -45,11 +45,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 20 April 2026.
+   This Internet-Draft will expire on 29 April 2027.
 
 Copyright Notice
 
-   Copyright (c) 2025 IETF Trust and the persons identified as the
+   Copyright (c) 2026 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -800,9 +800,9 @@ Table of Contents
 
    [webtrans] Kinnear, E. and V. Vasiliev, "The WebTransport Protocol
               Framework", Work in Progress, Internet-Draft, draft-ietf-
-              webtrans-overview-10, 7 July 2025,
+              webtrans-overview-13, 6 July 2026,
               <https://datatracker.ietf.org/doc/html/draft-ietf-
-              webtrans-overview-10>.
+              webtrans-overview-13>.
 
 Acknowledgments
 
