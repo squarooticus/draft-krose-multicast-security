@@ -17,9 +17,6 @@ author:
  -
     ins: K. Rose
     name: Kyle Rose
-    organization: Akamai Technologies, Inc.
-    street: 145 Broadway
-    city: Cambridge, MA 02144
     country: United States of America
     email: krose@krose.org
  -
